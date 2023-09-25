@@ -1,9 +1,10 @@
-import { Hello } from '@/components/hello';
+import { TopicForm } from '@/components/topic/topicForm';
 
-export default function Home() {
+export default async function Home() {
   return (
     <div>
-      <Hello />
+      <h1>Users</h1>
+      <TopicForm />
     </div>
   );
 }
