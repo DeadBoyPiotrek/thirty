@@ -71,6 +71,7 @@ model Topic {
   image         String?
   posts         Post[]
   title         String
+  content       String
 }
 
 model Post {
