@@ -1,17 +1,22 @@
+import { title } from 'process';
 import { z } from 'zod';
 
 export const topicFormSchema = z.object({
-  title: z.string().nonempty().max(2, { message: 'Title is too long' }),
-  content: z.string().nonempty().max(2, { message: 'Content is too long' }),
+  title: z.string().nonempty().max(250, { message: 'Title is too long' }),
+  content: z.string().nonempty().max(1000, { message: 'Content is too long' }),
   image: z.custom<FileList>().superRefine((files, ctx) => {
+    console.log(`🚀 ~ image:z.custom<FileList> ~ files:`, files);
+
     if (files.length === 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'File must be provided',
       });
       return false;
+      // return undefined;
     }
 
+    console.log(`🚀 ~ image:z.custom<FileList> ~ files[0]:`, files[0]);
     if (
       ![
         'image/webp',

@@ -63,6 +63,12 @@ model FriendRequest {
   status     Status @default(pending)
 }
 
+enum Status {
+  pending
+  accepted
+  rejected
+}
+
 model Topic {
   id            String   @id @default(cuid())
   user          User     @relation(fields: [userId], references: [id])
@@ -105,12 +111,6 @@ model Like {
   user          User     @relation(fields: [userId], references: [id])
   userId        String
   datePublished DateTime
-}
-
-enum Status {
-  pending
-  accepted
-  rejected
 }
 
 model VerificationToken {
