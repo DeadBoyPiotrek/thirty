@@ -7,15 +7,5 @@ export const topicRouter = router({
     //TODO save topic with image url and user id
 
     console.log(`🚀 ~ .mutation ~ input:`, input);
-
-    //   const response = await supabase.storage
-    //     .from('test')
-    //     .upload('noExtension', imageFile);
-
-    //   if (response.error) {
-    //     console.error('Error uploading image:', response.error);
-    //   } else {
-    //     console.log('Image uploaded successfully:', response.data);
-    //   }
   }),
 });

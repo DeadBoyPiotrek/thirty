@@ -6,6 +6,9 @@ import Provider from './_trpc/Provider';
 import { getServerSession } from 'next-auth';
 import SessionProvider from '../components/session/sessionProvider';
 import { authOptions } from './api/auth/[...nextauth]/route';
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
+import { extractRouterConfig } from 'uploadthing/server';
+import { ourFileRouter } from './api/uploadthing/core';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -22,6 +25,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Navigation />
         <SessionProvider session={session}>
           <Provider>{children}</Provider>
