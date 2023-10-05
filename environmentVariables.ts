@@ -8,8 +8,8 @@ const envVariables = z.object({
   GITHUB_SECRET: z.string(),
   GOOGLE_ID: z.string(),
   GOOGLE_SECRET: z.string(),
-  UPLOADTHING_SECRET: z.string(),
-  UPLOADTHING_APP_ID: z.string(),
+  NEXT_PUBLIC_SUPABASE_URL: z.string(),
+  NEXT_PUBLIC_SUPABASE_KEY: z.string(),
 });
 
 envVariables.parse(process.env);

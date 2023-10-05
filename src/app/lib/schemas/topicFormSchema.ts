@@ -1,44 +1,61 @@
 import { z } from 'zod';
 
-export const topicFormSchema = z.object({
-  title: z.string().nonempty().max(250, { message: 'Title is too long' }),
-  content: z.string().nonempty().max(1000, { message: 'Content is too long' }),
-  // image: z.custom<FileList>().superRefine((files, ctx) => {
-  //   console.log(`🚀 ~ image:z.custom<FileList> ~ files:`, files);
+const title = z.string().nonempty().max(250, { message: 'Title is too long' });
 
-  //   if (files.length === 0) {
-  //     ctx.addIssue({
-  //       code: z.ZodIssueCode.custom,
-  //       message: 'File must be provided',
-  //     });
-  //     return false;
-  //   }
+const content = z
+  .string()
+  .nonempty()
+  .max(1000, { message: 'Content is too long' });
 
-  //   console.log(`🚀 ~ image:z.custom<FileList> ~ files[0]:`, files[0]);
-  //   if (
-  //     ![
-  //       'image/webp',
-  //       'image/png',
-  //       'image/svg',
-  //       'image/jpg',
-  //       'image/jpeg',
-  //     ].includes(files[0].type)
-  //   ) {
-  //     ctx.addIssue({
-  //       code: z.ZodIssueCode.custom,
-  //       message: 'File must be a valid image type',
-  //     });
-  //     return false;
-  //   }
+const image = z
+  .custom<FileList>()
+  .superRefine((files, ctx) => {
+    if (files.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'File must be provided',
+      });
+      return false;
+    }
 
-  //   if (files[0].size > 1024 * 1024 * 5) {
-  //     ctx.addIssue({
-  //       code: z.ZodIssueCode.custom,
-  //       message: 'File must be less than 5MB',
-  //     });
-  //     return false;
-  //   }
+    if (
+      ![
+        'image/webp',
+        'image/png',
+        'image/svg',
+        'image/jpg',
+        'image/jpeg',
+      ].includes(files[0].type)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'File must be a valid image type',
+      });
+      return false;
+    }
 
-  //   return true;
-  // }),
+    if (files[0].size > 1024 * 1024 * 5) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'File must be less than 5MB',
+      });
+      return false;
+    }
+
+    return true;
+  })
+  .refine(files => files.length === 1);
+
+const imageURL = z.string().url();
+
+export const topicFormSchemaImg = z.object({
+  title,
+  content,
+  image,
+});
+
+export const topicFormSchemaImgUrl = z.object({
+  title,
+  content,
+  imageURL,
 });

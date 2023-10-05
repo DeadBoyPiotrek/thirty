@@ -1,11 +1,40 @@
-import { topicFormSchema } from '@/app/lib/schemas/topicFormSchema';
+import { topicFormSchemaImgUrl } from '@/app/lib/schemas/topicFormSchema';
 import { publicProcedure, router } from '../trpc';
-export const topicRouter = router({
-  addTopic: publicProcedure.input(topicFormSchema).mutation(({ input }) => {
-    //TODO save image
-    //TODO retrieve image url
-    //TODO save topic with image url and user id
+import { prisma } from '../prisma';
 
-    console.log(`🚀 ~ .mutation ~ input:`, input);
-  }),
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+
+const session = getServerSession(authOptions);
+const userEmail = session?.user?.email;
+
+export const topicRouter = router({
+  addTopic: publicProcedure
+    .input(topicFormSchemaImgUrl)
+    .mutation(async ({ input }) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          email: userEmail,
+        },
+      });
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const topic = await prisma.topic.create({
+        data: {
+          content: input.content,
+          title: input.title,
+          image: input.imageURL,
+          user: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      });
+
+      return topic;
+    }),
 });

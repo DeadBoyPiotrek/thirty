@@ -2,14 +2,10 @@
 import { topicFormSchema } from '@/app/lib/schemas/topicFormSchema';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import type { FileWithPath } from '@uploadthing/react';
-import { useDropzone } from '@uploadthing/react/hooks';
-import { generateClientDropzoneAccept } from 'uploadthing/client';
-import { useUploadThing } from '@/app/lib/uploadthing/hooks';
-import { useCallback, useState } from 'react';
-
+import { supabase } from '@/server/supabase';
+import { trpc } from '@_trpc/client';
 export const TopicForm = () => {
+  const mutation = trpc.topic.addTopic.useMutation();
   //* form stuff
   type Inputs = Zod.infer<typeof topicFormSchema>;
   const {
@@ -20,40 +16,30 @@ export const TopicForm = () => {
     resolver: zodResolver(topicFormSchema),
   });
   const onSubmit: SubmitHandler<Inputs> = async data => {
-    console.log(`🚀 ~ TopicForm ~ data:`, data);
-    startUpload(files);
+    const { data: resData, error } = await supabase.storage
+      .from('topics')
+      .upload(
+        data.image[0].name +
+          Math.floor(new Date().getTime() / 1000) +
+          Math.floor(Math.random() * 1000),
+        data.image[0]
+      );
+
+    if (error) {
+      console.log(error);
+    } else {
+      const { data: ResData2 } = supabase.storage
+        .from('topics')
+        .getPublicUrl(resData?.path);
+      mutation.mutate({
+        content: data.content,
+        title: data.title,
+        image: ResData2.publicUrl,
+      });
+      console.log(ResData2.publicUrl);
+    }
   };
   //* form stuff
-
-  //* uploadthing stuff
-
-  const [files, setFiles] = useState<File[]>([]);
-  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
-    setFiles(acceptedFiles);
-  }, []);
-
-  const { startUpload, permittedFileInfo } = useUploadThing('imageUploader', {
-    onClientUploadComplete: () => {
-      alert('uploaded successfully!');
-    },
-    onUploadError: () => {
-      alert('error occurred while uploading');
-    },
-    // onUploadBegin: () => {
-    //   alert('upload has begun');
-    // },
-  });
-
-  const fileTypes = permittedFileInfo?.config
-    ? Object.keys(permittedFileInfo?.config)
-    : [];
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
-  });
-
-  //* uploadthing stuff
 
   return (
     <>
@@ -76,11 +62,7 @@ export const TopicForm = () => {
         {errors.image?.message && (
           <p className="text-sm text-red-400">{errors.image.message}</p>
         )}
-        <div {...getRootProps()} className="border">
-          <input {...getInputProps()} />
-          <p>{`${files.length} selected`}</p>
-          Drop files here!
-        </div>
+
         <button type="submit">Submit</button>
       </form>
     </>
