@@ -1,5 +1,5 @@
 'use client';
-import { topicFormSchema } from '@/app/lib/schemas/topicFormSchema';
+import { topicFormSchemaImg } from '@/app/lib/schemas/topicFormSchema';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/server/supabase';
@@ -7,13 +7,13 @@ import { trpc } from '@_trpc/client';
 export const TopicForm = () => {
   const mutation = trpc.topic.addTopic.useMutation();
   //* form stuff
-  type Inputs = Zod.infer<typeof topicFormSchema>;
+  type Inputs = Zod.infer<typeof topicFormSchemaImg>;
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
-    resolver: zodResolver(topicFormSchema),
+    resolver: zodResolver(topicFormSchemaImg),
   });
   const onSubmit: SubmitHandler<Inputs> = async data => {
     const { data: resData, error } = await supabase.storage
@@ -34,7 +34,7 @@ export const TopicForm = () => {
       mutation.mutate({
         content: data.content,
         title: data.title,
-        image: ResData2.publicUrl,
+        imageURL: ResData2.publicUrl,
       });
       console.log(ResData2.publicUrl);
     }
