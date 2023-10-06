@@ -8,6 +8,7 @@ export const topicRouter = router({
     .mutation(async ({ ctx, input }) => {
       console.log(`🚀 ~ .mutation ~ input:`, input);
       console.log(`🚀 ~ .mutation ~ ctx:`, ctx);
-      // create topic
+      const email = ctx.email;
+      console.log(`🚀 ~ .mutation ~ email:`, email);
     }),
 });
