@@ -6,9 +6,37 @@ export const topicRouter = router({
   addTopic: protectedProcedure
     .input(topicFormSchemaImgUrl)
     .mutation(async ({ ctx, input }) => {
-      console.log(`🚀 ~ .mutation ~ input:`, input);
-      console.log(`🚀 ~ .mutation ~ ctx:`, ctx);
-      const email = ctx.email;
-      console.log(`🚀 ~ .mutation ~ email:`, email);
+      const topic = await prisma.topic.create({
+        data: {
+          title: input.title,
+          content: input.content,
+          image: input.imageURL,
+
+          user: {
+            connect: {
+              id: ctx.userId,
+            },
+          },
+        },
+      });
+
+      return topic;
     }),
+
+  getMyTopics: protectedProcedure.query(async ({ ctx }) => {
+    const topics = await prisma.topic.findMany({
+      where: {
+        userId: ctx.userId,
+      },
+    });
+
+    const topicsWithDateString = topics.map(topic => {
+      return {
+        ...topic,
+        datePublished: topic.datePublished.toISOString(),
+      };
+    });
+
+    return topicsWithDateString;
+  }),
 });

@@ -7,6 +7,7 @@ const t = initTRPC.create();
 const middleware = t.middleware;
 const isAuth = middleware(async opts => {
   const session = await getServerSession(authOptions);
+
   if (!session?.user || !session?.user?.email) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
@@ -14,8 +15,8 @@ const isAuth = middleware(async opts => {
   }
   return opts.next({
     ctx: {
-      email: session.user.email,
       session,
+      userId: session.user.id as string,
     },
   });
 });

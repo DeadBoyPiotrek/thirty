@@ -21,7 +21,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@server/*": ["./src/server/*"],
-      "@_trpc/*": ["./src/app/_trpc/*"]
+      "@_trpc/*": ["./src/app/_trpc/*"],
+      "@types/*": ["./src/types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

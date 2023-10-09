@@ -3,5 +3,5 @@
   "rules": {
     "no-unused-vars": "error"
   },
-  "ignorePatterns": ["environmentVariables.ts"]
+  "ignorePatterns": ["environmentVariables.ts", "next-auth.d.ts"]
 }
