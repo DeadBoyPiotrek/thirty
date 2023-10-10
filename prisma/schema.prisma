@@ -87,7 +87,7 @@ model Post {
   user          User      @relation(fields: [userId], references: [id])
   userId        String
   datePublished DateTime
-  image         String?
+  image         String
   title         String
   content       String
   comments      Comment[]

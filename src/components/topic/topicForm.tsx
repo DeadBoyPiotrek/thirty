@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/server/supabase';
 import { trpc } from '@_trpc/client';
+import { Button } from '@/components/ui/button';
 export const TopicForm = () => {
   const mutation = trpc.topic.addTopic.useMutation();
   //* form stuff
@@ -63,7 +64,7 @@ export const TopicForm = () => {
           <p className="text-sm text-red-400">{errors.image.message}</p>
         )}
 
-        <button type="submit">Submit</button>
+        <Button className="bg-slate-200 p-2">Submit</Button>
       </form>
     </>
   );

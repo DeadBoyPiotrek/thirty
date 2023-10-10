@@ -1,4 +1,4 @@
-import { Navigation } from '@/components/nav/Navigation';
+import { Navigation } from '@/components/nav/navigation';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -6,6 +6,7 @@ import Provider from './_trpc/Provider';
 import { getServerSession } from 'next-auth';
 import SessionProvider from '../components/session/sessionProvider';
 import { authOptions } from './api/auth/[...nextauth]/route';
+import { cn } from '@/app/lib/utils';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,10 +23,12 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(inter.className, 'flex flex-col items-center')}>
         <Navigation />
         <SessionProvider session={session}>
-          <Provider>{children}</Provider>
+          <Provider>
+            <main className="max-w-7xl w-full flex flex-col">{children}</main>
+          </Provider>
         </SessionProvider>
       </body>
     </html>
