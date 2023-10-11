@@ -15,7 +15,7 @@ const TopicList = ({ topics }: { topics: Topic[] }) => {
   return (
     <div className="border inline-block">
       {topics.map(topic => (
-        <div key={topic.id} className="topic">
+        <div key={topic.id} className="topic w-80 ">
           <Image src={topic.image} alt={topic.title} width={400} height={300} />
           <h2>{topic.title}</h2>
           <p>{topic.content}</p>
