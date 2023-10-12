@@ -2,7 +2,7 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react';
 
-export default function Profile() {
+const ProfilePage = () => {
   const { data: session } = useSession();
 
   return (
@@ -21,4 +21,6 @@ export default function Profile() {
       )}
     </div>
   );
-}
+};
+
+export default ProfilePage;

@@ -6,8 +6,7 @@ import Provider from './_trpc/Provider';
 import { getServerSession } from 'next-auth';
 import SessionProvider from '../components/session/sessionProvider';
 import { authOptions } from './api/auth/[...nextauth]/route';
-import { cn } from '@/app/lib/utils';
-
+import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {

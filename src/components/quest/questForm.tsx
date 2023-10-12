@@ -1,24 +1,24 @@
 'use client';
-import { topicFormSchemaImg } from '@/app/lib/schemas/topicFormSchema';
+import { questFormSchemaImg } from '@/lib/schemas/questFormSchema';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/server/supabase';
 import { trpc } from '@_trpc/client';
 import { Button } from '@/components/ui/button';
-export const TopicForm = () => {
-  const mutation = trpc.topic.addTopic.useMutation();
+export const QuestForm = () => {
+  const mutation = trpc.quest.addQuest.useMutation();
   //* form stuff
-  type Inputs = Zod.infer<typeof topicFormSchemaImg>;
+  type Inputs = Zod.infer<typeof questFormSchemaImg>;
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
-    resolver: zodResolver(topicFormSchemaImg),
+    resolver: zodResolver(questFormSchemaImg),
   });
   const onSubmit: SubmitHandler<Inputs> = async data => {
     const { data: resData, error } = await supabase.storage
-      .from('topics')
+      .from('quests')
       .upload(
         data.image[0].name +
           Math.floor(new Date().getTime() / 1000) +
@@ -30,7 +30,7 @@ export const TopicForm = () => {
       console.log(error);
     } else {
       const { data: ResData2 } = supabase.storage
-        .from('topics')
+        .from('quests')
         .getPublicUrl(resData?.path);
       mutation.mutate({
         content: data.content,
@@ -48,12 +48,12 @@ export const TopicForm = () => {
         className="flex flex-col w-56 text-yellow-500 border p-2"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <label>Topic title</label>
+        <label>quest title</label>
         <input {...register('title')} />
         {errors.title?.message && (
           <p className="text-sm text-red-400">{errors.title.message}</p>
         )}
-        <label>Topic content</label>
+        <label>quest content</label>
         <input {...register('content')} />
         {errors.content?.message && (
           <p className="text-sm text-red-400">{errors.content.message}</p>

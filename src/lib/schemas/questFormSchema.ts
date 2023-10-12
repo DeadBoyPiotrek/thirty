@@ -48,13 +48,13 @@ const image = z
 
 const imageURL = z.string().url();
 
-export const topicFormSchemaImg = z.object({
+export const questFormSchemaImg = z.object({
   title,
   content,
   image,
 });
 
-export const topicFormSchemaImgUrl = z.object({
+export const questFormSchemaImgUrl = z.object({
   title,
   content,
   imageURL,

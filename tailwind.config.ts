@@ -12,6 +12,9 @@ const config: Config = {
         brandRed: '#ef233c',
         brandBlue: '#3a86ff',
       },
+      scale: {
+        115: '1.15',
+      },
     },
   },
   plugins: [],

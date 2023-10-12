@@ -1,9 +1,7 @@
-import { TopicForm } from '@/components/topic/topicForm';
-
 import { serverClient } from './_trpc/serverClient';
 import Image from 'next/image';
 
-type Topic = {
+type Quest = {
   id: string;
   title: string;
   content: string;
@@ -11,15 +9,15 @@ type Topic = {
   image: string;
 };
 
-const TopicList = ({ topics }: { topics: Topic[] }) => {
+const QuestList = ({ quests }: { quests: Quest[] }) => {
   return (
     <div className="border inline-block">
-      {topics.map(topic => (
-        <div key={topic.id} className="topic w-80 ">
-          <Image src={topic.image} alt={topic.title} width={400} height={300} />
-          <h2>{topic.title}</h2>
-          <p>{topic.content}</p>
-          <small>{topic.datePublished}</small>
+      {quests.map(quest => (
+        <div key={quest.id} className="quest w-80 ">
+          <Image src={quest.image} alt={quest.title} width={400} height={300} />
+          <h2>{quest.title}</h2>
+          <p>{quest.content}</p>
+          <small>{quest.datePublished}</small>
         </div>
       ))}
     </div>
@@ -27,13 +25,9 @@ const TopicList = ({ topics }: { topics: Topic[] }) => {
 };
 
 export default async function Home() {
-  const topics = await serverClient.topic.getMyTopics();
+  const quests = await serverClient.quest.getMyQuests();
 
   return (
-    <div>
-      <TopicForm />
-
-      {topics && topics.length > 0 && <TopicList topics={topics} />}
-    </div>
+    <div>{quests && quests.length > 0 && <QuestList quests={quests} />}</div>
   );
 }
