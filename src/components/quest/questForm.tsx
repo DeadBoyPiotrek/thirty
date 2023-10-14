@@ -5,9 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/server/supabase';
 import { trpc } from '@_trpc/client';
 import { Button } from '@/components/ui/button';
+import { randomizeName } from '@/lib/utils';
 export const QuestForm = () => {
   const mutation = trpc.quest.addQuest.useMutation();
-  //* form stuff
+
   type Inputs = Zod.infer<typeof questFormSchemaImg>;
   const {
     register,
@@ -19,13 +20,7 @@ export const QuestForm = () => {
   const onSubmit: SubmitHandler<Inputs> = async data => {
     const { data: resData, error } = await supabase.storage
       .from('quests')
-      .upload(
-        data.image[0].name +
-          Math.floor(new Date().getTime() / 1000) +
-          Math.floor(Math.random() * 1000),
-        data.image[0]
-      );
-
+      .upload(randomizeName(data.image[0].name), data.image[0]);
     if (error) {
       console.log(error);
     } else {
@@ -37,10 +32,8 @@ export const QuestForm = () => {
         title: data.title,
         imageURL: ResData2.publicUrl,
       });
-      console.log(ResData2.publicUrl);
     }
   };
-  //* form stuff
 
   return (
     <>

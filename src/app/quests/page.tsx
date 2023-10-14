@@ -1,9 +1,12 @@
+import { serverClient } from '@_trpc/serverClient';
 import { QuestForm } from '@/components/quest/questForm';
-const QuestsPage = () => {
+import { QuestList } from '@/components/quest/questsList';
+const QuestsPage = async () => {
+  const quests = await serverClient.quest.getMyQuests();
   return (
     <div>
-      <h1>QuestsPage</h1>
       <QuestForm />
+      <div>{quests && quests.length > 0 && <QuestList quests={quests} />}</div>
     </div>
   );
 };

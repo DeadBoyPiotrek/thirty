@@ -37,7 +37,7 @@ export const Navigation = async () => {
           </Link>
         </span>
 
-        <Link href="/profile">
+        <Link href={}>
           <Avatar>
             {user.image ? (
               <Image
