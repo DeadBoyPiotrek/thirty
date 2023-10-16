@@ -2,7 +2,8 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react';
 
-const ProfilePage = () => {
+const ProfilePage = ({ params }: { params: { userId: string } }) => {
+  console.log(`🚀 ~ ProfilePage ~ params:`, params);
   const { data: session } = useSession();
 
   return (

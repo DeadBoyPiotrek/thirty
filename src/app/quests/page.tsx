@@ -2,7 +2,7 @@ import { serverClient } from '@_trpc/serverClient';
 import { QuestForm } from '@/components/quest/questForm';
 import { QuestList } from '@/components/quest/questsList';
 const QuestsPage = async () => {
-  const quests = await serverClient.quest.getMyQuests();
+  const quests = await serverClient.quest.getMyQuestsWPosts();
   return (
     <div>
       <QuestForm />

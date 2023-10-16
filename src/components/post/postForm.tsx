@@ -1,35 +1,40 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { supabase } from '@/server/supabase';
-type TopicFormData = {
-  title: string;
-  content: string;
-  image: FileList;
-  topic: string;
-};
+import { postFormSchemaImg } from '@/lib/schemas/postFormSchema';
+import { randomizeName } from '@/lib/utils';
+import { trpc } from '@/app/_trpc/client';
 
+type Inputs = Zod.infer<typeof postFormSchemaImg>;
 export const PostForm = () => {
+  const allQuests = trpc.quest.getQuestsForPostForm.useQuery();
+
+  const mutation = trpc.post.addPost.useMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TopicFormData>();
-  const onSubmit = async (data: TopicFormData) => {
-    const imageFile = data.image[0];
-    console.log(`🚀 ~ onSubmit ~ imageFile:`, imageFile);
+  } = useForm<Inputs>();
 
-    if (imageFile) {
-      const response = await supabase.storage
-        .from('test')
-        .upload('noExtension', imageFile);
-
-      if (response.error) {
-        console.error('Error uploading image:', response.error);
-      } else {
-        console.log('Image uploaded successfully:', response.data);
-      }
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    console.log(`🚀 ~ PostForm ~ data:`, data);
+    const { data: resData, error } = await supabase.storage
+      .from('posts')
+      .upload(randomizeName(data.image[0].name), data.image[0]);
+    if (error) {
+      console.log(error);
+    } else {
+      const { data: ResData2 } = supabase.storage
+        .from('posts')
+        .getPublicUrl(resData?.path);
+      mutation.mutate({
+        content: data.content,
+        title: data.title,
+        imageURL: ResData2.publicUrl,
+        questId: data.questId,
+      });
     }
   };
 
@@ -39,11 +44,14 @@ export const PostForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <label>Topic</label>
-      <select {...register('topic', { required: true })}>
-        <option value="1">Topic 1</option>
-        <option value="2">Topic 2</option>
-        <option value="3">Topic 3</option>
+      <select {...register('questId', { required: true })}>
+        {allQuests.data?.map(quest => (
+          <option key={quest.id} value={quest.id}>
+            {quest.title}
+          </option>
+        ))}
       </select>
+      {errors.questId && <span>This field is required</span>}
 
       <label>Post title</label>
       <input {...register('title', { required: true })} />
