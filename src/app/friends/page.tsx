@@ -1,9 +1,9 @@
-import { FriendsSearch } from '@/components/friends/friendsSearch';
+import { UsersSearch } from '@/components/users/usersSearch';
 
 const FriendsPage = () => {
   return (
     <div>
-      <FriendsSearch />
+      <UsersSearch />
     </div>
   );
 };

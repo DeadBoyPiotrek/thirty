@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback } from '../ui/avatar';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const FriendsSearch = () => {
+export const UsersSearch = () => {
   const [search, setSearch] = useState('');
   const users = trpc.user.searchForUsers.useQuery({ name: search });
   console.log(`🚀 ~ FriendsSearch ~ users:`, users.data);
@@ -15,7 +15,7 @@ export const FriendsSearch = () => {
       <input
         className="text-black p-4"
         type="text"
-        placeholder="Search for friends"
+        placeholder="Search for users "
         value={search}
         onChange={e => setSearch(e.target.value)}
       />

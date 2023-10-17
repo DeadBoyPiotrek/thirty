@@ -22,9 +22,6 @@ export const userRouter = router({
     }
     return user.profileId;
   }),
-  getUserProfileByProfileId: protectedProcedure.query(() => {
-    return 'lol';
-  }),
 
   searchForUsers: protectedProcedure
     .input(z.object({ name: z.string() }))
@@ -42,5 +39,25 @@ export const userRouter = router({
       });
 
       return users;
+    }),
+
+  getUserProfile: protectedProcedure
+    .input(z.object({ profileId: z.string() }))
+    .query(async ({ input }) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          profileId: input.profileId,
+        },
+        select: {
+          name: true,
+          profileId: true,
+          image: true,
+          friends: true,
+          quests: true,
+          profilePrivate: true,
+        },
+      });
+
+      return user;
     }),
 });

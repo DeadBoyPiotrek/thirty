@@ -1,27 +1,43 @@
-'use client';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import Image from 'next/image';
+import { serverClient } from '../_trpc/serverClient';
 
-import { signIn, signOut, useSession } from 'next-auth/react';
+const ProfilePage = async ({ params }: { params: { userId: string } }) => {
+  const currentUserProfileId = await serverClient.user.getUserProfileId();
 
-const ProfilePage = ({ params }: { params: { userId: string } }) => {
-  console.log(`🚀 ~ ProfilePage ~ params:`, params);
-  const { data: session } = useSession();
+  const user = await serverClient.user.getUserProfile({
+    profileId: params.userId,
+  });
+  //! check if user is profile owner
 
-  return (
-    <div>
-      <h1>User Profile</h1>
-      {!session ? (
-        <>
-          Not signed in <br />
-          <button onClick={() => signIn()}>Sign in</button>
-        </>
-      ) : (
-        <>
-          Signed in as {session?.user?.name} <br />
-          <button onClick={() => signOut()}>Sign out</button>
-        </>
-      )}
-    </div>
-  );
+  if (user) {
+    return (
+      <div>
+        <Avatar>
+          {user.image ? (
+            <Image
+              src={user.image}
+              alt="Avatar"
+              width={300}
+              height={300}
+              className="w-72 rounded-full "
+            />
+          ) : (
+            <AvatarFallback userName={!user.name ? 'Profile' : user?.name} />
+          )}
+        </Avatar>
+        <h2 className="font-bold text-2xl">{user.name}</h2>
+
+        {currentUserProfileId === params.userId ? (
+          <button className="border p-2">edit profile</button>
+        ) : (
+          <button className="border p-2">add friend</button>
+        )}
+      </div>
+    );
+  } else {
+    return <p>user not found</p>;
+  }
 };
 
 export default ProfilePage;
