@@ -1,12 +1,17 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Image from 'next/image';
 import { serverClient } from '../_trpc/serverClient';
+import { AddFriend } from '@/components/addFriend/addFriend';
 
-const ProfilePage = async ({ params }: { params: { userId: string } }) => {
+const ProfilePage = async ({
+  params,
+}: {
+  params: { userProfileId: string };
+}) => {
   const currentUserProfileId = await serverClient.user.getUserProfileId();
 
   const user = await serverClient.user.getUserProfile({
-    profileId: params.userId,
+    profileId: params.userProfileId,
   });
   //! check if user is profile owner
 
@@ -28,10 +33,10 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
         </Avatar>
         <h2 className="font-bold text-2xl">{user.name}</h2>
 
-        {currentUserProfileId === params.userId ? (
+        {currentUserProfileId === params.userProfileId ? (
           <button className="border p-2">edit profile</button>
         ) : (
-          <button className="border p-2">add friend</button>
+          <AddFriend profileId={params.userProfileId} />
         )}
       </div>
     );

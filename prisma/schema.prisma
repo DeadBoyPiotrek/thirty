@@ -20,8 +20,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -34,32 +33,32 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id                     String          @id @default(cuid())
-  name                   String?
-  email                  String?         @unique
-  emailVerified          DateTime?
-  image                  String?
-  profileId              String          @unique @default(cuid())
-  profilePrivate         Boolean         @default(false)
-  accounts               Account[]
-  sessions               Session[]
-  FriendRequests         FriendRequest[] @relation("SentFriendRequests")
-  receivedFriendRequests FriendRequest[] @relation("ReceivedFriendRequests")
-  quests                 Quest[]
-  posts                  Post[]
-  comments               Comment[]
-  likes                  Like[]
-  friends                User[]          @relation("Friends")
-  friendOf               User[]          @relation("Friends")
-}
-
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model User {
+  id                    String          @id @default(cuid())
+  name                  String?
+  email                 String?         @unique
+  emailVerified         DateTime?
+  image                 String?
+  profileId             String          @unique @default(cuid())
+  profilePrivate        Boolean         @default(false)
+  sentfriendRequest     FriendRequest[] @relation("SentFriendRequests")
+  receivedFriendRequest FriendRequest[] @relation("ReceivedFriendRequests")
+  friends               User[]          @relation("Friends")
+  friendOf              User[]          @relation("Friends")
+  accounts              Account[]
+  sessions              Session[]
+  quests                Quest[]
+  posts                 Post[]
+  comments              Comment[]
+  likes                 Like[]
 }
 
 model FriendRequest {
@@ -114,13 +113,12 @@ model Comment {
   userId        String
 }
 
-// TODO: make sure either post or quest is defined
 model Like {
   id      String  @id @default(cuid())
   post    Post?   @relation(fields: [postId], references: [id])
-  postId  String
+  postId  String?
   user    User    @relation(fields: [userId], references: [id])
   userId  String
-  Quest   Quest?  @relation(fields: [questId], references: [id])
+  quest   Quest?  @relation(fields: [questId], references: [id])
   questId String?
 }
