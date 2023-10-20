@@ -43,7 +43,7 @@ const ProfilePage = async ({
         <h2 className="font-bold text-2xl">{user.name}</h2>
 
         {currentUserProfileId === params.userProfileId ? (
-          <OwnerActions session={session} />
+          <OwnerActions session={session} friends={friends} />
         ) : (
           <AddFriend profileId={params.userProfileId} />
         )}

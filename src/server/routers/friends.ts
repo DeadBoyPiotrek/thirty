@@ -61,7 +61,9 @@ export const friendsRouter = router({
   acceptFriendRequest: protectedProcedure
     .input(z.object({ profileId: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      prisma.user.update({
+      console.log('first user id', ctx.userId);
+      console.log('second user profileId', input.profileId);
+      await prisma.user.update({
         where: {
           id: ctx.userId,
         },
@@ -92,6 +94,6 @@ export const friendsRouter = router({
       },
     });
 
-    return friends;
+    return friends?.friends;
   }),
 });

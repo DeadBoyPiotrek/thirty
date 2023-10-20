@@ -68,6 +68,8 @@ model FriendRequest {
   receiver   User   @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
   receiverId String
   status     Status @default(pending)
+
+  @@unique([senderId, receiverId])
 }
 
 enum Status {
