@@ -4,11 +4,12 @@ import type { Session } from 'next-auth';
 
 type OwnerActionsProps = {
   session: Session;
-  friends: {
-    image: string | null;
-    name: string | null;
-    profileId: string;
-  }[];
+  friends:
+    | {
+        image: string | null;
+        name: string | null;
+        profileId: string;
+      }[];
 };
 
 export const OwnerActions = ({ session, friends }: OwnerActionsProps) => {

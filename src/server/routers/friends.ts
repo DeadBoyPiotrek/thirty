@@ -94,6 +94,6 @@ export const friendsRouter = router({
       },
     });
 
-    return friends?.friends;
+    return friends?.friends ?? [];
   }),
 });
