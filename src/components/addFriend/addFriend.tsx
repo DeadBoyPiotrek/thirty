@@ -2,7 +2,7 @@
 import { trpc } from '@/app/_trpc/client';
 
 export const AddFriend = ({ profileId }: { profileId: string }) => {
-  const addFriend = trpc.user.sendFriendRequest.useMutation();
+  const addFriend = trpc.friends.sendFriendRequest.useMutation();
   return (
     <button
       className="border p-3"

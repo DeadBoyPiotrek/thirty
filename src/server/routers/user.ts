@@ -60,35 +60,4 @@ export const userRouter = router({
 
       return user;
     }),
-
-  sendFriendRequest: protectedProcedure
-    .input(z.object({ profileId: z.string() }))
-    .mutation(async ({ input, ctx }) => {
-      const { userId } = ctx;
-      const user = await prisma.user.findUnique({
-        where: {
-          profileId: input.profileId,
-        },
-        select: {
-          id: true,
-          friends: true,
-        },
-      });
-
-      if (!user) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'User not found',
-        });
-      }
-
-      const friendRequest = await prisma.friendRequest.create({
-        data: {
-          senderId: userId,
-          receiverId: user.id,
-        },
-      });
-
-      return friendRequest;
-    }),
 });

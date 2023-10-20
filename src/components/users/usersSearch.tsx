@@ -6,9 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const UsersSearch = () => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('✅');
   const users = trpc.user.searchForUsers.useQuery({ name: search });
-  console.log(`🚀 ~ FriendsSearch ~ users:`, users.data);
 
   return (
     <div className="flex justify-center flex-col gap-2">

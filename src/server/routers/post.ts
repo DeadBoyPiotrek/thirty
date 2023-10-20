@@ -1,6 +1,5 @@
 import { postFormSchemaImgUrl } from '@/lib/schemas/postFormSchema';
 import { protectedProcedure, router } from '../trpc';
-import {} from 'zod';
 import { prisma } from '../prisma';
 export const postRouter = router({
   addPost: protectedProcedure
