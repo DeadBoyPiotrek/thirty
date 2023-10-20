@@ -18,7 +18,6 @@ const ProfilePage = async ({
 
   const currentUserProfileId = await serverClient.user.getUserProfileId();
   const friends = await serverClient.friends.getFriends();
-  console.log(`🚀 ~ friends:`, friends);
 
   const user = await serverClient.user.getUserProfile({
     profileId: params.userProfileId,

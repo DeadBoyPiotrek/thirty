@@ -58,23 +58,63 @@ export const friendsRouter = router({
     return friendRequests;
   }),
 
-  acceptFriendRequest: protectedProcedure
+  removeFriend: protectedProcedure
     .input(z.object({ profileId: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      console.log('first user id', ctx.userId);
-      console.log('second user profileId', input.profileId);
-      await prisma.user.update({
+      const { userId } = ctx;
+      const user = await prisma.user.findUnique({
         where: {
-          id: ctx.userId,
+          id: userId,
         },
-        data: {
+        select: {
           friends: {
-            connect: {
+            where: {
               profileId: input.profileId,
             },
           },
         },
       });
+
+      if (!user) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+
+      await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          friends: {
+            disconnect: {
+              profileId: input.profileId,
+            },
+          },
+        },
+      });
+    }),
+
+  acceptFriendRequest: protectedProcedure
+    .input(z.object({ profileId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      try {
+        await prisma.user.update({
+          where: {
+            id: ctx.userId,
+          },
+          data: {
+            friends: {
+              connect: {
+                profileId: input.profileId,
+              },
+            },
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }),
 
   getFriends: protectedProcedure.query(async ({ ctx }) => {
