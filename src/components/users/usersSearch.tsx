@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const UsersSearch = () => {
-  const [search, setSearch] = useState('✅');
+  const [search, setSearch] = useState('');
   const users = trpc.user.searchForUsers.useQuery({ name: search });
 
   return (
@@ -32,7 +32,7 @@ export const UsersSearch = () => {
                 alt="Avatar"
                 width={40}
                 height={40}
-                className="w-10 rounded-full hover:scale-115 transition ease-in-out duration-300"
+                className="w-10 rounded-full"
               />
             ) : (
               <AvatarFallback userName={!user.name ? 'Profile' : user?.name} />

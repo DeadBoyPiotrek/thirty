@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Image from 'next/image';
 import { serverClient } from '../_trpc/serverClient';
-import { AddFriend } from '@/components/addFriend/addFriend';
+import { UserActions } from '@/components/userActions/userActions';
 import { OwnerActions } from '@/components/ownerActions/ownerActions';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
@@ -44,7 +44,7 @@ const ProfilePage = async ({
         {currentUserProfileId === params.userProfileId ? (
           <OwnerActions session={session} friends={friends} />
         ) : (
-          <AddFriend profileId={params.userProfileId} />
+          <UserActions profileId={params.userProfileId} />
         )}
       </div>
     );

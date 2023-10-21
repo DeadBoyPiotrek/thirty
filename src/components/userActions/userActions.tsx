@@ -1,7 +1,7 @@
 'use client';
 import { trpc } from '@/app/_trpc/client';
 
-export const AddFriend = ({ profileId }: { profileId: string }) => {
+export const UserActions = ({ profileId }: { profileId: string }) => {
   const addFriend = trpc.friends.sendFriendRequest.useMutation();
   const removeFriend = trpc.friends.removeFriend.useMutation();
   return (
