@@ -5,14 +5,12 @@ import { Avatar, AvatarFallback } from '../ui/avatar';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Image from 'next/image';
-import { serverClient } from '@/app/_trpc/serverClient';
 
 export const Navigation = async () => {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
   if (user) {
-    const userProfileId = await serverClient.user.getUserProfileId();
     return (
       <nav className="flex justify-between px-10 py-4 m-4 max-w-7xl w-full  backdrop-blur-md rounded-xl items-center border border-neutral-800 shadow-md shadow-neutral-900/50 ">
         <p className="font-extrabold text-4xl">Thirty</p>
@@ -39,7 +37,7 @@ export const Navigation = async () => {
           </Link>
         </span>
 
-        <Link href={userProfileId}>
+        <Link href={user.id}>
           <Avatar>
             {user.image ? (
               <Image

@@ -34,6 +34,7 @@ export const questRouter = router({
         content: true,
         image: true,
         datePublished: true,
+        userId: true,
         posts: {
           select: {
             id: true,

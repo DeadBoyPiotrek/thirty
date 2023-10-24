@@ -42,40 +42,32 @@ model VerificationToken {
 }
 
 model User {
-  id                    String          @id @default(cuid())
-  name                  String?
-  email                 String?         @unique
-  emailVerified         DateTime?
-  image                 String?
-  profileId             String          @unique @default(cuid())
-  profilePrivate        Boolean         @default(false)
-  sentfriendRequest     FriendRequest[] @relation("SentFriendRequests")
-  receivedFriendRequest FriendRequest[] @relation("ReceivedFriendRequests")
-  friends               User[]          @relation("Friends")
-  friendOf              User[]          @relation("Friends")
-  accounts              Account[]
-  sessions              Session[]
-  quests                Quest[]
-  posts                 Post[]
-  comments              Comment[]
-  likes                 Like[]
+  id                     String          @id @default(cuid())
+  name                   String?
+  email                  String?         @unique
+  emailVerified          DateTime?
+  image                  String?
+  profilePrivate         Boolean         @default(false)
+  sentFriendRequests     FriendRequest[] @relation("SentFriendRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedFriendRequests")
+  friends                User[]          @relation("Friends")
+  friendOf               User[]          @relation("Friends")
+  accounts               Account[]
+  sessions               Session[]
+  quests                 Quest[]
+  posts                  Post[]
+  comments               Comment[]
+  likes                  Like[]
 }
 
 model FriendRequest {
   id         String @id @default(cuid())
-  sender     User   @relation("SentFriendRequests", fields: [senderId], references: [id])
+  sender     User   @relation("SentFriendRequests", fields: [senderId], references: [id], onDelete: Cascade)
   senderId   String
-  receiver   User   @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
+  receiver   User   @relation("ReceivedFriendRequests", fields: [receiverId], references: [id], onDelete: Cascade)
   receiverId String
-  status     Status @default(pending)
 
   @@unique([senderId, receiverId])
-}
-
-enum Status {
-  pending
-  accepted
-  rejected
 }
 
 model Quest {
@@ -85,7 +77,7 @@ model Quest {
   content       String
   datePublished DateTime @default(now())
   finished      Boolean  @default(false)
-  user          User     @relation(fields: [userId], references: [id])
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
   posts         Post[]
   likes         Like[]
@@ -97,9 +89,9 @@ model Post {
   title         String
   content       String
   datePublished DateTime  @default(now())
-  quest         Quest     @relation(fields: [questId], references: [id])
+  quest         Quest     @relation(fields: [questId], references: [id], onDelete: Cascade)
   questId       String
-  user          User      @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
   comments      Comment[]
   likes         Like[]
@@ -109,18 +101,18 @@ model Comment {
   id            String   @id @default(cuid())
   content       String
   datePublished DateTime @default(now())
-  post          Post     @relation(fields: [postId], references: [id])
+  post          Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId        String
-  user          User     @relation(fields: [userId], references: [id])
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
 }
 
 model Like {
   id      String  @id @default(cuid())
-  post    Post?   @relation(fields: [postId], references: [id])
+  post    Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId  String?
-  user    User    @relation(fields: [userId], references: [id])
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
-  quest   Quest?  @relation(fields: [questId], references: [id])
+  quest   Quest?  @relation(fields: [questId], references: [id], onDelete: Cascade)
   questId String?
 }

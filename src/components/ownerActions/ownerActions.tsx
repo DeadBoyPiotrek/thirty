@@ -8,7 +8,7 @@ type OwnerActionsProps = {
     | {
         image: string | null;
         name: string | null;
-        profileId: string;
+        id: string;
       }[];
 };
 
@@ -22,7 +22,7 @@ export const OwnerActions = ({ session, friends }: OwnerActionsProps) => {
         <div className="border flex flex-col">
           Your friends 👯‍♂️:
           {friends.map(friend => {
-            return <p key={friend.profileId}>{friend.name}</p>;
+            return <p key={friend.id}>{friend.name}</p>;
           })}
         </div>
       </>

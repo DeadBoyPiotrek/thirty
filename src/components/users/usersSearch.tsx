@@ -21,9 +21,9 @@ export const UsersSearch = () => {
 
       {users.data?.map(user => (
         <Link
-          key={user.profileId}
+          key={user.id}
           className="border p-3 flex items-center gap-4"
-          href={`/${user.profileId}`}
+          href={`/${user.id}`}
         >
           <Avatar>
             {user.image ? (

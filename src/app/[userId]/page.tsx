@@ -6,21 +6,17 @@ import { OwnerActions } from '@/components/ownerActions/ownerActions';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
-const ProfilePage = async ({
-  params,
-}: {
-  params: { userProfileId: string };
-}) => {
+const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const session = await getServerSession(authOptions);
   if (!session) {
     return redirect('/');
   }
 
-  const currentUserProfileId = await serverClient.user.getUserProfileId();
+  const currentUserId = session.user?.id;
   const friends = await serverClient.friends.getFriends();
 
   const user = await serverClient.user.getUserProfile({
-    profileId: params.userProfileId,
+    userId: params.userId,
   });
 
   if (user) {
@@ -41,10 +37,10 @@ const ProfilePage = async ({
         </Avatar>
         <h2 className="font-bold text-2xl">{user.name}</h2>
 
-        {currentUserProfileId === params.userProfileId ? (
+        {currentUserId === params.userId ? (
           <OwnerActions session={session} friends={friends} />
         ) : (
-          <UserActions profileId={params.userProfileId} />
+          <UserActions profileId={params.userId} />
         )}
       </div>
     );
