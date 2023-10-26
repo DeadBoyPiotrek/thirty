@@ -18,20 +18,27 @@ export const QuestForm = () => {
     resolver: zodResolver(questFormSchemaImg),
   });
   const onSubmit: SubmitHandler<Inputs> = async data => {
-    const { data: resData, error } = await supabase.storage
-      .from('quests')
-      .upload(randomizeName(data.image[0].name), data.image[0]);
-    if (error) {
-      console.log(error);
-    } else {
-      const { data: ResData2 } = supabase.storage
-        .from('quests')
-        .getPublicUrl(resData?.path);
+    if (data.image.length === 0) {
       mutation.mutate({
         content: data.content,
         title: data.title,
-        imageURL: ResData2.publicUrl,
       });
+    } else {
+      const { data: resData, error } = await supabase.storage
+        .from('quests')
+        .upload(randomizeName(data.image[0].name), data.image[0]);
+      if (error) {
+        console.log(error);
+      } else {
+        const { data: ResData2 } = supabase.storage
+          .from('quests')
+          .getPublicUrl(resData?.path);
+        mutation.mutate({
+          content: data.content,
+          title: data.title,
+          imageURL: ResData2.publicUrl,
+        });
+      }
     }
   };
 

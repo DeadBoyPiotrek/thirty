@@ -1,7 +1,7 @@
 'use client';
 import { signOut } from 'next-auth/react';
 import type { Session } from 'next-auth';
-
+import { Switch } from '@ui/switch';
 type OwnerActionsProps = {
   session: Session;
   friends:
@@ -17,10 +17,10 @@ export const OwnerActions = ({ session, friends }: OwnerActionsProps) => {
     <button className="border p-2">edit profile</button>;
     return (
       <>
-        Signed in as {session.user.email} <br />
         <button onClick={() => signOut()}>Sign out</button>
-        <div className="border flex flex-col">
-          Your friends 👯‍♂️:
+        <Switch />
+        <div className="border flex flex-col ">
+          Your friends
           {friends.map(friend => {
             return <p key={friend.id}>{friend.name}</p>;
           })}

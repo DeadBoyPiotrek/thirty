@@ -6,6 +6,7 @@ import { OwnerActions } from '@/components/ownerActions/ownerActions';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
+import { NotFound } from '@/components/notFound/notFound';
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -44,8 +45,9 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
         )}
       </div>
     );
+    //TODO is this ok to do?
   } else {
-    return <p>user not found</p>;
+    return <NotFound />;
   }
 };
 

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { HiHome } from 'react-icons/hi';
 import { FaUserFriends, FaStar } from 'react-icons/fa';
-import { Avatar, AvatarFallback } from '../ui/avatar';
+import { Avatar, AvatarFallback } from '@ui/avatar';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Image from 'next/image';
@@ -29,7 +29,7 @@ export const Navigation = async () => {
               className="transition hover:scale-125 ease-in-out duration-300 "
             />
           </Link>
-          <Link href="/quests">
+          <Link href={`${user.id}/quests`}>
             <FaStar
               aria-hidden="true"
               className="transition hover:scale-125 ease-in-out duration-300"
@@ -37,7 +37,7 @@ export const Navigation = async () => {
           </Link>
         </span>
 
-        <Link href={user.id}>
+        <Link href={`/${user.id}`}>
           <Avatar>
             {user.image ? (
               <Image

@@ -6,7 +6,7 @@ type FriendRequestsProps = {
     sender: {
       image: string | null;
       name: string | null;
-      profileId: string;
+      id: string;
     };
   }[];
 };
@@ -18,12 +18,12 @@ export const FriendRequests = ({ friendRequests }: FriendRequestsProps) => {
       <h1 className="text-4xl">FriendRequests</h1>
       {friendRequests.map(request => {
         return (
-          <div className="flex gap-2" key={request.sender.profileId}>
+          <div className="flex gap-2" key={request.sender.id}>
             <p>{request.sender.name}</p>
             <button
               onClick={() =>
                 acceptFriendRequest.mutate({
-                  profileId: request.sender.profileId,
+                  profileId: request.sender.id,
                 })
               }
             >

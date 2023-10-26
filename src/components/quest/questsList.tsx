@@ -6,29 +6,36 @@ type Post = {
   title: string;
   content: string;
   datePublished: string;
-  image: string;
+  image: string | null;
 };
 type Quest = {
   id: string;
   title: string;
   content: string;
   datePublished: string;
-  image: string;
+  image: string | null;
   userId: string;
   posts: Post[];
 };
 export const QuestList = ({ quests }: { quests: Quest[] }) => {
   return (
-    <div className="border inline-block">
+    <div className="">
       <QuestForm />
       {quests.map(quest => (
-        <Link key={quest.id} href={`${quest.userId}`} className="quest w-80">
-          <Image
-            src={quest.image}
-            alt={`image for ${quest.title}`}
-            width={400}
-            height={300}
-          />
+        <Link
+          key={quest.id}
+          href={`${quest.userId}/quest/`}
+          className="quest w-80"
+        >
+          {quest.image ? (
+            <Image
+              src={quest.image}
+              alt={`image for ${quest.title}`}
+              width={400}
+              height={300}
+            />
+          ) : null}
+
           <h2>{quest.title}</h2>
           <p>{quest.content}</p>
           <small>{quest.datePublished}</small>

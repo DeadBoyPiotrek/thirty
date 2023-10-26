@@ -72,7 +72,7 @@ model FriendRequest {
 
 model Quest {
   id            String   @id @default(cuid())
-  image         String
+  image         String?
   title         String
   content       String
   datePublished DateTime @default(now())
@@ -85,7 +85,7 @@ model Quest {
 
 model Post {
   id            String    @id @default(cuid())
-  image         String
+  image         String?
   title         String
   content       String
   datePublished DateTime  @default(now())
