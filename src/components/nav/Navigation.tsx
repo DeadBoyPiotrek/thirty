@@ -12,8 +12,8 @@ export const Navigation = async () => {
 
   if (user) {
     return (
-      <nav className="flex justify-between px-10 py-4 m-4 max-w-7xl w-full  backdrop-blur-md rounded-xl items-center border border-neutral-800 shadow-md shadow-neutral-900/50 ">
-        <p className="font-extrabold text-4xl">Thirty</p>
+      <nav className="flex justify-between px-10 py-4 m-4 max-w-7xl w-full rounded-xl items-center text-brandGray bg-brandLightBlack ">
+        <p className="font-extrabold text-4xl text-brandPurple">Thirty</p>
 
         <span className="flex text-4xl gap-x-16 ">
           <Link href="/">

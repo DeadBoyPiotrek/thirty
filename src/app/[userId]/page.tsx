@@ -24,7 +24,15 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   if (user) {
     return (
       <div>
-        <Button size={'md'}>Submi🔄️t</Button>
+        <Button variant={'dark'} size={'md'}>
+          Submit
+        </Button>
+        <Button variant={'light'} size={'md'}>
+          Submit
+        </Button>
+        <Button variant={'ghost'} size={'md'}>
+          Submit
+        </Button>
 
         <Avatar>
           {user.image ? (

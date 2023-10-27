@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss';
-
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,8 +8,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brandRed: '#ef233c',
-        brandBlue: '#3a86ff',
+        brandWhite: '#F8F8F8',
+        brandPurple: '#6772DB',
+        brandRed: '#C84F59',
+        brandBlack: '#0D0D0F',
+        brandLightBlack: '#141418',
+        brandGray: '#8D8D90',
       },
       scale: {
         115: '1.15',

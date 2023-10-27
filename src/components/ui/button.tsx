@@ -2,11 +2,12 @@ import { cn } from '@/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
 import { FC } from 'react';
 
-const buttonVariants = cva('p-2', {
+const buttonVariants = cva('p-2 rounded-lg transition ', {
   variants: {
     variant: {
-      primary: 'bg-red-400',
-      secondary: 'bg-blue-400',
+      light: 'bg-brandWhite text-brandBlack hover:bg-brandWhite/90 ',
+      dark: 'bg-brandLightBlack border border-brandGray/30 hover:bg-brandWhite/10',
+      ghost: 'text-brandGray hover:text-brandWhite',
     },
     size: {
       sm: 'text-sm',
@@ -15,7 +16,7 @@ const buttonVariants = cva('p-2', {
     },
   },
   defaultVariants: {
-    variant: 'primary',
+    variant: 'light',
     size: 'md',
   },
 });
