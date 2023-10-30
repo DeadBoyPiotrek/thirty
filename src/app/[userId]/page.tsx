@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { NotFound } from '@/components/notFound/notFound';
-import { Button } from '@ui/button';
+import { Button } from '@/components/ui/button';
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -23,37 +23,35 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
 
   if (user) {
     return (
-      <div>
-        <Button variant={'dark'} size={'md'}>
-          Submit
-        </Button>
-        <Button variant={'light'} size={'md'}>
-          Submit
-        </Button>
-        <Button variant={'ghost'} size={'md'}>
-          Submit
-        </Button>
-
-        <Avatar>
-          {user.image ? (
-            <Image
-              src={user.image}
-              alt="Avatar"
-              width={300}
-              height={300}
-              className="w-72 rounded-full "
-            />
+      <div className="flex ">
+        <div className="w-96 flex flex-col justify-center">
+          <Avatar className="mt-5">
+            {user.image ? (
+              <Image
+                src={user.image}
+                alt="Avatar"
+                width={300}
+                height={300}
+                className="w-72 rounded-full "
+              />
+            ) : (
+              <AvatarFallback userName={!user.name ? 'Profile' : user?.name} />
+            )}
+          </Avatar>
+          <h2 className="font-bold text-3xl my-5 break-words">{user.name}</h2>
+          {currentUserId === params.userId ? (
+            <OwnerActions session={session} />
           ) : (
-            <AvatarFallback userName={!user.name ? 'Profile' : user?.name} />
+            <UserActions profileId={params.userId} />
           )}
-        </Avatar>
-        <h2 className="font-bold text-2xl">{user.name}</h2>
-
-        {currentUserId === params.userId ? (
-          <OwnerActions session={session} friends={friends} />
-        ) : (
-          <UserActions profileId={params.userId} />
-        )}
+          <div className="text-xl flex flex-col ">
+            Friends
+            {friends.map(friend => {
+              return <p key={friend.id}>{friend.name}</p>;
+            })}
+          </div>
+        </div>
+        <div className="w-full">POSTS</div>
       </div>
     );
     //TODO is this ok to do?

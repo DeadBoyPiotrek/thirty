@@ -1,31 +1,32 @@
 'use client';
 import { signOut } from 'next-auth/react';
 import type { Session } from 'next-auth';
-import { Switch } from '@ui/switch';
+import { Button } from '../ui/button';
+import { Modal } from '../ui/modal';
+import { useState } from 'react';
+import { UserProfileForm } from '../userProfileForm/userProfileForm';
 type OwnerActionsProps = {
   session: Session;
-  friends:
-    | {
-        image: string | null;
-        name: string | null;
-        id: string;
-      }[];
 };
 
-export const OwnerActions = ({ session, friends }: OwnerActionsProps) => {
+export const OwnerActions = ({ session }: OwnerActionsProps) => {
+  const [mounted, setMounted] = useState(false);
+  const closeModal = () => {
+    setMounted(false);
+  };
   if (session) {
-    <button className="border p-2">edit profile</button>;
     return (
-      <>
-        <button onClick={() => signOut()}>Sign out</button>
-        <Switch />
-        <div className="border flex flex-col ">
-          Your friends
-          {friends.map(friend => {
-            return <p key={friend.id}>{friend.name}</p>;
-          })}
-        </div>
-      </>
+      <div className="flex gap-2 my-5">
+        <Modal mounted={mounted}>
+          <UserProfileForm closeModal={closeModal} />
+        </Modal>
+        <Button variant={'dark'} onClick={() => setMounted(true)}>
+          Edit profile
+        </Button>
+        <Button variant={'dark'} onClick={() => signOut()}>
+          Sign out
+        </Button>
+      </div>
     );
   }
 };

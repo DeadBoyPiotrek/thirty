@@ -1,5 +1,6 @@
 'use client';
 import { trpc } from '@/app/_trpc/client';
+import { Button } from '../ui/button';
 
 export const UserActions = ({ profileId }: { profileId: string }) => {
   const addFriend = trpc.friends.sendFriendRequest.useMutation();
@@ -19,12 +20,12 @@ export const UserActions = ({ profileId }: { profileId: string }) => {
   return (
     <>
       {areFriends.data ? (
-        <button
+        <Button
           className="border p-3"
           onClick={() => removeFriend.mutate({ profileId })}
         >
           Remove Friend 💔
-        </button>
+        </Button>
       ) : isFriendRequestSent.data ? (
         <button
           className="border p-3"
@@ -48,12 +49,12 @@ export const UserActions = ({ profileId }: { profileId: string }) => {
           </button>
         </>
       ) : (
-        <button
+        <Button
           className="border p-3"
           onClick={() => addFriend.mutate({ profileId })}
         >
           Add Friend ❤️
-        </button>
+        </Button>
       )}
     </>
   );
