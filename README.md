@@ -22,20 +22,20 @@
   - [x] Create Post
   - [x] Delete Post
   - [x] Add Image to Post
-  - [] Like Post
-  - [] Comment Post
-  - [] Edit Post
-  - [] Infinite Scroll
-- [] Looks
+  - [ ] Like Post
+  - [ ] Comment Post
+  - [ ] Edit Post
+  - [ ] Infinite Scroll
+- [ ] Looks
   - [x] Reusable Components
-  - [] Responsive
-  - [] Animations
-- [] Fetching
-  - [] ssr when possible
-  - [] caching
-  - [] optimistic updates
-- [] Error Handling
-- [] Testing
-- [] CI/CD
-- [] Deployment
-- [] Toaster
+  - [ ] Responsive
+  - [ ] Animations
+- [ ] Fetching
+  - [ ] ssr when possible
+  - [ ] caching
+  - [ ] optimistic updates
+- [ ] Error Handling
+- [ ] Testing
+- [ ] CI/CD
+- [ ] Deployment
+- [ ] Toaster
