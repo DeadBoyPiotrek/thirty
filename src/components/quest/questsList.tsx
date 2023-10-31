@@ -24,7 +24,7 @@ export const QuestList = ({ quests }: { quests: Quest[] }) => {
       {quests.map(quest => (
         <Link
           key={quest.id}
-          href={`${quest.userId}/quest/`}
+          href={`/${quest.userId}/quests/${quest.id}`}
           className="quest w-80"
         >
           {quest.image ? (

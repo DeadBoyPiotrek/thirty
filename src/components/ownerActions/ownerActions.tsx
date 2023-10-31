@@ -6,10 +6,11 @@ import { Modal } from '../ui/modal';
 import { useState } from 'react';
 import { UserProfileForm } from '../userProfileForm/userProfileForm';
 type OwnerActionsProps = {
+  userData: { name: string; bio: string | null };
   session: Session;
 };
 
-export const OwnerActions = ({ session }: OwnerActionsProps) => {
+export const OwnerActions = ({ session, userData }: OwnerActionsProps) => {
   const [mounted, setMounted] = useState(false);
   const closeModal = () => {
     setMounted(false);
@@ -18,7 +19,7 @@ export const OwnerActions = ({ session }: OwnerActionsProps) => {
     return (
       <div className="flex gap-2 my-5">
         <Modal mounted={mounted}>
-          <UserProfileForm closeModal={closeModal} />
+          <UserProfileForm userData={userData} closeModal={closeModal} />
         </Modal>
         <Button variant={'dark'} onClick={() => setMounted(true)}>
           Edit profile

@@ -9,7 +9,6 @@ import Image from 'next/image';
 export const Navigation = async () => {
   const session = await getServerSession(authOptions);
   const user = session?.user;
-
   if (user) {
     return (
       <nav className="flex justify-between px-10 py-4 m-4 max-w-7xl w-full rounded-xl items-center text-brandGray bg-brandBlack-light ">
@@ -29,7 +28,7 @@ export const Navigation = async () => {
               className="transition hover:scale-125 ease-in-out duration-300 "
             />
           </Link>
-          <Link href={`${user.id}/quests`}>
+          <Link href={`/${user.id}/quests`}>
             <FaStar
               aria-hidden="true"
               className="transition hover:scale-125 ease-in-out duration-300"

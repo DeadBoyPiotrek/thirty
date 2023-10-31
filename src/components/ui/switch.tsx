@@ -6,7 +6,7 @@ export const Switch = () => {
     <form>
       <div className="flex items-center ">
         <label
-          className="text-white text-[15px] leading-none pr-[15px]"
+          className="text-black text-[15px] leading-none pr-[15px]"
           htmlFor="profile-private"
         >
           Profile Private

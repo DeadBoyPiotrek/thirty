@@ -6,6 +6,7 @@ import { supabase } from '@/server/supabase';
 import { trpc } from '@_trpc/client';
 import { Button } from '@/components/ui/button';
 import { randomizeName } from '@/lib/utils';
+import { FormError } from '../ui/formError';
 export const QuestForm = () => {
   const mutation = trpc.quest.addQuest.useMutation();
 
@@ -50,19 +51,13 @@ export const QuestForm = () => {
       >
         <label>quest title</label>
         <input {...register('title')} />
-        {errors.title?.message && (
-          <p className="text-sm text-red-400">{errors.title.message}</p>
-        )}
+        <FormError error={errors.title?.message} />
         <label>quest content</label>
         <input {...register('content')} />
-        {errors.content?.message && (
-          <p className="text-sm text-red-400">{errors.content.message}</p>
-        )}
+        <FormError error={errors.content?.message} />
         <label>Image</label>
         <input {...register('image')} type="file" />
-        {errors.image?.message && (
-          <p className="text-sm text-red-400">{errors.image.message}</p>
-        )}
+        <FormError error={errors.image?.message} />
 
         <Button className="bg-slate-200 p-2">Submit</Button>
       </form>

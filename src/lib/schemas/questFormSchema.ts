@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
-const title = z.string().nonempty().max(250, { message: 'Title is too long' });
+const title = z.string().nonempty().max(500);
 
 const content = z
   .string()
   .nonempty()
-  .max(1000, { message: 'Content is too long' });
+  .max(1500, { message: 'Content is too long' });
 
-const image = z
+export const image = z
   .custom<FileList>()
   .superRefine((files, ctx) => {
     if (files.length === 0) {
@@ -40,7 +40,7 @@ const image = z
   })
   .refine(files => files.length === 1 || files.length === 0);
 
-const imageURL = z.string().url().optional();
+export const imageURL = z.string().url().optional();
 
 export const questFormSchemaImg = z.object({
   title,

@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { NotFound } from '@/components/notFound/notFound';
-import { Button } from '@/components/ui/button';
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -30,17 +29,23 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
               <Image
                 src={user.image}
                 alt="Avatar"
-                width={300}
-                height={300}
-                className="w-72 rounded-full "
+                width={288}
+                height={288}
+                className="h-72 w-full rounded-full overflow-hidden object-cover"
               />
             ) : (
               <AvatarFallback userName={!user.name ? 'Profile' : user?.name} />
             )}
           </Avatar>
-          <h2 className="font-bold text-3xl my-5 break-words">{user.name}</h2>
+          <h2 className="font-bold text-3xl mt-5 break-words">{user.name}</h2>
+          {user.bio ? (
+            <p className="text-xl my-5 break-words">{user.bio}</p>
+          ) : null}
           {currentUserId === params.userId ? (
-            <OwnerActions session={session} />
+            <OwnerActions
+              userData={{ name: user.name, bio: user.bio }}
+              session={session}
+            />
           ) : (
             <UserActions profileId={params.userId} />
           )}
