@@ -31,7 +31,7 @@ export const friendsRouter = router({
               select: {
                 name: true,
                 id: true,
-                image: true,
+                imageUrl: true,
               },
             },
           },
@@ -162,7 +162,7 @@ export const friendsRouter = router({
           select: {
             name: true,
             id: true,
-            image: true,
+            imageUrl: true,
           },
         },
       },

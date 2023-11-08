@@ -6,8 +6,8 @@ import { userProfileSchemaImg } from '@lib/schemas/userProfileSchema';
 import { trpc } from '@/app/_trpc/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormError } from '../ui/formError';
-import { supabase } from '@/server/supabase';
-import { randomizeName } from '@/lib/utils';
+
+import { uploadImage } from '@/lib/helpers/images/uploadImage';
 type UserProfileFormProps = {
   userData: { name: string; bio: string | null };
   closeModal: () => void;
@@ -32,20 +32,20 @@ export const UserProfileForm = ({
       mutation.mutate(data);
       closeModal();
     } else {
-      const { data: resData, error } = await supabase.storage
-        .from('avatars')
-        .upload(randomizeName(data.image[0].name), data.image[0]);
+      const { imageName, imageUrl, error } = await uploadImage({
+        folderName: 'avatars',
+        image: data.image[0],
+      });
+      mutation.mutate({
+        bio: data.bio,
+        name: data.name,
+        imageUrl,
+        imageName,
+      });
+      closeModal();
+
       if (error) {
-        console.log(error);
-      } else {
-        const { data: ResData2 } = supabase.storage
-          .from('avatars')
-          .getPublicUrl(resData?.path);
-        mutation.mutate({
-          bio: data.bio,
-          name: data.name,
-          imageURL: ResData2.publicUrl,
-        });
+        console.error('uh oh something went wrong', error);
       }
     }
   };

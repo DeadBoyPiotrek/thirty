@@ -40,7 +40,7 @@ export const image = z
   })
   .refine(files => files.length === 1 || files.length === 0);
 
-export const imageURL = z.string().url().optional();
+export const imageUrl = z.string().url().optional();
 
 export const questFormSchemaImg = z.object({
   title,
@@ -51,5 +51,5 @@ export const questFormSchemaImg = z.object({
 export const questFormSchemaImgUrl = z.object({
   title,
   content,
-  imageURL,
+  imageUrl,
 });

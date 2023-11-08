@@ -25,13 +25,14 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
       <div className="flex ">
         <div className="w-96 flex flex-col justify-center">
           <Avatar className="mt-5">
-            {user.image ? (
+            {user.imageUrl ? (
               <Image
-                src={user.image}
+                src={user.imageUrl}
                 alt="Avatar"
-                width={288}
-                height={288}
-                className="h-72 w-full rounded-full overflow-hidden object-cover"
+                width={400}
+                height={400}
+                className="h-72 w-72 rounded-full object-cover"
+                quality={100}
               />
             ) : (
               <AvatarFallback userName={!user.name ? 'Profile' : user?.name} />

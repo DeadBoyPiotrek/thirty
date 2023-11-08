@@ -1,26 +1,39 @@
 'use client';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { postFormSchemaImg } from '@/lib/schemas/postFormSchema';
+import { postFormSchemaImgEdit } from '@/lib/schemas/postFormSchema';
 import { trpc } from '@/app/_trpc/client';
 import { FormError } from '@ui/formError';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { uploadImage } from '@/lib/helpers/images/uploadImage';
+import { Button } from '../ui/button';
+type Inputs = Zod.infer<typeof postFormSchemaImgEdit>;
 
-type Inputs = Zod.infer<typeof postFormSchemaImg>;
-export const PostForm = () => {
-  const allQuests = trpc.quest.getQuestsForPostForm.useQuery();
+interface PostEditFormProps {
+  post: {
+    id: string;
+    title: string;
+    content: string;
+    imageUrl: string | null;
+  };
+  closeModal: () => void;
+}
 
-  const mutation = trpc.post.addPost.useMutation();
+export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
+  const mutation = trpc.post.updatePost.useMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ resolver: zodResolver(postFormSchemaImg) });
+  } = useForm<Inputs>({
+    resolver: zodResolver(postFormSchemaImgEdit),
+    defaultValues: { title: post.title, content: post.content },
+  });
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     if (data.image.length === 0) {
       mutation.mutate({
+        id: post.id,
         questId: data.questId,
         content: data.content,
         title: data.title,
@@ -35,6 +48,7 @@ export const PostForm = () => {
       }
 
       mutation.mutate({
+        id: post.id,
         content: data.content,
         title: data.title,
         imageName,
@@ -42,38 +56,34 @@ export const PostForm = () => {
         questId: data.questId,
       });
     }
+    closeModal();
   };
 
   return (
     <form
-      className="flex flex-col w-56 text-yellow-500 border p-2"
+      className="text-black flex flex-col gap-2 bg-brandWhite-pure w-96 rounded-lg p-5"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <label>Topic</label>
-      <select {...register('questId', { required: true })}>
-        {allQuests.data?.map(quest => (
-          <option key={quest.id} value={quest.id}>
-            {quest.title}
-          </option>
-        ))}
-      </select>
-      <FormError error={errors.questId?.message} />
-
       <label>Post title</label>
-      <input {...register('title', { required: true })} />
+      <input {...register('title')} />
       <FormError error={errors.title?.message} />
 
       <label>Post content</label>
-      <input {...register('content', { required: true })} />
-      {errors.content && <span>This field is required</span>}
+      <textarea {...register('content')} />
       <FormError error={errors.content?.message} />
 
       <label>Image</label>
-      <input {...register('image', { required: false })} type="file" />
-      <p> {errors.image && null}</p>
+      <input {...register('image')} type="file" />
       <FormError error={errors.image?.message} />
 
-      <button type="submit">Submit</button>
+      <span className="flex gap-2">
+        <Button type="submit" variant={'brand'}>
+          Save
+        </Button>
+        <Button type="reset" variant={'dark'} onClick={() => closeModal()}>
+          Cancel
+        </Button>
+      </span>
     </form>
   );
 };

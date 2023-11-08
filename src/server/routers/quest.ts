@@ -11,7 +11,7 @@ export const questRouter = router({
         data: {
           title: input.title,
           content: input.content,
-          image: input.imageURL,
+          imageUrl: input.imageUrl,
 
           user: {
             connect: {
@@ -35,7 +35,7 @@ export const questRouter = router({
           id: true,
           title: true,
           content: true,
-          image: true,
+          imageUrl: true,
           datePublished: true,
           userId: true,
           posts: {
@@ -43,27 +43,14 @@ export const questRouter = router({
               id: true,
               title: true,
               content: true,
-              image: true,
+              imageUrl: true,
               datePublished: true,
             },
           },
         },
       });
-      //TODO - can it be done in a better way?
-      const questsWithDateString = quests.map(quest => {
-        return {
-          ...quest,
-          datePublished: quest.datePublished.toISOString(),
-          posts: quest.posts.map(post => {
-            return {
-              ...post,
-              datePublished: post.datePublished.toISOString(),
-            };
-          }),
-        };
-      });
 
-      return questsWithDateString;
+      return quests;
     }),
 
   getQuestsForPostForm: protectedProcedure.query(async ({ ctx }) => {
@@ -79,4 +66,43 @@ export const questRouter = router({
 
     return quests;
   }),
+
+  getSingleQuestWithPost: protectedProcedure
+    .input(z.object({ userId: z.string(), questId: z.string() }))
+    .query(async ({ input }) => {
+      const quest = await prisma.quest.findFirst({
+        where: {
+          userId: input.userId,
+          id: input.questId,
+        },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          imageUrl: true,
+          datePublished: true,
+          posts: {
+            orderBy: {
+              datePublished: 'desc',
+            },
+            select: {
+              id: true,
+              title: true,
+              content: true,
+              imageUrl: true,
+              datePublished: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  imageUrl: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return quest;
+    }),
 });

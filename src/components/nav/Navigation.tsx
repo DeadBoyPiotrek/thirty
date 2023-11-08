@@ -42,9 +42,9 @@ export const Navigation = async () => {
               <Image
                 src={user.image}
                 alt="Avatar"
-                width={40}
-                height={40}
-                className="w-10 rounded-full hover:scale-115 transition ease-in-out duration-300"
+                width={100}
+                height={100}
+                className="w-10 h-10 rounded-full hover:scale-115 transition ease-in-out duration-300 object-cover"
               />
             ) : (
               <AvatarFallback userName={!user.name ? 'Profile' : user?.name} />

@@ -46,9 +46,11 @@ model User {
   name                   String
   email                  String?         @unique
   emailVerified          DateTime?
-  image                  String?
   profilePrivate         Boolean         @default(false)
   bio                    String?
+  image                  String? //TODO: required for next-auth remove if possible
+  imageUrl               String?
+  imageName              String?
   sentFriendRequests     FriendRequest[] @relation("SentFriendRequests")
   receivedFriendRequests FriendRequest[] @relation("ReceivedFriendRequests")
   friends                User[]          @relation("Friends")
@@ -73,11 +75,12 @@ model FriendRequest {
 
 model Quest {
   id            String   @id @default(cuid())
-  image         String?
   title         String
   content       String
   datePublished DateTime @default(now())
   finished      Boolean  @default(false)
+  imageUrl      String?
+  imageName     String?
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
   posts         Post[]
@@ -86,9 +89,10 @@ model Quest {
 
 model Post {
   id            String    @id @default(cuid())
-  image         String?
   title         String
   content       String
+  imageUrl      String?
+  imageName     String?
   datePublished DateTime  @default(now())
   quest         Quest     @relation(fields: [questId], references: [id], onDelete: Cascade)
   questId       String
@@ -110,10 +114,10 @@ model Comment {
 
 model Like {
   id      String  @id @default(cuid())
-  post    Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId  String?
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
+  post    Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId  String?
   quest   Quest?  @relation(fields: [questId], references: [id], onDelete: Cascade)
   questId String?
 }

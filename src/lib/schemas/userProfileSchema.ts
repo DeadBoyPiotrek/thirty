@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { image, imageURL } from './questFormSchema';
+import { image, imageUrl } from './questFormSchema';
 
 const name = z.string().nonempty().max(50);
 const bio = z.string().max(500);
@@ -14,6 +14,7 @@ export const userProfileSchemaImg = z.object({
 export const userProfileSchemaImgUrl = z.object({
   name,
   bio,
-  imageURL,
+  imageUrl,
+  imageName: z.string().optional(),
   profilePrivate,
 });

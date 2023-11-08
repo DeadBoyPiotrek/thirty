@@ -1,36 +1,37 @@
 import Image from 'next/image';
 import { QuestForm } from '@/components/quest/questForm';
 import Link from 'next/link';
+import { format } from 'date-fns';
 type Post = {
   id: string;
   title: string;
   content: string;
-  datePublished: string;
-  image: string | null;
+  datePublished: Date;
+  imageUrl: string | null;
 };
 type Quest = {
   id: string;
   title: string;
   content: string;
-  datePublished: string;
-  image: string | null;
+  datePublished: Date;
+  imageUrl: string | null;
   userId: string;
   posts: Post[];
 };
 export const QuestList = ({ quests }: { quests: Quest[] }) => {
   return (
-    <div className="">
+    <div className="flex flex-col gap-2">
       <QuestForm />
       {quests.map(quest => (
         <Link
           key={quest.id}
           href={`/${quest.userId}/quests/${quest.id}`}
-          className="quest w-80"
+          className="w-max border block"
         >
-          {quest.image ? (
+          {quest.imageUrl ? (
             <Image
-              src={quest.image}
-              alt={`image for ${quest.title}`}
+              src={quest.imageUrl}
+              alt={`imageUrl for ${quest.title}`}
               width={400}
               height={300}
             />
@@ -38,26 +39,7 @@ export const QuestList = ({ quests }: { quests: Quest[] }) => {
 
           <h2>{quest.title}</h2>
           <p>{quest.content}</p>
-          <small>{quest.datePublished}</small>
-          {/* <div className="m-5">
-            {quest.posts.length > 0 ? (
-              quest.posts.map(post => (
-                <div key={post.id} className="post">
-                  <h3>{post.title}</h3>
-                  <p>{post.content}</p>
-                  <small>{post.datePublished}</small>
-                  <Image
-                    src={post.image}
-                    alt={`image for ${post.title}`}
-                    width={200}
-                    height={200}
-                  />
-                </div>
-              ))
-            ) : (
-              <p>No posts yet</p>
-            )}
-          </div> */}
+          <small>{format(quest.datePublished, 'MMM dd, yyyy')}</small>
         </Link>
       ))}
     </div>

@@ -18,7 +18,7 @@ export const userRouter = router({
         select: {
           name: true,
           id: true,
-          image: true,
+          imageUrl: true,
         },
       });
 
@@ -35,7 +35,7 @@ export const userRouter = router({
         select: {
           name: true,
           bio: true,
-          image: true,
+          imageUrl: true,
           friends: true,
           quests: true,
           profilePrivate: true,
@@ -55,7 +55,9 @@ export const userRouter = router({
         data: {
           name: input.name,
           bio: input.bio,
-          image: input.imageURL,
+          image: input.imageUrl,
+          imageUrl: input.imageUrl,
+          imageName: input.imageName,
           profilePrivate: input.profilePrivate,
         },
       });
