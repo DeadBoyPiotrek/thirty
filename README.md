@@ -24,7 +24,7 @@
   - [x] Add Image to Post
   - [ ] Like Post
   - [ ] Comment Post
-  - [ ] Edit Post
+  - [x] Edit Post
   - [ ] Infinite Scroll
 - [ ] Looks
   - [x] Reusable Components
