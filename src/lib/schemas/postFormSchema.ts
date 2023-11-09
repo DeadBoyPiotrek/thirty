@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { image } from './questFormSchema';
-const title = z.string().nonempty().max(500);
+const title = z.string().nonempty().max(100);
 
 const content = z
   .string()

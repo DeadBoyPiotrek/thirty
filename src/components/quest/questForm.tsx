@@ -37,7 +37,7 @@ export const QuestForm = () => {
         mutation.mutate({
           content: data.content,
           title: data.title,
-          imageURL: ResData2.publicUrl,
+          imageUrl: ResData2.publicUrl,
         });
       }
     }
@@ -59,7 +59,7 @@ export const QuestForm = () => {
         <input {...register('image')} type="file" />
         <FormError error={errors.image?.message} />
 
-        <Button className="bg-slate-200 p-2">Submit</Button>
+        <Button className="bg-slate-200 p-2">Add Quest</Button>
       </form>
     </>
   );

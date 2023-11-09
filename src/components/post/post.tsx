@@ -7,10 +7,13 @@ import { useState } from 'react';
 import { PostEditForm } from './postEditForm';
 import { MdModeEditOutline } from 'react-icons/md';
 import { MdDeleteForever } from 'react-icons/md';
+import { AiFillHeart } from 'react-icons/ai';
+import { FaComment } from 'react-icons/fa';
 import { trpc } from '@/app/_trpc/client';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 interface PostProps {
   post: {
     id: string;
@@ -31,6 +34,7 @@ interface PostProps {
 }
 
 export const Post = ({ post }: PostProps) => {
+  const { data: session } = useSession();
   const mutation = trpc.post.deletePost.useMutation();
   const [mounted, setMounted] = useState(false);
   const closeModal = () => {
@@ -38,46 +42,93 @@ export const Post = ({ post }: PostProps) => {
   };
 
   return (
-    <div key={post.id} className="border ">
-      <Link href={`/${post.user.id}`}>
-        <Avatar>
-          {post.user.imageUrl ? (
-            <Image
-              src={post.user.imageUrl}
-              alt="Avatar"
-              width={100}
-              height={100}
-              className="w-10 h-10 rounded-full hover:scale-115 transition ease-in-out duration-300 object-cover"
-            />
-          ) : (
-            <AvatarFallback
-              userName={!post.user.name ? 'Profile' : post.user?.name}
-            />
-          )}
-        </Avatar>
-      </Link>
-      <div>{post.user.name}</div>
-      <div>{format(post.datePublished, 'MMM dd, yyyy')}</div>
+    <div key={post.id} className="bg-brandBlack-medium rounded-lg">
       <Modal mounted={mounted}>
         <PostEditForm post={post} closeModal={closeModal} />
       </Modal>
-      <div className="flex gap-2 p-2">
-        <Button aria-label="edit" onClick={() => setMounted(true)}>
-          <MdModeEditOutline />
-        </Button>
-        <Button
-          aria-label="delete"
-          onClick={() => mutation.mutate({ id: post.id })}
-        >
-          <MdDeleteForever />
-        </Button>
+      <div className="flex p-5 justify-between">
+        <div className="flex gap-2 items-center ">
+          <Link href={`/${post.user.id}`}>
+            <Avatar>
+              {post.user.imageUrl ? (
+                <Image
+                  src={post.user.imageUrl}
+                  alt="Avatar"
+                  width={100}
+                  height={100}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <AvatarFallback
+                  userName={!post.user.name ? 'Profile' : post.user?.name}
+                />
+              )}
+            </Avatar>
+          </Link>
+          <div>
+            <div className="flex">
+              <p>{post.user.name}</p> &nbsp;in&nbsp;
+              <Link href={`/${post.user.id}/quests/${post.quest.id}`}>
+                {post.quest.title}
+              </Link>
+            </div>
+            <time
+              className="text-sm"
+              dateTime={post.datePublished.toISOString()}
+            >
+              {format(post.datePublished, 'HH:mm MMM dd ')}
+            </time>
+          </div>
+        </div>
+        {session?.user.id === post.user.id ? (
+          <div className="flex gap-2 pr-3">
+            <Button
+              className="text-lg"
+              variant={'ghost'}
+              aria-label="edit"
+              onClick={() => setMounted(true)}
+            >
+              <MdModeEditOutline />
+            </Button>
+            <Button
+              className="text-lg"
+              variant={'ghost'}
+              aria-label="delete"
+              onClick={() => mutation.mutate({ id: post.id })}
+            >
+              <MdDeleteForever />
+            </Button>
+          </div>
+        ) : null}
       </div>
 
-      <h2>{post.title}</h2>
-      <p>{post.content}</p>
-      {post.imageUrl ? (
-        <Image src={post.imageUrl} alt={post.title} width={500} height={500} />
-      ) : null}
+      <h2 className="text-lg text-brandPurple-300 px-5">{post.title}</h2>
+      <p className="px-5">{post.content}</p>
+      <div className="flex justify-center">
+        {post.imageUrl ? (
+          <Image
+            src={post.imageUrl}
+            alt={post.title}
+            width={500}
+            height={500}
+          />
+        ) : null}
+      </div>
+      <div className="p-5 flex justify-center gap-5 ">
+        <Button
+          className="flex items-center font-medium gap-2 "
+          aria-label="like"
+        >
+          <AiFillHeart />
+          Like
+        </Button>
+        <Button
+          className="flex items-center font-medium gap-2 "
+          aria-label="comment"
+        >
+          <FaComment /> Comment
+        </Button>
+      </div>
     </div>
   );
 };

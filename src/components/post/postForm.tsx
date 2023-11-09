@@ -6,9 +6,15 @@ import { trpc } from '@/app/_trpc/client';
 import { FormError } from '@ui/formError';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { uploadImage } from '@/lib/helpers/images/uploadImage';
+import { Input } from '@ui/input';
+import { Textarea } from '@ui/textarea';
+import { Button } from '@ui/button';
+import { useState } from 'react';
 
 type Inputs = Zod.infer<typeof postFormSchemaImg>;
 export const PostForm = () => {
+  const [imgName, setImgName] = useState<string | null>(null);
+
   const allQuests = trpc.quest.getQuestsForPostForm.useQuery();
 
   const mutation = trpc.post.addPost.useMutation();
@@ -16,6 +22,7 @@ export const PostForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<Inputs>({ resolver: zodResolver(postFormSchemaImg) });
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
@@ -42,38 +49,71 @@ export const PostForm = () => {
         questId: data.questId,
       });
     }
+    reset();
   };
 
   return (
     <form
-      className="flex flex-col w-56 text-yellow-500 border p-2"
+      className="flex flex-col p-5 m-5 bg-brandBlack-medium rounded-lg gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <label>Topic</label>
-      <select {...register('questId', { required: true })}>
-        {allQuests.data?.map(quest => (
-          <option key={quest.id} value={quest.id}>
-            {quest.title}
-          </option>
-        ))}
-      </select>
-      <FormError error={errors.questId?.message} />
+      <div className="flex gap-2 ">
+        <div className="flex flex-col gap-2">
+          <label>Quest</label>
+          <select
+            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg w-min h-11"
+            {...register('questId', { required: true })}
+          >
+            {allQuests.data?.map(quest => (
+              <option key={quest.id} value={quest.id}>
+                {quest.title}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <label>Post title</label>
-      <input {...register('title', { required: true })} />
-      <FormError error={errors.title?.message} />
-
+        <FormError error={errors.questId?.message} />
+        <div className="flex flex-col gap-2">
+          <label htmlFor="image" className="">
+            Image
+          </label>
+          <input
+            id="image"
+            {...register('image', { required: false })}
+            type="file"
+            className="hidden"
+            onChange={e =>
+              e.target.files && setImgName(e.target.files[0]?.name || null)
+            }
+          />
+          <label
+            htmlFor="image"
+            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 cursor-pointer overflow-hidden"
+          >
+            {imgName ? imgName : 'Choose Image'}
+          </label>
+          <FormError error={errors.image?.message} />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label>Post title</label>
+          <Input
+            variant={'dark'}
+            textSize={'lg'}
+            {...register('title', { required: true })}
+            className="h-11 "
+          />
+          <FormError error={errors.title?.message} />
+        </div>
+      </div>
       <label>Post content</label>
-      <input {...register('content', { required: true })} />
-      {errors.content && <span>This field is required</span>}
+      <Textarea {...register('content', { required: true })} />
+
       <FormError error={errors.content?.message} />
-
-      <label>Image</label>
-      <input {...register('image', { required: false })} type="file" />
-      <p> {errors.image && null}</p>
-      <FormError error={errors.image?.message} />
-
-      <button type="submit">Submit</button>
+      <div className="flex justify-center">
+        <Button variant={'brand'} className="font-bold" type="submit">
+          Post
+        </Button>
+      </div>
     </form>
   );
 };

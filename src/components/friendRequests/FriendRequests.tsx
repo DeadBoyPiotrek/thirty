@@ -4,7 +4,7 @@ import { trpc } from '@/app/_trpc/client';
 type FriendRequestsProps = {
   friendRequests: {
     sender: {
-      image: string | null;
+      imageUrl: string | null;
       name: string | null;
       id: string;
     };

@@ -26,9 +26,9 @@ export const UsersSearch = () => {
           href={`/${user.id}`}
         >
           <Avatar>
-            {user.image ? (
+            {user.imageUrl ? (
               <Image
-                src={user.image}
+                src={user.imageUrl}
                 alt="Avatar"
                 width={40}
                 height={40}

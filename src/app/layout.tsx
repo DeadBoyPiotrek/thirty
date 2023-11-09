@@ -26,7 +26,9 @@ export default async function RootLayout({
         <Navigation />
         <SessionProvider session={session}>
           <Provider>
-            <main className="max-w-7xl w-full flex flex-col">{children}</main>
+            <main className="max-w-7xl w-full flex flex-col items-center">
+              {children}
+            </main>
           </Provider>
         </SessionProvider>
       </body>

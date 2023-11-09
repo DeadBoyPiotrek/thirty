@@ -1,8 +1,7 @@
+import React from 'react';
 import { cn } from '@/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
-import { FC } from 'react';
-
-const buttonVariants = cva('p-2 rounded-lg transition block', {
+const textareaVariants = cva('p-2 rounded-lg transition block', {
   variants: {
     variant: {
       brand:
@@ -17,22 +16,29 @@ const buttonVariants = cva('p-2 rounded-lg transition block', {
       lg: 'text-lg',
     },
   },
+
   defaultVariants: {
-    variant: 'light',
+    variant: 'dark',
     size: 'md',
   },
 });
-interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
 
-const Button: FC<ButtonProps> = ({ className, size, variant, ...props }) => {
-  return (
-    <button
-      className={cn(buttonVariants({ size, variant }), className)}
-      {...props}
-    />
-  );
-};
+interface textareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+    VariantProps<typeof textareaVariants> {}
 
-export { Button };
+const Textarea = React.forwardRef<HTMLTextAreaElement, textareaProps>(
+  ({ className, size, variant, ...props }, ref) => {
+    return (
+      <textarea
+        ref={ref}
+        className={cn(textareaVariants({ size, variant }), className)}
+        {...props}
+      />
+    );
+  }
+);
+
+Textarea.displayName = 'Textarea';
+
+export { Textarea };
