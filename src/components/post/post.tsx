@@ -74,7 +74,7 @@ export const Post = ({ post }: PostProps) => {
             </div>
             <time
               className="text-sm"
-              dateTime={post.datePublished.toISOString()}
+              // dateTime={post.datePublished.toISOString()}
             >
               {format(post.datePublished, 'HH:mm MMM dd ')}
             </time>
@@ -111,6 +111,7 @@ export const Post = ({ post }: PostProps) => {
             alt={post.title}
             width={500}
             height={500}
+            className="w-auto h-auto"
           />
         ) : null}
       </div>

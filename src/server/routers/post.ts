@@ -4,6 +4,7 @@ import {
 } from '@/lib/schemas/postFormSchema';
 import { protectedProcedure, router } from '../trpc';
 import { prisma } from '../prisma';
+import { z } from 'zod';
 export const postRouter = router({
   addPost: protectedProcedure
     .input(postFormSchemaImgName)
@@ -67,49 +68,52 @@ export const postRouter = router({
       return post;
     }),
 
-  getFeedPosts: protectedProcedure.query(async ({ ctx }) => {
-    const posts = await prisma.post.findMany({
-      orderBy: {
-        datePublished: 'desc',
-      },
-      where: {
-        OR: [
-          {
-            userId: ctx.userId,
-          },
-          {
-            user: {
-              friends: {
-                some: {
-                  id: ctx.userId,
+  getFeedPosts: protectedProcedure
+    .input(z.object({ page: z.number() }))
+    .query(async ({ ctx }) => {
+      const posts = await prisma.post.findMany({
+        orderBy: {
+          datePublished: 'desc',
+        },
+        take: 4,
+        where: {
+          OR: [
+            {
+              userId: ctx.userId,
+            },
+            {
+              user: {
+                friends: {
+                  some: {
+                    id: ctx.userId,
+                  },
                 },
               },
             },
+          ],
+        },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          imageUrl: true,
+          imageName: true,
+          datePublished: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              imageUrl: true,
+            },
           },
-        ],
-      },
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        imageUrl: true,
-        imageName: true,
-        datePublished: true,
-        user: {
-          select: {
-            id: true,
-            name: true,
-            imageUrl: true,
+          quest: {
+            select: {
+              id: true,
+              title: true,
+            },
           },
         },
-        quest: {
-          select: {
-            id: true,
-            title: true,
-          },
-        },
-      },
-    });
-    return posts;
-  }),
+      });
+      return posts;
+    }),
 });

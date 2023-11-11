@@ -10,14 +10,16 @@ interface FeedProps {
 }
 
 export const Feed = ({ initialPosts }: FeedProps) => {
-  const posts = trpc.post.getFeedPosts.useQuery(undefined, {
-    initialData: initialPosts,
-  });
+  const { data, fetchNextPage, isFetchingNextPage } =
+    trpc.post.getFeedPosts.useInfiniteQuery({
+      undefined,
+      // initialData: initialPosts,
+    });
   return (
     <div className="flex flex-col gap-10">
-      {posts?.data?.map(post => (
+      {/* {data.map(post => (
         <Post key={post.id} post={post} />
-      ))}
+      ))} */}
     </div>
   );
 };
