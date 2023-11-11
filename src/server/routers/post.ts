@@ -69,26 +69,36 @@ export const postRouter = router({
     }),
 
   getFeedPosts: protectedProcedure
-    .input(z.object({ page: z.number() }))
-    .query(async ({ ctx }) => {
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
       const posts = await prisma.post.findMany({
+        take: input.limit ?? 5,
+        skip: input.cursor ? 1 : 0,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
         orderBy: {
-          datePublished: 'desc',
+          id: 'desc',
         },
-        OR: [
-          {
-            userId: ctx.userId,
-          },
-          {
-            user: {
-              friends: {
-                some: {
-                  id: ctx.userId,
+        where: {
+          OR: [
+            {
+              userId: ctx.userId,
+            },
+            {
+              user: {
+                friends: {
+                  some: {
+                    id: ctx.userId,
+                  },
                 },
               },
             },
-          },
-        ],
+          ],
+        },
 
         select: {
           id: true,
@@ -112,6 +122,9 @@ export const postRouter = router({
           },
         },
       });
-      return posts;
+      return {
+        posts,
+        cursor: posts[posts.length - 1]?.id ?? null,
+      };
     }),
 });
