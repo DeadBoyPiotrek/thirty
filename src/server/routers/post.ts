@@ -69,13 +69,18 @@ export const postRouter = router({
     }),
 
   getFeedPosts: protectedProcedure
-    .input(z.object({ page: z.number() }))
-    .query(async ({ ctx }) => {
+    .input(
+      z.object({
+        cursor: z.number(),
+        limit: z.number().min(1).max(10),
+      })
+    )
+    .query(async ({ ctx, input }) => {
       const posts = await prisma.post.findMany({
         orderBy: {
           datePublished: 'desc',
         },
-        take: 4,
+        take: input.limit,
         where: {
           OR: [
             {

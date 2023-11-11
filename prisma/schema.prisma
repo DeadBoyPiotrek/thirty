@@ -8,8 +8,8 @@ generator client {
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
+  id                Int     @id @default(autoincrement())
+  userId            Int
   type              String
   provider          String
   providerAccountId String
@@ -26,9 +26,9 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           Int      @id @default(autoincrement())
   sessionToken String   @unique
-  userId       String
+  userId       Int
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -42,7 +42,7 @@ model VerificationToken {
 }
 
 model User {
-  id                     String          @id @default(cuid())
+  id                     Int             @id @default(autoincrement())
   name                   String
   email                  String?         @unique
   emailVerified          DateTime?
@@ -64,17 +64,17 @@ model User {
 }
 
 model FriendRequest {
-  id         String @id @default(cuid())
-  sender     User   @relation("SentFriendRequests", fields: [senderId], references: [id], onDelete: Cascade)
-  senderId   String
-  receiver   User   @relation("ReceivedFriendRequests", fields: [receiverId], references: [id], onDelete: Cascade)
-  receiverId String
+  id         Int  @id @default(autoincrement())
+  sender     User @relation("SentFriendRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId   Int
+  receiver   User @relation("ReceivedFriendRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId Int
 
   @@unique([senderId, receiverId])
 }
 
 model Quest {
-  id            String   @id @default(cuid())
+  id            Int      @id @default(autoincrement())
   title         String
   content       String
   datePublished DateTime @default(now())
@@ -82,42 +82,42 @@ model Quest {
   imageUrl      String?
   imageName     String?
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String
+  userId        Int
   posts         Post[]
   likes         Like[]
 }
 
 model Post {
-  id            String    @id @default(cuid())
+  id            Int       @id @default(autoincrement())
   title         String
   content       String
   imageUrl      String?
   imageName     String?
   datePublished DateTime  @default(now())
   quest         Quest     @relation(fields: [questId], references: [id], onDelete: Cascade)
-  questId       String
+  questId       Int
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String
+  userId        Int
   comments      Comment[]
   likes         Like[]
 }
 
 model Comment {
-  id            String   @id @default(cuid())
+  id            Int      @id @default(autoincrement())
   content       String
   datePublished DateTime @default(now())
   post          Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId        String
+  postId        Int
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String
+  userId        Int
 }
 
 model Like {
-  id      String  @id @default(cuid())
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
-  post    Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId  String?
-  quest   Quest?  @relation(fields: [questId], references: [id], onDelete: Cascade)
-  questId String?
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
+  post    Post?  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId  Int?
+  quest   Quest? @relation(fields: [questId], references: [id], onDelete: Cascade)
+  questId Int?
 }
