@@ -26,7 +26,7 @@ export const userRouter = router({
     }),
 
   getUserProfile: protectedProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(z.object({ userId: z.number().int() }))
     .query(async ({ input }) => {
       const user = await prisma.user.findUnique({
         where: {

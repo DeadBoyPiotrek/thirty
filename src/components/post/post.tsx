@@ -16,18 +16,18 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 interface PostProps {
   post: {
-    id: string;
+    id: number;
     title: string;
     content: string;
     imageUrl: string | null;
     datePublished: Date;
     user: {
-      id: string;
+      id: number;
       name: string;
       imageUrl: string | null;
     };
     quest: {
-      id: string;
+      id: number;
       title: string;
     };
   };

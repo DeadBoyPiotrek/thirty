@@ -2,7 +2,7 @@
 import { trpc } from '@/app/_trpc/client';
 import { Button } from '../ui/button';
 
-export const UserActions = ({ profileId }: { profileId: string }) => {
+export const UserActions = ({ profileId }: { profileId: number }) => {
   const addFriend = trpc.friends.sendFriendRequest.useMutation();
   const removeFriend = trpc.friends.removeFriend.useMutation();
   const acceptFriendRequest = trpc.friends.acceptFriendRequest.useMutation();

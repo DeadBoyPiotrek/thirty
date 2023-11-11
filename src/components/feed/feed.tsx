@@ -11,21 +11,16 @@ interface FeedProps {
 
 export const Feed = ({ initialPosts }: FeedProps) => {
   // const { data, fetchNextPage, isFetchingNextPage } =
-  //   trpc.post.getFeedPosts.useInfiniteQuery(
-  //     { limit: 10 },
-  //     {
-  //       initialData: initialPosts,
-  //       getNextPageParam: lastPage => {
-  //         lastPage;
-  //       },
-  //       initialCursor: 1,
-  //     }
-  //   );
+  //   trpc.post.getFeedPosts.useInfiniteQuery({
+  //     undefined,
+  //     {initialData: initialPosts,
+  //     },
+  //   });
   return (
     <div className="flex flex-col gap-10">
-      {/* {data.map(post => (
+      {initialPosts.map(post => (
         <Post key={post.id} post={post} />
-      ))} */}
+      ))}
     </div>
   );
 };

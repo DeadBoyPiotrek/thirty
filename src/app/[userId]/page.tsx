@@ -17,7 +17,7 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const friends = await serverClient.friends.getFriends();
 
   const user = await serverClient.user.getUserProfile({
-    userId: params.userId,
+    userId: parseInt(params.userId),
   });
 
   if (user) {
@@ -42,13 +42,13 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
           {user.bio ? (
             <p className="text-xl my-5 break-words">{user.bio}</p>
           ) : null}
-          {currentUserId === params.userId ? (
+          {currentUserId === parseInt(params.userId) ? (
             <OwnerActions
               userData={{ name: user.name, bio: user.bio }}
               session={session}
             />
           ) : (
-            <UserActions profileId={params.userId} />
+            <UserActions profileId={parseInt(params.userId)} />
           )}
           <div className="text-xl flex flex-col ">
             Friends

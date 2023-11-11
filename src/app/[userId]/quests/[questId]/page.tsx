@@ -8,8 +8,8 @@ const QuestPage = async ({
   params: { userId: string; questId: string };
 }) => {
   const quest = await serverClient.quest.getSingleQuestWithPost({
-    userId: params.userId,
-    questId: params.questId,
+    userId: parseInt(params.userId),
+    questId: parseInt(params.questId),
   });
 
   if (!quest) {

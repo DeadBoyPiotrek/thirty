@@ -5,7 +5,7 @@ import { TRPCError } from '@trpc/server';
 
 export const friendsRouter = router({
   sendFriendRequest: protectedProcedure
-    .input(z.object({ profileId: z.string() }))
+    .input(z.object({ profileId: z.number() }))
     .mutation(async ({ input, ctx }) => {
       const { userId } = ctx;
 
@@ -43,7 +43,7 @@ export const friendsRouter = router({
   }),
 
   removeFriend: protectedProcedure
-    .input(z.object({ profileId: z.string() }))
+    .input(z.object({ profileId: z.number().int() }))
     .mutation(async ({ input, ctx }) => {
       const { userId } = ctx;
       const user = await prisma.user.findUnique({
@@ -94,7 +94,7 @@ export const friendsRouter = router({
     }),
 
   acceptFriendRequest: protectedProcedure
-    .input(z.object({ profileId: z.string() }))
+    .input(z.object({ profileId: z.number().int() }))
     .mutation(async ({ input, ctx }) => {
       try {
         await prisma.user.update({
@@ -139,7 +139,7 @@ export const friendsRouter = router({
     }),
 
   declineFriendRequest: protectedProcedure
-    .input(z.object({ profileId: z.string() }))
+    .input(z.object({ profileId: z.number().int() }))
     .mutation(async ({ input, ctx }) => {
       await prisma.friendRequest.delete({
         where: {
@@ -172,7 +172,7 @@ export const friendsRouter = router({
   }),
 
   areFriends: protectedProcedure
-    .input(z.object({ profileId: z.string() }))
+    .input(z.object({ profileId: z.number().int() }))
     .query(async ({ input, ctx }) => {
       const { userId } = ctx;
       const data = await prisma.user.findUnique({
@@ -192,7 +192,7 @@ export const friendsRouter = router({
     }),
 
   isFriendRequestSent: protectedProcedure
-    .input(z.object({ profileId: z.string() }))
+    .input(z.object({ profileId: z.number().int() }))
     .query(async ({ input, ctx }) => {
       const { userId } = ctx;
 
@@ -209,7 +209,7 @@ export const friendsRouter = router({
     }),
 
   isFriendRequestReceived: protectedProcedure
-    .input(z.object({ profileId: z.string() }))
+    .input(z.object({ profileId: z.number().int() }))
     .query(async ({ input, ctx }) => {
       const { userId } = ctx;
 
@@ -226,7 +226,7 @@ export const friendsRouter = router({
     }),
 
   removeSentFriendRequest: protectedProcedure
-    .input(z.object({ profileId: z.string() }))
+    .input(z.object({ profileId: z.number().int() }))
     .mutation(async ({ input, ctx }) => {
       const { userId } = ctx;
 

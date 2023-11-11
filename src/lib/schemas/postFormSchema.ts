@@ -7,7 +7,7 @@ const content = z
   .nonempty()
   .max(1500, { message: 'Content is too long' });
 
-const questId = z.string().cuid();
+const questId = z.number().int();
 
 export const postFormSchemaImg = z.object({
   questId,
@@ -30,7 +30,7 @@ export const postFormSchemaImgName = z.object({
   imageUrl: z.string().nonempty().max(500).url().optional(),
 });
 export const postFormSchemaImgNameEdit = z.object({
-  id: z.string().cuid(),
+  id: z.number().int(),
   questId: questId.optional(),
   title: title.optional(),
   content: content.optional(),

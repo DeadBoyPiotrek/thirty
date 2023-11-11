@@ -62,17 +62,19 @@ export const PostForm = () => {
           <label>Quest</label>
           <select
             className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg w-min h-11"
-            {...register('questId', { required: true })}
+            {...register('questId', { required: true, valueAsNumber: true })}
           >
-            {allQuests.data?.map(quest => (
-              <option key={quest.id} value={quest.id}>
-                {quest.title}
-              </option>
-            ))}
+            {allQuests.data?.map(quest => {
+              return (
+                <option key={quest.id} value={quest.id}>
+                  {quest.title}
+                </option>
+              );
+            })}
           </select>
+          <FormError error={errors.questId?.message} />
         </div>
 
-        <FormError error={errors.questId?.message} />
         <div className="flex flex-col gap-2">
           <label htmlFor="image" className="">
             Image

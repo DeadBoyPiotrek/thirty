@@ -6,7 +6,7 @@ type FriendRequestsProps = {
     sender: {
       imageUrl: string | null;
       name: string | null;
-      id: string;
+      id: number;
     };
   }[];
 };

@@ -69,34 +69,27 @@ export const postRouter = router({
     }),
 
   getFeedPosts: protectedProcedure
-    .input(
-      z.object({
-        cursor: z.number(),
-        limit: z.number().min(1).max(10),
-      })
-    )
-    .query(async ({ ctx, input }) => {
+    .input(z.object({ page: z.number() }))
+    .query(async ({ ctx }) => {
       const posts = await prisma.post.findMany({
         orderBy: {
           datePublished: 'desc',
         },
-        take: input.limit,
-        where: {
-          OR: [
-            {
-              userId: ctx.userId,
-            },
-            {
-              user: {
-                friends: {
-                  some: {
-                    id: ctx.userId,
-                  },
+        OR: [
+          {
+            userId: ctx.userId,
+          },
+          {
+            user: {
+              friends: {
+                some: {
+                  id: ctx.userId,
                 },
               },
             },
-          ],
-        },
+          },
+        ],
+
         select: {
           id: true,
           title: true,

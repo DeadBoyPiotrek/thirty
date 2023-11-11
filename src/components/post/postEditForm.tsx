@@ -11,7 +11,7 @@ type Inputs = Zod.infer<typeof postFormSchemaImgEdit>;
 
 interface PostEditFormProps {
   post: {
-    id: string;
+    id: number;
     title: string;
     content: string;
     imageUrl: string | null;

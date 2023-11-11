@@ -16,7 +16,7 @@ const isAuth = middleware(async opts => {
   return opts.next({
     ctx: {
       session,
-      userId: session.user.id as string,
+      userId: session.user.id as number,
     },
   });
 });

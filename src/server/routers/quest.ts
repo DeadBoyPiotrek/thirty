@@ -25,7 +25,7 @@ export const questRouter = router({
     }),
 
   getQuestsWithPosts: protectedProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(z.object({ userId: z.number().int() }))
     .query(async ({ input }) => {
       const quests = await prisma.quest.findMany({
         where: {
@@ -68,7 +68,7 @@ export const questRouter = router({
   }),
 
   getSingleQuestWithPost: protectedProcedure
-    .input(z.object({ userId: z.string(), questId: z.string() }))
+    .input(z.object({ userId: z.number().int(), questId: z.number().int() }))
     .query(async ({ input }) => {
       const quest = await prisma.quest.findFirst({
         where: {

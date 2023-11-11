@@ -3,19 +3,19 @@ import { QuestForm } from '@/components/quest/questForm';
 import Link from 'next/link';
 import { format } from 'date-fns';
 type Post = {
-  id: string;
+  id: number;
   title: string;
   content: string;
   datePublished: Date;
   imageUrl: string | null;
 };
 type Quest = {
-  id: string;
+  id: number;
   title: string;
   content: string;
   datePublished: Date;
   imageUrl: string | null;
-  userId: string;
+  userId: number;
   posts: Post[];
 };
 export const QuestList = ({ quests }: { quests: Quest[] }) => {
