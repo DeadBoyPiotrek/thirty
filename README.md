@@ -25,14 +25,14 @@
   - [ ] Like Post
   - [ ] Comment Post
   - [x] Edit Post
-  - [ ] Infinite Scroll
+  - [x] Infinite Scroll
 - [ ] Looks
   - [x] Reusable Components
   - [ ] Responsive
   - [ ] Animations
 - [ ] Fetching
-  - [ ] ssr when possible
-  - [ ] caching
+  - [x] ssr when possible
+  - [x] caching
   - [ ] optimistic updates
 - [ ] Error Handling
 - [ ] Testing

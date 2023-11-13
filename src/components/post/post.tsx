@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Button } from '../ui/button';
 import { Modal } from '../ui/modal';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { PostEditForm } from './postEditForm';
 import { MdModeEditOutline } from 'react-icons/md';
 import { MdDeleteForever } from 'react-icons/md';
@@ -33,7 +33,7 @@ interface PostProps {
   };
 }
 
-export const Post = ({ post }: PostProps) => {
+export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
   const { data: session } = useSession();
   const mutation = trpc.post.deletePost.useMutation();
   const [mounted, setMounted] = useState(false);
@@ -42,7 +42,11 @@ export const Post = ({ post }: PostProps) => {
   };
 
   return (
-    <div key={post.id} className="bg-brandBlack-medium rounded-lg">
+    <div
+      ref={ref}
+      key={post.id}
+      className="bg-brandBlack-medium rounded-lg w-full"
+    >
       <Modal mounted={mounted}>
         <PostEditForm post={post} closeModal={closeModal} />
       </Modal>
@@ -132,4 +136,6 @@ export const Post = ({ post }: PostProps) => {
       </div>
     </div>
   );
-};
+});
+
+Post.displayName = 'Post';

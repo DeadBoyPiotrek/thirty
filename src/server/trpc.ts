@@ -13,6 +13,7 @@ const isAuth = middleware(async opts => {
       code: 'UNAUTHORIZED',
     });
   }
+
   return opts.next({
     ctx: {
       session,

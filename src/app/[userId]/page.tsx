@@ -15,7 +15,6 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
 
   const currentUserId = session.user?.id;
   const friends = await serverClient.friends.getFriends();
-
   const user = await serverClient.user.getUserProfile({
     userId: parseInt(params.userId),
   });
@@ -24,14 +23,14 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
     return (
       <div className="flex ">
         <div className="w-96 flex flex-col justify-center">
-          <Avatar className="mt-5">
+          <Avatar className="mt-5 w-max">
             {user.imageUrl ? (
               <Image
                 src={user.imageUrl}
                 alt="Avatar"
-                width={400}
-                height={400}
-                className="h-72 w-72 rounded-full object-cover"
+                width={288}
+                height={288}
+                className="h-72 w-72 object-cover rounded-3xl"
                 quality={100}
               />
             ) : (

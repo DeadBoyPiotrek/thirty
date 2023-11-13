@@ -16,7 +16,7 @@ export const Navigation = async () => {
           Thirty
         </Link>
 
-        <span className="flex text-4xl gap-x-16 ">
+        <span className="flex text-4xl gap-x-16 ml-[-60px]">
           <Link href="/">
             <HiHome
               aria-hidden="true"

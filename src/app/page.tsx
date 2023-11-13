@@ -8,12 +8,12 @@ import { serverClient } from './_trpc/serverClient';
 export default async function Home() {
   const session = await getServerSession(authOptions);
   if (session) {
-    const { posts } = await serverClient.post.getFeedPosts({});
-
+    const { posts } = await serverClient.post.getFeedPosts({ limit: 5 });
+    const userQuests = await serverClient.quest.getQuestsForPostForm();
     return (
-      <div className="flex flex-col justify-center items-center max-w-4xl">
-        <PostForm />
-        <Feed initialPosts={posts} />
+      <div className="flex flex-col items-center max-w-4xl">
+        {userQuests ? <PostForm userQuests={userQuests} /> : null}
+        <Feed initialPosts={{ posts, cursor: 1 }} />
       </div>
     );
   } else {

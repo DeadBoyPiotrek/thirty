@@ -12,10 +12,16 @@ import { Button } from '@ui/button';
 import { useState } from 'react';
 
 type Inputs = Zod.infer<typeof postFormSchemaImg>;
-export const PostForm = () => {
-  const [imgName, setImgName] = useState<string | null>(null);
 
-  const allQuests = trpc.quest.getQuestsForPostForm.useQuery();
+interface PostFormProps {
+  userQuests: {
+    id: number;
+    title: string;
+  }[];
+}
+
+export const PostForm = ({ userQuests }: PostFormProps) => {
+  const [imgName, setImgName] = useState<string | null>(null);
 
   const mutation = trpc.post.addPost.useMutation();
   const {
@@ -54,7 +60,7 @@ export const PostForm = () => {
 
   return (
     <form
-      className="flex flex-col p-5 m-5 bg-brandBlack-medium rounded-lg gap-2"
+      className="flex flex-col p-5 m-5 bg-brandBlack-medium rounded-lg gap-2 w-full"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex gap-2 ">
@@ -64,7 +70,7 @@ export const PostForm = () => {
             className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg w-min h-11"
             {...register('questId', { required: true, valueAsNumber: true })}
           >
-            {allQuests.data?.map(quest => {
+            {userQuests.map(quest => {
               return (
                 <option key={quest.id} value={quest.id}>
                   {quest.title}
