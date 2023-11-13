@@ -39,3 +39,4 @@
 - [ ] CI/CD
 - [ ] Deployment
 - [ ] Toaster
+- [ ] Dropzone for images

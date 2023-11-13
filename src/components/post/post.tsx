@@ -85,18 +85,18 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
           </div>
         </div>
         {session?.user.id === post.user.id ? (
-          <div className="flex gap-2 pr-3">
+          <div className="flex gap-2 ">
             <Button
-              className="text-lg"
-              variant={'ghost'}
+              className="text-lg px-4 border-brandBlack-light"
+              variant={'dark'}
               aria-label="edit"
               onClick={() => setMounted(true)}
             >
               <MdModeEditOutline />
             </Button>
             <Button
-              className="text-lg"
-              variant={'ghost'}
+              className="text-lg px-4 border-brandBlack-light"
+              variant={'dark'}
               aria-label="delete"
               onClick={() => mutation.mutate({ id: post.id })}
             >
@@ -123,6 +123,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
         <Button
           className="flex items-center font-medium gap-2 "
           aria-label="like"
+          variant={'ghost'}
         >
           <AiFillHeart />
           Like
@@ -130,6 +131,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
         <Button
           className="flex items-center font-medium gap-2 "
           aria-label="comment"
+          variant={'ghost'}
         >
           <FaComment /> Comment
         </Button>
