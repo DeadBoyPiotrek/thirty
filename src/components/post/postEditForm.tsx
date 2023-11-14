@@ -20,7 +20,12 @@ interface PostEditFormProps {
 }
 
 export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
-  const mutation = trpc.post.updatePost.useMutation();
+  const utils = trpc.useUtils();
+  const mutation = trpc.post.updatePost.useMutation({
+    onSettled: () => {
+      utils.post.getFeedPosts.invalidate();
+    },
+  });
   const {
     register,
     handleSubmit,

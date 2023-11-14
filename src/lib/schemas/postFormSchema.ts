@@ -1,11 +1,8 @@
 import { z } from 'zod';
 import { image } from './questFormSchema';
-const title = z.string().nonempty().max(100);
+const title = z.string().min(1).max(100);
 
-const content = z
-  .string()
-  .nonempty()
-  .max(1500, { message: 'Content is too long' });
+const content = z.string().min(1).max(1500, { message: 'Content is too long' });
 
 const questId = z.number().int();
 

@@ -1,11 +1,8 @@
 import { z } from 'zod';
 
-const title = z.string().nonempty().max(500);
+const title = z.string().min(1).max(500);
 
-const content = z
-  .string()
-  .nonempty()
-  .max(1500, { message: 'Content is too long' });
+const content = z.string().min(1).max(1500, { message: 'Content is too long' });
 
 export const image = z
   .custom<FileList>()

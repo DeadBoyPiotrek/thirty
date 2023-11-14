@@ -34,8 +34,13 @@ interface PostProps {
 }
 
 export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
+  const utils = trpc.useUtils();
   const { data: session } = useSession();
-  const mutation = trpc.post.deletePost.useMutation();
+  const mutation = trpc.post.deletePost.useMutation({
+    onSettled: () => {
+      utils.post.getFeedPosts.invalidate();
+    },
+  });
   const [mounted, setMounted] = useState(false);
   const closeModal = () => {
     setMounted(false);
@@ -53,21 +58,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
       <div className="flex p-5 justify-between">
         <div className="flex gap-2 items-center ">
           <Link href={`/${post.user.id}`}>
-            <Avatar>
-              {post.user.imageUrl ? (
-                <Image
-                  src={post.user.imageUrl}
-                  alt="Avatar"
-                  width={100}
-                  height={100}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-              ) : (
-                <AvatarFallback
-                  userName={!post.user.name ? 'Profile' : post.user?.name}
-                />
-              )}
-            </Avatar>
+            <Avatar src="sdf" alt="avatar" className="mt-5 w-max" />
           </Link>
           <div>
             <div className="flex">
@@ -78,7 +69,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
             </div>
             <time
               className="text-sm"
-              // dateTime={post.datePublished.toISOString()}
+              dateTime={post.datePublished.toISOString()}
             >
               {format(post.datePublished, 'HH:mm MMM dd ')}
             </time>

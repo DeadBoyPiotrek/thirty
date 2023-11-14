@@ -39,19 +39,11 @@ export const Navigation = async () => {
         </span>
 
         <Link href={`/${user.id}`}>
-          <Avatar>
-            {user.image ? (
-              <Image
-                src={user.image}
-                alt="Avatar"
-                width={100}
-                height={100}
-                className="w-10 h-10 rounded-full hover:scale-115 transition ease-in-out duration-300 object-cover"
-              />
-            ) : (
-              <AvatarFallback userName={!user.name ? 'Profile' : user?.name} />
-            )}
-          </Avatar>
+          <Avatar
+            src={`${user.imagee || `/images/profile-user-default`} `}
+            alt="avatar"
+            className="mt-5 w-max"
+          />
         </Link>
       </nav>
     );

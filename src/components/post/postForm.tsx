@@ -21,9 +21,14 @@ interface PostFormProps {
 }
 
 export const PostForm = ({ userQuests }: PostFormProps) => {
+  const utils = trpc.useUtils();
   const [imgName, setImgName] = useState<string | null>(null);
 
-  const mutation = trpc.post.addPost.useMutation();
+  const mutation = trpc.post.addPost.useMutation({
+    onSettled: () => {
+      utils.post.getFeedPosts.invalidate();
+    },
+  });
   const {
     register,
     handleSubmit,
@@ -56,6 +61,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
       });
     }
     reset();
+    setImgName(null);
   };
 
   return (
@@ -63,7 +69,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
       className="flex flex-col p-5 m-5 bg-brandBlack-medium rounded-lg gap-2 w-full"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex gap-2 ">
+      <div className="flex gap-4 ">
         <div className="flex flex-col gap-2">
           <label>Quest</label>
           <select
@@ -89,7 +95,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
             id="image"
             {...register('image', { required: false })}
             type="file"
-            className="hidden"
+            className="w-0 h-0 overflow-hidden absolute"
             onChange={e =>
               e.target.files && setImgName(e.target.files[0]?.name || null)
             }

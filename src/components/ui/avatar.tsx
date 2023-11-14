@@ -1,30 +1,34 @@
 'use client';
 import { cn } from '@/lib/utils';
-import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import { VariantProps, cva } from 'class-variance-authority';
+import Image, { ImageProps } from 'next/image';
+import { FC } from 'react';
 
-type AvatarProps = {
-  className?: string;
-  children: React.ReactNode;
-};
+const avatarVariants = cva('rounded-full overflow-hidden', {
+  variants: {
+    size: {
+      sm: 'w-10 h-10',
+      md: 'w-20 h-20',
+      lg: 'w-40 h-40',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+interface AvatarProps extends ImageProps, VariantProps<typeof avatarVariants> {}
 
-const Avatar = ({ className, children }: AvatarProps) => {
+export const Avatar: FC<AvatarProps> = ({
+  className,
+  size,
+  ...props
+}: AvatarProps) => {
   return (
-    <AvatarPrimitive.Root className={cn(className)}>
-      {children}
-    </AvatarPrimitive.Root>
+    <Image
+      className={cn(avatarVariants({ size }), className)}
+      width={100}
+      height={100}
+      {...props}
+    />
   );
 };
-
-type AvatarFallbackProps = {
-  userName: string;
-};
-
-const AvatarFallback = ({ userName }: AvatarFallbackProps) => {
-  return (
-    <AvatarPrimitive.Fallback className="text-red-500 ">
-      {userName}
-    </AvatarPrimitive.Fallback>
-  );
-};
-
-export { Avatar, AvatarFallback };

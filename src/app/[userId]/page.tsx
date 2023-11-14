@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import Image from 'next/image';
+import { Avatar } from '@/components/ui/avatar';
+
 import { serverClient } from '../_trpc/serverClient';
 import { UserActions } from '@/components/userActions/userActions';
 import { OwnerActions } from '@/components/ownerActions/ownerActions';
@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { NotFound } from '@/components/notFound/notFound';
+
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -23,20 +24,13 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
     return (
       <div className="flex ">
         <div className="w-96 flex flex-col justify-center">
-          <Avatar className="mt-5 w-max">
-            {user.imageUrl ? (
-              <Image
-                src={user.imageUrl}
-                alt="Avatar"
-                width={288}
-                height={288}
-                className="h-72 w-72 object-cover rounded-3xl"
-                quality={100}
-              />
-            ) : (
-              <AvatarFallback userName={!user.name ? 'Profile' : user?.name} />
-            )}
-          </Avatar>
+          <Avatar
+            size={'lg'}
+            src={`${user.imageUrl}`}
+            alt="avatar"
+            className="mt-5 w-max"
+          />
+
           <h2 className="font-bold text-3xl mt-5 break-words">{user.name}</h2>
           {user.bio ? (
             <p className="text-xl my-5 break-words">{user.bio}</p>
