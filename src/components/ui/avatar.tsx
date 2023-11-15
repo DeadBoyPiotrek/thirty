@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
 import { cn } from '@/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';

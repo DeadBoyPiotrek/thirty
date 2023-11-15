@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { HiHome } from 'react-icons/hi';
 import { FaUserFriends, FaStar } from 'react-icons/fa';
-import { Avatar, AvatarFallback } from '@ui/avatar';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Image from 'next/image';
@@ -39,10 +38,12 @@ export const Navigation = async () => {
         </span>
 
         <Link href={`/${user.id}`}>
-          <Avatar
-            src={`${user.imagee || `/images/profile-user-default`} `}
+          <Image
+            src={`${user.image || `/images/profile-user-default.svg`}`}
             alt="avatar"
-            className="mt-5 w-max"
+            className=" w-10 h-10 rounded-full overflow-hidden object-cover "
+            width={40}
+            height={40}
           />
         </Link>
       </nav>

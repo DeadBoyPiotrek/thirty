@@ -1,5 +1,3 @@
-import { Avatar } from '@/components/ui/avatar';
-
 import { serverClient } from '../_trpc/serverClient';
 import { UserActions } from '@/components/userActions/userActions';
 import { OwnerActions } from '@/components/ownerActions/ownerActions';
@@ -7,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { NotFound } from '@/components/notFound/notFound';
+import Image from 'next/image';
 
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const session = await getServerSession(authOptions);
@@ -22,13 +21,14 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
 
   if (user) {
     return (
-      <div className="flex ">
+      <div className="flex w-full ">
         <div className="w-96 flex flex-col justify-center">
-          <Avatar
-            size={'lg'}
-            src={`${user.imageUrl}`}
+          <Image
+            src={`${user.imageUrl || `/images/profile-user-default.svg`}`}
             alt="avatar"
-            className="mt-5 w-max"
+            className="w-72 h-72 rounded-full object-cover"
+            width={300}
+            height={300}
           />
 
           <h2 className="font-bold text-3xl mt-5 break-words">{user.name}</h2>

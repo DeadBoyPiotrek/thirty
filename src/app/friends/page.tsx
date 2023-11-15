@@ -8,8 +8,8 @@ const FriendsPage = async () => {
 
   return (
     <div>
-      <FriendRequests friendRequests={friendRequests} />
       <UsersSearch />
+      <FriendRequests friendRequests={friendRequests} />
     </div>
   );
 };

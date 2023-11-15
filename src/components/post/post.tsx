@@ -11,7 +11,6 @@ import { AiFillHeart } from 'react-icons/ai';
 import { FaComment } from 'react-icons/fa';
 import { trpc } from '@/app/_trpc/client';
 import { format } from 'date-fns';
-import { Avatar, AvatarFallback } from '../ui/avatar';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 interface PostProps {
@@ -58,7 +57,15 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
       <div className="flex p-5 justify-between">
         <div className="flex gap-2 items-center ">
           <Link href={`/${post.user.id}`}>
-            <Avatar src="sdf" alt="avatar" className="mt-5 w-max" />
+            <Image
+              src={`${
+                post.user.imageUrl || `/images/profile-user-default.svg`
+              }`}
+              alt="avatar"
+              className=" w-10 h-10 rounded-full overflow-hidden object-cover "
+              width={40}
+              height={40}
+            />
           </Link>
           <div>
             <div className="flex">
