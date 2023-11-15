@@ -2,16 +2,17 @@ import { userProfileSchemaImgUrl } from '@/lib/schemas/userProfileSchema';
 import { prisma } from '../prisma';
 import { router, publicProcedure, protectedProcedure } from '../trpc';
 import { z } from 'zod';
+
 export const userRouter = router({
-  getAllUsers: publicProcedure.query(() => {
-    const users = prisma.user.findMany();
+  getAllUsers: publicProcedure.query(async () => {
+    const users = await prisma.user.findMany();
     return users;
   }),
 
   searchForUsers: protectedProcedure
-    .input(z.object({ name: z.string() }))
-    .query(({ input }) => {
-      const users = prisma.user.findMany({
+    .input(z.object({ name: z.string().min(1).max(50) }))
+    .query(async ({ input }) => {
+      const users = await prisma.user.findMany({
         where: {
           name: { contains: input.name, mode: 'insensitive' },
         },
@@ -22,6 +23,7 @@ export const userRouter = router({
         },
       });
 
+      console.log(`🚀 ~ .query ~ users:`, users);
       return users;
     }),
 

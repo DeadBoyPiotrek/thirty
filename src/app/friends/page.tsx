@@ -7,7 +7,7 @@ const FriendsPage = async () => {
   const friendRequests = await serverClient.friends.getReceivedFriendRequests();
 
   return (
-    <div>
+    <div className="flex gap-5">
       <UsersSearch />
       <FriendRequests friendRequests={friendRequests} />
     </div>

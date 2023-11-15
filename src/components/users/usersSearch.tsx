@@ -1,13 +1,34 @@
+/* eslint-disable */
 'use client';
 import { trpc } from '@/app/_trpc/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Input } from '../ui/input';
-
+import { useDebounce } from '@/lib/helpers/useDebounce';
+import { z } from 'zod';
 export const UsersSearch = () => {
-  const [search, setSearch] = useState<string>(null);
-  const users = trpc.user.searchForUsers.useQuery({ name: search });
+  const [search, setSearch] = useState<string>('');
+  const [users2, setUsers2] = useState<string[]>([]);
+  console.log(`🚀 ~ UsersSearch ~ users2:`, users2);
+  const result = z.string().min(1).max(50).safeParse(useDebounce(search, 500));
+
+  const users = trpc.user.searchForUsers.useQuery(
+    {
+      name: result.success ? result.data : '',
+    },
+    { enabled: result.success }
+  );
+
+  useEffect(() => {
+    console.log(`🚀 ~ useEffect ~ users.data:`, users.data);
+    if (users.data) {
+      setUsers2(users.data || []);
+    }
+    // if (search === '') {
+    //   setUsers2([]);
+    // }
+  }, [users]);
 
   return (
     <div className="flex justify-center flex-col gap-2">
@@ -19,7 +40,7 @@ export const UsersSearch = () => {
         onChange={e => setSearch(e.target.value)}
       />
 
-      {users.data?.map(user => (
+      {users2?.map(user => (
         <Link
           key={user.id}
           className="border-b p-3 flex items-center gap-4"
