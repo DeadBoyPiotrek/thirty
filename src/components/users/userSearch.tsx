@@ -6,10 +6,9 @@ import { UsersList } from './usersList';
 
 export const UsersSearch = () => {
   const [inputName, setInputName] = useState<string>('');
-  console.log(`🚀 ~ UsersSearch ~ inputName:`, inputName);
 
   return (
-    <div className="flex justify-center flex-col gap-2">
+    <div className="flex flex-col gap-2">
       <UserSearchInput changeName={setInputName} />
       <UsersList inputName={inputName} />
     </div>

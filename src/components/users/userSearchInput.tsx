@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Input } from '../ui/input';
 import { z } from 'zod';
 import { useDebounce } from '@/lib/helpers/useDebounce';
@@ -11,11 +11,13 @@ export const UserSearchInput = ({
   changeName: Dispatch<SetStateAction<string>>;
 }) => {
   const [search, setSearch] = useState<string>('');
-  const result = z.string().min(1).max(50).safeParse(useDebounce(search, 500));
+  const result = z.string().max(50).safeParse(useDebounce(search, 500));
 
-  if (result.success) {
-    changeName(result.data);
-  }
+  useEffect(() => {
+    if (result.success) {
+      changeName(result.data);
+    }
+  }, [result, changeName]);
 
   return (
     <Input
