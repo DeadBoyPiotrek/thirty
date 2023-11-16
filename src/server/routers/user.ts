@@ -12,6 +12,7 @@ export const userRouter = router({
   searchForUsers: protectedProcedure
     .input(z.object({ name: z.string().min(1).max(50) }))
     .query(async ({ input }) => {
+      console.log(`🚀 ~ .query ~ input`, input);
       const users = await prisma.user.findMany({
         where: {
           name: { contains: input.name, mode: 'insensitive' },
