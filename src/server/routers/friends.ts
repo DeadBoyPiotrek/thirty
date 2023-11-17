@@ -42,6 +42,30 @@ export const friendsRouter = router({
     return receivedFriendRequests?.receivedFriendRequests ?? [];
   }),
 
+  getSentFriendRequests: protectedProcedure.query(async ({ ctx }) => {
+    const { userId } = ctx;
+    const sentFriendRequests = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        sentFriendRequests: {
+          select: {
+            receiver: {
+              select: {
+                name: true,
+                id: true,
+                imageUrl: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return sentFriendRequests?.sentFriendRequests ?? [];
+  }),
+
   removeFriend: protectedProcedure
     .input(z.object({ profileId: z.number().int() }))
     .mutation(async ({ input, ctx }) => {

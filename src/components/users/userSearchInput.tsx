@@ -23,7 +23,7 @@ export const UserSearchInput = ({
     <Input
       className="p-4"
       type="text"
-      placeholder="Search for users "
+      placeholder="username"
       value={search}
       onChange={e => setSearch(e.target.value)}
     />

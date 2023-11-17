@@ -9,6 +9,8 @@ export const UsersSearch = () => {
 
   return (
     <div className="flex flex-col gap-2">
+      <p className="text-3xl">Search for Users</p>
+
       <UserSearchInput changeName={setInputName} />
       <UsersList inputName={inputName} />
     </div>

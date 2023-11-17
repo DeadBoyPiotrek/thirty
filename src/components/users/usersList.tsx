@@ -1,5 +1,7 @@
 'use client';
 import { trpc } from '@/app/_trpc/client';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 type User = {
@@ -22,7 +24,20 @@ export const UsersList = ({ inputName }: { inputName: string }) => {
   return (
     <div className="flex justify-center flex-col gap-2">
       {usersList.map(user => (
-        <div key={user.id}>{user.name}</div>
+        <Link
+          className="flex items-center gap-2 rounded-md p-2 hover:bg-brandBlack-light"
+          key={user.id}
+          href={`/${user.id}`}
+        >
+          <Image
+            src={`${user.imageUrl || `/images/profile-user-default.svg`}`}
+            alt="avatar"
+            className=" w-10 h-10 rounded-full overflow-hidden object-cover "
+            width={40}
+            height={40}
+          />
+          <p>{user.name}</p>
+        </Link>
       ))}
     </div>
   );
