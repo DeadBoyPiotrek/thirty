@@ -5,32 +5,56 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 
 type FriendRequestsProps = {
-  receivedFriendRequests: {
+  initReceivedFriendRequests: {
     sender: {
       imageUrl: string | null;
-      name: string | null;
+      name: string;
       id: number;
     };
   }[];
-  sentFriendRequests: {
+  initSentFriendRequests: {
     receiver: {
       imageUrl: string | null;
-      name: string | null;
+      name: string;
       id: number;
     };
   }[];
 };
 
 export const FriendRequests = ({
-  receivedFriendRequests,
-  sentFriendRequests,
+  initReceivedFriendRequests,
+  initSentFriendRequests,
 }: FriendRequestsProps) => {
-  const acceptFriendRequest = trpc.friends.acceptFriendRequest.useMutation();
+  const utils = trpc.useUtils();
+  const receivedFriendRequests =
+    trpc.friends.getReceivedFriendRequests.useQuery(undefined, {
+      initialData: initReceivedFriendRequests,
+    });
+
+  const sentFriendRequests = trpc.friends.getSentFriendRequests.useQuery(
+    undefined,
+    {
+      initialData: initSentFriendRequests,
+    }
+  );
+
+  const acceptFriendRequest = trpc.friends.acceptFriendRequest.useMutation({
+    onSettled: () => {
+      utils.friends.getReceivedFriendRequests.invalidate();
+    },
+  });
+  const declineFriendRequest = trpc.friends.declineFriendRequest.useMutation({
+    onSettled: () => {
+      utils.friends.getSentFriendRequests.invalidate();
+      utils.friends.getReceivedFriendRequests.invalidate();
+    },
+  });
+
   return (
     <div className="flex flex-col">
       <p className="text-3xl ">Friend Requests</p>
       <div className="flex gap-3 flex-wrap mt-2">
-        {receivedFriendRequests.map(request => (
+        {receivedFriendRequests.data.map(request => (
           <div
             className="flex flex-col items-center gap-2 rounded-md border border-brandBlack-light p-4 hover:bg-brandBlack-light"
             key={request.sender.id}
@@ -66,6 +90,41 @@ export const FriendRequests = ({
                 }
               >
                 Decline
+              </Button>
+            </span>
+          </div>
+        ))}
+        {sentFriendRequests.data.map(request => (
+          <div
+            className="flex flex-col items-center gap-2 rounded-md border border-brandBlack-light p-4 hover:bg-brandBlack-light"
+            key={request.receiver.id}
+          >
+            <Link
+              className="flex flex-col items-center gap-2 rounded-md  hover:bg-brandBlack-light"
+              href={`/${request.receiver.id}`}
+            >
+              <Image
+                src={`${
+                  request.receiver.imageUrl ||
+                  `/images/profile-user-default.svg`
+                }`}
+                alt="avatar"
+                className=" w-48 h-48 rounded-lg overflow-hidden object-cover "
+                width={200}
+                height={200}
+              />
+              <p>{request.receiver.name}</p>
+            </Link>
+            <span className="flex gap-2">
+              <Button
+                variant={'dark'}
+                onClick={() =>
+                  declineFriendRequest.mutate({
+                    profileId: request.receiver.id,
+                  })
+                }
+              >
+                Remove
               </Button>
             </span>
           </div>

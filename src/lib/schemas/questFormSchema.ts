@@ -1,8 +1,18 @@
 import { z } from 'zod';
 
-const title = z.string().min(1).max(500);
+const title = z
+  .string()
+  .min(1, {
+    message: 'Title is too short',
+  })
+  .max(200, { message: 'Title is too long' });
 
-const content = z.string().min(1).max(1500, { message: 'Content is too long' });
+const content = z
+  .string()
+  .min(1, {
+    message: 'Content is too short',
+  })
+  .max(1500, { message: 'Content is too long' });
 
 export const image = z
   .custom<FileList>()

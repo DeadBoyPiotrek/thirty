@@ -27,7 +27,6 @@ export const userRouter = router({
         },
       });
 
-      console.log(`🚀 ~ .query ~ users:`, users);
       return users;
     }),
 
@@ -65,6 +64,22 @@ export const userRouter = router({
           imageUrl: input.imageUrl,
           imageName: input.imageName,
           profilePrivate: input.profilePrivate,
+        },
+      });
+
+      return user;
+    }),
+
+  userExists: protectedProcedure
+    .input(z.object({ userId: z.number() }))
+    .query(async ({ input }) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: input.userId,
+        },
+        select: {
+          id: true,
+          name: true,
         },
       });
 

@@ -165,12 +165,18 @@ export const friendsRouter = router({
   declineFriendRequest: protectedProcedure
     .input(z.object({ profileId: z.number().int() }))
     .mutation(async ({ input, ctx }) => {
-      await prisma.friendRequest.delete({
+      await prisma.friendRequest.deleteMany({
         where: {
-          senderId_receiverId: {
-            senderId: input.profileId,
-            receiverId: ctx.userId,
-          },
+          OR: [
+            {
+              senderId: input.profileId,
+              receiverId: ctx.userId,
+            },
+            {
+              senderId: ctx.userId,
+              receiverId: input.profileId,
+            },
+          ],
         },
       });
     }),
@@ -252,12 +258,10 @@ export const friendsRouter = router({
   removeSentFriendRequest: protectedProcedure
     .input(z.object({ profileId: z.number().int() }))
     .mutation(async ({ input, ctx }) => {
-      const { userId } = ctx;
-
       await prisma.friendRequest.delete({
         where: {
           senderId_receiverId: {
-            senderId: userId,
+            senderId: ctx.userId,
             receiverId: input.profileId,
           },
         },

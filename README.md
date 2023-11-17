@@ -40,3 +40,4 @@
 - [ ] Deployment
 - [ ] Toaster
 - [ ] Dropzone for images
+- [ ] Safe Post/Quest draft
