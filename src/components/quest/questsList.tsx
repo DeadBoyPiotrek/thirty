@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import Link from 'next/link';
 import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 type Quest = {
   id: number;
@@ -13,12 +14,15 @@ type Quest = {
 };
 export const QuestList = ({ quests }: { quests: Quest[] }) => {
   return (
-    <div className="flex gap-3 flex-wrap justify-center ">
+    <div className="flex gap-3 flex-wrap border ">
       {quests.map(quest => (
         <Link
           key={quest.id}
           href={`/${quest.userId}/quests/${quest.id}`}
-          className="w-96 max-h-96 rounded-lg bg-brandBlack-medium border-2"
+          className={cn(
+            'w-96 max-h-96 rounded-lg bg-brandBlack-medium flex flex-col',
+            !quest.imageUrl && 'p-4'
+          )}
         >
           {quest.imageUrl ? (
             <Image
@@ -26,22 +30,23 @@ export const QuestList = ({ quests }: { quests: Quest[] }) => {
               alt={`imageUrl for ${quest.title}`}
               width={400}
               height={300}
-              className="h-52 object-cover rounded-t-lg "
+              className="h-52 object-cover rounded-t-lg  "
             />
           ) : null}
           <time
-            className="pt-2  pl-2 text-sm block"
+            className="pt-2  pl-2 text-sm block "
             dateTime={quest.datePublished.toISOString()}
           >
             {format(quest.datePublished, 'MMM dd, yyyy')}
           </time>
 
-          <p className="text-2xl bg-red-50 text-brandPurple-500 break-words pt-2 pl-2 h-full overflow-hidden text-ellipsis ">
+          <p className="text-2xl text-brandPurple-500 break-words pt-2 pl-2 overflow-hidden ">
             {quest.title}
           </p>
-          {/* <p className="pt-2 pl-2 break-words overflow-hidden text-ellipsis">
+
+          <p className="pt-2 pl-2 break-words overflow-hidden">
             {quest.content}
-          </p> */}
+          </p>
         </Link>
       ))}
     </div>

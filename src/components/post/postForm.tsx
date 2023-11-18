@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { postFormSchemaImg } from '@/lib/schemas/postFormSchema';
 import { trpc } from '@/app/_trpc/client';
 import { FormError } from '@ui/formError';
@@ -10,9 +10,9 @@ import { Input } from '@ui/input';
 import { Textarea } from '@ui/textarea';
 import { Button } from '@ui/button';
 import { useState } from 'react';
-
+import * as Select from '@radix-ui/react-select';
 type Inputs = Zod.infer<typeof postFormSchemaImg>;
-
+import { DevTool } from '@hookform/devtools';
 interface PostFormProps {
   userQuests: {
     id: number;
@@ -34,6 +34,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<Inputs>({ resolver: zodResolver(postFormSchemaImg) });
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
@@ -72,8 +73,8 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
       <div className="flex gap-4 ">
         <div className="flex flex-col gap-2">
           <label>Quest</label>
-          <select
-            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg w-min h-11"
+          {/* <select
+            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg max-w-sm h-11 "
             {...register('questId', { required: true, valueAsNumber: true })}
           >
             {userQuests.map(quest => {
@@ -83,7 +84,39 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
                 </option>
               );
             })}
-          </select>
+          </select> */}
+          <Controller
+            name="questId"
+            control={control}
+            render={({ field }) => (
+              <Select.Root onValueChange={field.onChange} {...field}>
+                <Select.Trigger
+                  className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg max-w-sm h-11 "
+                  aria-label="quests"
+                >
+                  <Select.Value placeholder="Select a quest…" />
+                  <Select.Icon className="text-violet11">⬇️</Select.Icon>
+                </Select.Trigger>
+                <Select.Portal>
+                  <Select.Content>
+                    <Select.Group>
+                      {userQuests.map(quest => {
+                        return (
+                          <Select.Item
+                            key={quest.id}
+                            value={quest.id.toString()}
+                            className="max-w-sm h-11 overflow-hidden break-words bg-brandBlack"
+                          >
+                            <Select.ItemText>{quest.title}</Select.ItemText>
+                          </Select.Item>
+                        );
+                      })}
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Portal>
+              </Select.Root>
+            )}
+          ></Controller>
           <FormError error={errors.questId?.message} />
         </div>
 
@@ -128,6 +161,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
           Post
         </Button>
       </div>
+      <DevTool control={control} />
     </form>
   );
 };

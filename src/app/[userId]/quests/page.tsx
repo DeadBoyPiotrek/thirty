@@ -4,7 +4,7 @@ import { QuestList } from '@/components/quest/questsList';
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import Link from 'next/link';
+
 const QuestsPage = async ({ params }: { params: { userId: string } }) => {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -22,12 +22,7 @@ const QuestsPage = async ({ params }: { params: { userId: string } }) => {
   });
 
   return (
-    <div className="flex flex-col max-w-4xl w-full">
-      <Link href={'/asdf'} className="border w-10 h-10 ">
-        <p className="text-2xl bg-red-50/10 text-brandPurple-500 break-words pt-2 pl-2 h-full overflow-hidden text-ellipsis ">
-          sasd lkfjh asdfk ljhsdfg sdfg
-        </p>
-      </Link>
+    <div className="flex flex-col justify-center items-center max-w-7xl border ">
       <h1 className="text-4xl font-bold">
         Quests of <span className="text-brandPurple-500">{user.name}</span>
       </h1>
