@@ -89,23 +89,32 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
             name="questId"
             control={control}
             render={({ field }) => (
-              <Select.Root onValueChange={field.onChange} {...field}>
+              <Select.Root
+                onValueChange={value => field.onChange(parseInt(value))}
+                // {...field}
+              >
                 <Select.Trigger
                   className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg max-w-sm h-11 "
                   aria-label="quests"
                 >
-                  <Select.Value placeholder="Select a quest…" />
+                  <Select.Value
+                    className=" bg-red-50 overflow-hidden max-w-sm break-words"
+                    placeholder="Select a quest…"
+                  />
                   <Select.Icon className="text-violet11">⬇️</Select.Icon>
                 </Select.Trigger>
                 <Select.Portal>
-                  <Select.Content>
+                  <Select.Content
+                    position="popper"
+                    className=" bg-brandBlack-medium border border-brandGray rounded-lg max-w-sm "
+                  >
                     <Select.Group>
                       {userQuests.map(quest => {
                         return (
                           <Select.Item
                             key={quest.id}
                             value={quest.id.toString()}
-                            className="max-w-sm h-11 overflow-hidden break-words bg-brandBlack"
+                            className="max-w-sm h-11 overflow-hidden break-words hover:bg-brandBlack-light cursor-pointer p-2 "
                           >
                             <Select.ItemText>{quest.title}</Select.ItemText>
                           </Select.Item>
