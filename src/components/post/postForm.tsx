@@ -10,9 +10,9 @@ import { Input } from '@ui/input';
 import { Textarea } from '@ui/textarea';
 import { Button } from '@ui/button';
 import { useState } from 'react';
-import * as Select from '@radix-ui/react-select';
+
+import { QuestSelect } from '../select/questSelect';
 type Inputs = Zod.infer<typeof postFormSchemaImg>;
-import { DevTool } from '@hookform/devtools';
 interface PostFormProps {
   userQuests: {
     id: number;
@@ -21,6 +21,8 @@ interface PostFormProps {
 }
 
 export const PostForm = ({ userQuests }: PostFormProps) => {
+  const [questSelectKey, setQuestSelectKey] = useState<number>(0);
+
   const utils = trpc.useUtils();
   const [imgName, setImgName] = useState<string | null>(null);
 
@@ -44,6 +46,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
         content: data.content,
         title: data.title,
       });
+      setQuestSelectKey(prevKey => prevKey + 1);
     } else {
       const { imageName, imageUrl, error } = await uploadImage({
         image: data.image[0],
@@ -63,6 +66,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
     }
     reset();
     setImgName(null);
+    setQuestSelectKey(prevKey => prevKey + 1);
   };
 
   return (
@@ -71,82 +75,41 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex gap-4 ">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 ">
           <label>Quest</label>
-          {/* <select
-            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg max-w-sm h-11 "
-            {...register('questId', { required: true, valueAsNumber: true })}
-          >
-            {userQuests.map(quest => {
-              return (
-                <option key={quest.id} value={quest.id}>
-                  {quest.title}
-                </option>
-              );
-            })}
-          </select> */}
           <Controller
             name="questId"
             control={control}
-            render={({ field }) => (
-              <Select.Root
-                onValueChange={value => field.onChange(parseInt(value))}
-                // {...field}
-              >
-                <Select.Trigger
-                  className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg max-w-sm h-11 "
-                  aria-label="quests"
-                >
-                  <Select.Value
-                    className=" bg-red-50 overflow-hidden max-w-sm break-words"
-                    placeholder="Select a quest…"
-                  />
-                  <Select.Icon className="text-violet11">⬇️</Select.Icon>
-                </Select.Trigger>
-                <Select.Portal>
-                  <Select.Content
-                    position="popper"
-                    className=" bg-brandBlack-medium border border-brandGray rounded-lg max-w-sm "
-                  >
-                    <Select.Group>
-                      {userQuests.map(quest => {
-                        return (
-                          <Select.Item
-                            key={quest.id}
-                            value={quest.id.toString()}
-                            className="max-w-sm h-11 overflow-hidden break-words hover:bg-brandBlack-light cursor-pointer p-2 "
-                          >
-                            <Select.ItemText>{quest.title}</Select.ItemText>
-                          </Select.Item>
-                        );
-                      })}
-                    </Select.Group>
-                  </Select.Content>
-                </Select.Portal>
-              </Select.Root>
-            )}
+            render={({ field }) => {
+              return (
+                <QuestSelect
+                  field={field}
+                  quests={userQuests}
+                  key={questSelectKey}
+                />
+              );
+            }}
           ></Controller>
           <FormError error={errors.questId?.message} />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label htmlFor="image" className="">
-            Image
-          </label>
+        <div className="flex flex-col gap-2 w-full">
+          <label htmlFor="image">Image</label>
           <input
             id="image"
             {...register('image', { required: false })}
             type="file"
             className="w-0 h-0 overflow-hidden absolute"
+            aria-label="image"
             onChange={e =>
               e.target.files && setImgName(e.target.files[0]?.name || null)
             }
           />
           <label
             htmlFor="image"
-            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 cursor-pointer overflow-hidden"
+            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 cursor-pointer overflow-hidden w-full"
           >
-            {imgName ? imgName : 'Choose Image'}
+            {imgName ? imgName : 'Choose Image...'}
           </label>
           <FormError error={errors.image?.message} />
         </div>
@@ -170,7 +133,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
           Post
         </Button>
       </div>
-      <DevTool control={control} />
+      {/* <DevTool control={control} /> */}
     </form>
   );
 };
