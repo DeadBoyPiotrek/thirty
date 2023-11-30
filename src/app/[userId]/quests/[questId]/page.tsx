@@ -17,18 +17,21 @@ const QuestPage = async ({
   }
 
   return (
-    <>
-      <h1>{quest.title}</h1>
-      <p>{quest.content}</p>
+    <div className="max-w-4xl flex flex-col justify-center">
+      <h1 className="font-bold text-brandPurple-500 text-4xl max-w-4xl break-words">
+        {quest.title}
+      </h1>
+      <p className="max-w-4xl break-words py-2">{quest.content}</p>
       {quest.imageUrl ? (
         <Image
           src={quest.imageUrl}
           alt={quest.title}
-          width={500}
-          height={500}
+          width={800}
+          height={800}
+          className="w-full h-full rounded-lg"
         />
       ) : null}
-      <ul>
+      <div className="flex flex-col gap-5 mt-4">
         {quest.posts.map(post => {
           return (
             <Post
@@ -37,8 +40,8 @@ const QuestPage = async ({
             />
           );
         })}
-      </ul>
-    </>
+      </div>
+    </div>
   );
 };
 

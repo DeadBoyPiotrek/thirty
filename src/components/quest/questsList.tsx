@@ -14,7 +14,11 @@ type Quest = {
 };
 export const QuestList = ({ quests }: { quests: Quest[] }) => {
   return (
-    <div className="flex gap-3 flex-wrap border ">
+    <div
+      className="flex flex-wrap gap-3 xl:w-[1180px] 
+    lg:w-[785px]  md:w-[384px] 
+    "
+    >
       {quests.map(quest => (
         <Link
           key={quest.id}

@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const session = await getServerSession(authOptions);
@@ -29,12 +30,18 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
         <Image
           src={`${user.imageUrl || `/images/profile-user-default.svg`}`}
           alt="avatar"
-          className="w-72 h-72 rounded-full object-cover"
-          width={300}
-          height={300}
+          className="w-72 h-72 rounded-full object-cover "
+          width={288}
+          height={288}
         />
 
         <h2 className="font-bold text-3xl mt-5 break-words">{user.name}</h2>
+        <Link
+          className="text-xl font-medium my-2 text-brandPurple-500"
+          href={`/${params.userId}/quests`}
+        >
+          Quests
+        </Link>
         {user.bio ? (
           <p className="text-xl my-5 break-words">{user.bio}</p>
         ) : null}

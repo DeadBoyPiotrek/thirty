@@ -33,7 +33,7 @@ export const QuestSelect = ({ field, quests }: QuestSelectProps) => (
     <Select.Portal>
       <Select.Content
         position="popper"
-        className=" bg-brandBlack-medium border border-brandGray rounded-lg max-w-sm"
+        className=" bg-brandBlack-medium border border-brandGray rounded-lg max-w-sm max-h-24"
       >
         <Select.Group>
           {quests.map(quest => {

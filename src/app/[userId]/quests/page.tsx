@@ -22,11 +22,11 @@ const QuestsPage = async ({ params }: { params: { userId: string } }) => {
   });
 
   return (
-    <div className="flex flex-col justify-center items-center max-w-7xl border ">
-      <h1 className="text-4xl font-bold">
+    <div className="flex flex-col justify-center items-center max-w-7xl ">
+      {loggedUserId === parseInt(params.userId) ? <QuestForm /> : null}
+      <h1 className="text-4xl font-bold m-5">
         Quests of <span className="text-brandPurple-500">{user.name}</span>
       </h1>
-      {loggedUserId === parseInt(params.userId) ? <QuestForm /> : null}
       <QuestList quests={quests} />
     </div>
   );
