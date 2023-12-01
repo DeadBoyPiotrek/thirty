@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { image } from './questFormSchema';
 const title = z
   .string()
+  .trim()
   .min(1, {
     message: 'Title is too short',
   })
@@ -9,6 +10,7 @@ const title = z
 
 const content = z
   .string()
+  .trim()
   .min(1, {
     message: 'Content is too short',
   })

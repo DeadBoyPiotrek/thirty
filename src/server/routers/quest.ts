@@ -47,36 +47,6 @@ export const questRouter = router({
       return quests;
     }),
 
-  getQuestsWithPosts: protectedProcedure
-    .input(z.object({ userId: z.number().int() }))
-    .query(async ({ input }) => {
-      const quests = await prisma.quest.findMany({
-        where: {
-          userId: input.userId,
-        },
-
-        select: {
-          id: true,
-          title: true,
-          content: true,
-          imageUrl: true,
-          datePublished: true,
-          userId: true,
-          posts: {
-            select: {
-              id: true,
-              title: true,
-              content: true,
-              imageUrl: true,
-              datePublished: true,
-            },
-          },
-        },
-      });
-
-      return quests;
-    }),
-
   getQuestsForPostForm: protectedProcedure.query(async ({ ctx }) => {
     const quests = await prisma.quest.findMany({
       where: {

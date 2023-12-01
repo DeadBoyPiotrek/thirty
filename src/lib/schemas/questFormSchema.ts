@@ -2,17 +2,21 @@ import { z } from 'zod';
 
 const title = z
   .string()
+  .trim()
   .min(1, {
     message: 'Title is too short',
   })
-  .max(200, { message: 'Title is too long' });
+  .max(200, { message: 'Title is too long' })
+  .nonempty();
 
 const content = z
   .string()
+  .trim()
   .min(1, {
     message: 'Content is too short',
   })
-  .max(1500, { message: 'Content is too long' });
+  .max(1500, { message: 'Content is too long' })
+  .nonempty();
 
 export const image = z
   .custom<FileList>()

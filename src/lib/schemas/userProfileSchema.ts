@@ -1,8 +1,12 @@
 import { z } from 'zod';
 import { image, imageUrl } from './questFormSchema';
 
-const name = z.string().nonempty().min(1).max(50);
-const bio = z.string().max(500);
+const name = z
+  .string()
+  .trim()
+  .min(1, { message: 'Name is too short' })
+  .max(50, { message: 'Name is too long' });
+const bio = z.string().trim().max(500, { message: 'Bio is too long' });
 const profilePrivate = z.boolean().optional();
 export const userProfileSchemaImg = z.object({
   name,

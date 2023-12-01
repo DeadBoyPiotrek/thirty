@@ -17,7 +17,7 @@ const QuestPage = async ({
   }
 
   return (
-    <div className="max-w-4xl flex flex-col justify-center">
+    <div className="max-w-4xl flex flex-col justify-center w-full">
       <h1 className="font-bold text-brandPurple-500 text-4xl max-w-4xl break-words">
         {quest.title}
       </h1>

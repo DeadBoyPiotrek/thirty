@@ -128,12 +128,11 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
       <Textarea {...register('content', { required: true })} />
 
       <FormError error={errors.content?.message} />
-      <div className="flex justify-center">
-        <Button variant={'brand'} className="font-bold" type="submit">
+      <div className="flex justify-center ">
+        <Button variant={'brand'} className="font-bold px-4" type="submit">
           Post
         </Button>
       </div>
-      {/* <DevTool control={control} /> */}
     </form>
   );
 };

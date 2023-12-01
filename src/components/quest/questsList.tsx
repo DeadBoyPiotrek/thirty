@@ -1,8 +1,10 @@
+'use client';
 import Image from 'next/image';
 
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { trpc } from '@/app/_trpc/client';
 
 type Quest = {
   id: number;
@@ -12,19 +14,32 @@ type Quest = {
   imageUrl: string | null;
   userId: number;
 };
-export const QuestList = ({ quests }: { quests: Quest[] }) => {
+export const QuestList = ({
+  initQuests,
+  userId,
+}: {
+  initQuests: Quest[];
+  userId: number;
+}) => {
+  const { data } = trpc.quest.getQuests.useQuery(
+    { userId },
+    {
+      initialData: initQuests,
+    }
+  );
+
   return (
     <div
-      className="flex flex-wrap gap-3 xl:w-[1180px] 
-    lg:w-[785px]  md:w-[384px] 
+      className="flex flex-wrap justify-center gap-3 xl:w-[1180px] 
+    lg:w-[785px]  md:w-[384px] md:justify-start 
     "
     >
-      {quests.map(quest => (
+      {data.map(quest => (
         <Link
           key={quest.id}
           href={`/${quest.userId}/quests/${quest.id}`}
           className={cn(
-            'w-96 max-h-96 rounded-lg bg-brandBlack-medium flex flex-col',
+            'w-96 max-h-96 rounded-lg bg-brandBlack-medium flex flex-col pb-2',
             !quest.imageUrl && 'p-4'
           )}
         >

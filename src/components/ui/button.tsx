@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
 import { FC } from 'react';
 
-const buttonVariants = cva('p-2 rounded-lg transition block', {
+const buttonVariants = cva('p-2 rounded-lg transition ', {
   variants: {
     variant: {
       brand:

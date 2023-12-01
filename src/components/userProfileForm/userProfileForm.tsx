@@ -8,6 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormError } from '../ui/formError';
 
 import { uploadImage } from '@/lib/helpers/images/uploadImage';
+import { Input } from '@ui/input';
+import { Textarea } from '@ui/textarea';
 type UserProfileFormProps = {
   userData: { name: string; bio: string | null };
   closeModal: () => void;
@@ -57,16 +59,21 @@ export const UserProfileForm = ({
         className="text-black flex flex-col gap-2 bg-brandWhite-pure w-96 rounded-lg p-5"
       >
         <label>Image</label>
-        <input {...register('image')} type="file" />
+        <Input {...register('image')} type="file" variant={'light'} />
         <FormError error={errors.image?.message} />
         <label>Name</label>
-        <input {...register('name')} defaultValue={userData.name} />
+        <Input
+          {...register('name')}
+          defaultValue={userData.name}
+          variant={'light'}
+        />
         <FormError error={errors.name?.message} />
 
         <label>Bio</label>
-        <textarea
+        <Textarea
           {...register('bio')}
           defaultValue={userData.bio ?? undefined}
+          variant={'light'}
         />
         <FormError error={errors.bio?.message} />
 

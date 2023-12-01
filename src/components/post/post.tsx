@@ -107,8 +107,10 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
         ) : null}
       </div>
 
-      <h2 className="text-lg text-brandPurple-300 px-5">{post.title}</h2>
-      <p className="px-5">{post.content}</p>
+      <h2 className="text-lg text-brandPurple-300 px-5 break-words">
+        {post.title}
+      </h2>
+      <p className="px-5 break-words">{post.content}</p>
       <div className="flex justify-center">
         {post.imageUrl ? (
           <Image

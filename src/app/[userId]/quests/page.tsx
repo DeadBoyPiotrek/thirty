@@ -27,7 +27,7 @@ const QuestsPage = async ({ params }: { params: { userId: string } }) => {
       <h1 className="text-4xl font-bold m-5">
         Quests of <span className="text-brandPurple-500">{user.name}</span>
       </h1>
-      <QuestList quests={quests} />
+      <QuestList initQuests={quests} userId={parseInt(params.userId)} />
     </div>
   );
 };
