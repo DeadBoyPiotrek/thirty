@@ -29,12 +29,14 @@ export const FriendRequests = ({
   const receivedFriendRequests =
     trpc.friends.getReceivedFriendRequests.useQuery(undefined, {
       initialData: initReceivedFriendRequests,
+      refetchOnMount: false,
     });
 
   const sentFriendRequests = trpc.friends.getSentFriendRequests.useQuery(
     undefined,
     {
       initialData: initSentFriendRequests,
+      refetchOnMount: false,
     }
   );
 

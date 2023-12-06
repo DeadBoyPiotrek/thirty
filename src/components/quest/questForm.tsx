@@ -2,14 +2,13 @@
 import { questFormSchemaImg } from '@/lib/schemas/questFormSchema';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { supabase } from '@/server/supabase';
 import { trpc } from '@_trpc/client';
 import { Button } from '@/components/ui/button';
-import { randomizeName } from '@/lib/utils';
 import { FormError } from '../ui/formError';
 import { Input } from '@ui/input';
 import { Textarea } from '@ui/textarea';
 import { useState } from 'react';
+import { uploadImage } from '@/lib/helpers/images/uploadImage';
 export const QuestForm = () => {
   const [imgName, setImgName] = useState<string | null>(null);
   const utils = trpc.useUtils();
@@ -35,21 +34,20 @@ export const QuestForm = () => {
         title: data.title,
       });
     } else {
-      const { data: resData, error } = await supabase.storage
-        .from('quests')
-        .upload(randomizeName(data.image[0].name), data.image[0]);
+      const { error, imageUrl, imageName } = await uploadImage({
+        folderName: 'quests',
+        image: data.image[0],
+        oldImageName: null,
+      });
       if (error) {
         console.log(error);
-      } else {
-        const { data: ResData2 } = supabase.storage
-          .from('quests')
-          .getPublicUrl(resData?.path);
-        mutation.mutate({
-          content: data.content,
-          title: data.title,
-          imageUrl: ResData2.publicUrl,
-        });
       }
+      mutation.mutate({
+        content: data.content,
+        title: data.title,
+        imageUrl,
+        imageName,
+      });
     }
     reset();
     setImgName(null);

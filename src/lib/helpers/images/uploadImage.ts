@@ -3,13 +3,26 @@ import { supabase } from '@/server/supabase';
 import { ImageFolderName } from '@/types/image';
 import { createImageUrl } from './createImageUrl';
 
-export interface uploadImageProps {
+interface uploadImageProps {
   folderName: ImageFolderName;
   image: File;
+  oldImageName: string | null;
 }
 
-export const uploadImage = async ({ folderName, image }: uploadImageProps) => {
+export const uploadImage = async ({
+  folderName,
+  image,
+  oldImageName,
+}: uploadImageProps) => {
   try {
+    if (oldImageName) {
+      const { error: deleteError } = await supabase.storage
+        .from(folderName)
+        .remove([oldImageName]);
+      if (deleteError) {
+        return { imageName: '', imageUrl: '', error: deleteError };
+      }
+    }
     const randomName = randomizeName(image.name);
     const { error } = await supabase.storage
       .from(folderName)

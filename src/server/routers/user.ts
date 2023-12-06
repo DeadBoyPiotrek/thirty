@@ -40,6 +40,7 @@ export const userRouter = router({
         select: {
           name: true,
           bio: true,
+          imageName: true,
           imageUrl: true,
           friends: true,
           quests: true,

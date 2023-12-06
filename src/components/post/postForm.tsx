@@ -46,11 +46,11 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
         content: data.content,
         title: data.title,
       });
-      setQuestSelectKey(prevKey => prevKey + 1);
     } else {
       const { imageName, imageUrl, error } = await uploadImage({
         image: data.image[0],
         folderName: 'posts',
+        oldImageName: null,
       });
       if (error) {
         console.log(error);

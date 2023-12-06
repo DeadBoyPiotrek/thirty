@@ -7,9 +7,9 @@ export const UserActions = ({ profileId }: { profileId: number }) => {
   const removeFriend = trpc.friends.removeFriend.useMutation();
   const acceptFriendRequest = trpc.friends.acceptFriendRequest.useMutation();
   const declineFriendRequest = trpc.friends.declineFriendRequest.useMutation();
-  const areFriends = trpc.friends.areFriends.useQuery({ profileId });
   const removeSentFriendRequest =
     trpc.friends.removeSentFriendRequest.useMutation();
+  const areFriends = trpc.friends.areFriends.useQuery({ profileId });
   const isFriendRequestSent = trpc.friends.isFriendRequestSent.useQuery({
     profileId,
   });

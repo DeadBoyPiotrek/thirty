@@ -11,7 +11,7 @@ import { uploadImage } from '@/lib/helpers/images/uploadImage';
 import { Input } from '@ui/input';
 import { Textarea } from '@ui/textarea';
 type UserProfileFormProps = {
-  userData: { name: string; bio: string | null };
+  userData: { name: string; bio: string | null; imageName: string | null };
   closeModal: () => void;
 };
 
@@ -37,6 +37,7 @@ export const UserProfileForm = ({
       const { imageName, imageUrl, error } = await uploadImage({
         folderName: 'avatars',
         image: data.image[0],
+        oldImageName: userData.imageName,
       });
       mutation.mutate({
         bio: data.bio,

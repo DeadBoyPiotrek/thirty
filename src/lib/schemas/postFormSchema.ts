@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { image } from './questFormSchema';
+import { image, imageName, imageUrl } from './schemas';
 const title = z
   .string()
   .trim()
@@ -35,14 +35,14 @@ export const postFormSchemaImgName = z.object({
   questId,
   title,
   content,
-  imageName: z.string().nonempty().max(500).optional(),
-  imageUrl: z.string().nonempty().max(500).url().optional(),
+  imageName,
+  imageUrl,
 });
 export const postFormSchemaImgNameEdit = z.object({
   id: z.number().int(),
   questId: questId.optional(),
   title: title.optional(),
   content: content.optional(),
-  imageName: z.string().nonempty().max(500).optional(),
-  imageUrl: z.string().nonempty().max(500).url().optional(),
+  imageName,
+  imageUrl,
 });

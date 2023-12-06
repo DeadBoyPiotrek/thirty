@@ -37,7 +37,7 @@ export const QuestSelect = ({ field, quests }: QuestSelectProps) => (
     <Select.Portal>
       <Select.Content
         position="popper"
-        className=" bg-brandBlack-medium border border-brandGray rounded-lg max-w-sm max-h-[1000px] p-2"
+        className=" bg-brandBlack-medium border border-brandGray rounded-lg max-w-sm  p-2 max-h-[var(--radix-select-content-available-height)]"
       >
         <Select.ScrollUpButton className="flex justify-center text-2xl">
           <MdOutlineKeyboardArrowUp />

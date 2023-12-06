@@ -1,14 +1,16 @@
-import { serverClient } from '../_trpc/serverClient';
+import { serverClient } from '@_trpc/serverClient';
 import { UserActions } from '@/components/userActions/userActions';
 import { OwnerActions } from '@/components/ownerActions/ownerActions';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { notFound } from 'next/navigation';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
+  const userId = parseInt(params.userId);
   const session = await getServerSession(authOptions);
   if (!session) {
     return redirect('/');
@@ -17,11 +19,24 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const loggedUserId = session.user?.id;
   const friends = await serverClient.friends.getFriends();
   const user = await serverClient.user.getUserProfile({
-    userId: parseInt(params.userId),
+    userId: userId,
   });
 
   if (!user) {
     return notFound();
+  }
+
+  if (loggedUserId === userId) {
+    const areFriends = await serverClient.friends.areFriends({
+      profileId: userId,
+    });
+    const isFriendRequestSent = await serverClient.friends.isFriendRequestSent({
+      profileId: userId,
+    });
+    const isFriendRequestReceived =
+      await serverClient.friends.isFriendRequestReceived({
+        profileId: userId,
+      });
   }
 
   return (
@@ -45,18 +60,26 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
         {user.bio ? (
           <p className="text-xl my-5 break-words">{user.bio}</p>
         ) : null}
-        {loggedUserId === parseInt(params.userId) ? (
+        {loggedUserId === userId ? (
           <OwnerActions
-            userData={{ name: user.name, bio: user.bio }}
+            userData={{
+              name: user.name,
+              bio: user.bio,
+              imageName: user.imageName,
+            }}
             session={session}
           />
         ) : (
-          <UserActions profileId={parseInt(params.userId)} />
+          <UserActions profileId={userId} />
         )}
         <div className="text-xl flex flex-col ">
           Friends
           {friends.map(friend => {
-            return <p key={friend.id}>{friend.name}</p>;
+            return (
+              <Link href={`/${friend.id}`} key={friend.id}>
+                <p>{friend.name}</p>
+              </Link>
+            );
           })}
         </div>
       </div>

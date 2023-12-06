@@ -1,23 +1,20 @@
 'use client';
-
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import { Modal } from '../ui/modal';
-import { forwardRef, useState } from 'react';
-import { PostEditForm } from './postEditForm';
-import { MdModeEditOutline } from 'react-icons/md';
-import { MdDeleteForever } from 'react-icons/md';
+import { forwardRef } from 'react';
 import { AiFillHeart } from 'react-icons/ai';
 import { FaComment } from 'react-icons/fa';
-import { trpc } from '@/app/_trpc/client';
 import { format } from 'date-fns';
 import Link from 'next/link';
+import { PostButtons } from './postButtons';
+
 import { useSession } from 'next-auth/react';
 interface PostProps {
   post: {
     id: number;
     title: string;
     content: string;
+    imageName: string | null;
     imageUrl: string | null;
     datePublished: Date;
     user: {
@@ -33,17 +30,7 @@ interface PostProps {
 }
 
 export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
-  const utils = trpc.useUtils();
   const { data: session } = useSession();
-  const mutation = trpc.post.deletePost.useMutation({
-    onSettled: () => {
-      utils.post.getFeedPosts.invalidate();
-    },
-  });
-  const [mounted, setMounted] = useState(false);
-  const closeModal = () => {
-    setMounted(false);
-  };
 
   return (
     <div
@@ -51,9 +38,6 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
       key={post.id}
       className="bg-brandBlack-medium rounded-lg w-full"
     >
-      <Modal mounted={mounted}>
-        <PostEditForm post={post} closeModal={closeModal} />
-      </Modal>
       <div className="flex p-5 justify-between">
         <div className="flex gap-2 items-center ">
           <Link href={`/${post.user.id}`}>
@@ -85,26 +69,8 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
             </time>
           </div>
         </div>
-        {session?.user.id === post.user.id ? (
-          <div className="flex gap-2 ">
-            <Button
-              className="text-lg px-4 border-brandBlack-light"
-              variant={'dark'}
-              aria-label="edit"
-              onClick={() => setMounted(true)}
-            >
-              <MdModeEditOutline />
-            </Button>
-            <Button
-              className="text-lg px-4 border-brandBlack-light"
-              variant={'dark'}
-              aria-label="delete"
-              onClick={() => mutation.mutate({ id: post.id })}
-            >
-              <MdDeleteForever />
-            </Button>
-          </div>
-        ) : null}
+
+        {session?.user.id === post.user.id ? <PostButtons post={post} /> : null}
       </div>
 
       <h2 className="text-lg text-brandPurple-300 px-5 break-words">

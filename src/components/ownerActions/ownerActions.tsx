@@ -6,7 +6,7 @@ import { Modal } from '../ui/modal';
 import { useState } from 'react';
 import { UserProfileForm } from '../userProfileForm/userProfileForm';
 type OwnerActionsProps = {
-  userData: { name: string; bio: string | null };
+  userData: { name: string; bio: string | null; imageName: string | null };
   session: Session;
 };
 
