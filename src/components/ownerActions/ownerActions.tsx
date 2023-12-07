@@ -17,7 +17,7 @@ export const OwnerActions = ({ session, userData }: OwnerActionsProps) => {
   };
   if (session) {
     return (
-      <div className="flex gap-2 my-5">
+      <div className="flex gap-2">
         <Modal mounted={mounted}>
           <UserProfileForm userData={userData} closeModal={closeModal} />
         </Modal>

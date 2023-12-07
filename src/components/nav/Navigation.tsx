@@ -10,7 +10,7 @@ export const Navigation = async () => {
   const user = session?.user;
   if (user) {
     return (
-      <nav className="flex justify-between px-10 py-4 m-4 max-w-7xl w-full rounded-xl items-center text-brandGray bg-brandBlack-light ">
+      <nav className="flex justify-between px-10 py-4 m-4 max-w-7xl w-full rounded-xl items-center text-brandGray bg-brandBlack-medium ">
         <Link href="/" className="font-extrabold text-4xl text-brandPurple-500">
           Thirty
         </Link>

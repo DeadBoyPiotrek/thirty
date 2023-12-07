@@ -42,8 +42,13 @@ export const userRouter = router({
           bio: true,
           imageName: true,
           imageUrl: true,
-          friends: true,
-          quests: true,
+          friends: {
+            select: {
+              name: true,
+              id: true,
+              imageUrl: true,
+            },
+          },
           profilePrivate: true,
         },
       });

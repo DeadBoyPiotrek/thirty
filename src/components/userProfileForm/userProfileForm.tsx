@@ -21,7 +21,12 @@ export const UserProfileForm = ({
   closeModal,
   userData,
 }: UserProfileFormProps) => {
-  const mutation = trpc.user.updateProfile.useMutation();
+  const utils = trpc.useUtils();
+  const mutation = trpc.user.updateProfile.useMutation({
+    onSettled: () => {
+      utils.user.getUserProfile.invalidate();
+    },
+  });
 
   const {
     register,

@@ -181,25 +181,26 @@ export const friendsRouter = router({
       });
     }),
 
-  getFriends: protectedProcedure.query(async ({ ctx }) => {
-    const { userId } = ctx;
-    const data = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        friends: {
-          select: {
-            name: true,
-            id: true,
-            imageUrl: true,
-          },
-        },
-      },
-    });
+  // getFriends: protectedProcedure
+  //   .input(z.object({ userId: z.number() }))
+  //   .query(async ({ input }) => {
+  //     const data = await prisma.user.findUnique({
+  //       where: {
+  //         id: input.userId,
+  //       },
+  //       select: {
+  //         friends: {
+  //           select: {
+  //             name: true,
+  //             id: true,
+  //             imageUrl: true,
+  //           },
+  //         },
+  //       },
+  //     });
 
-    return data?.friends ?? [];
-  }),
+  //     return data?.friends ?? [];
+  //   }),
 
   areFriends: protectedProcedure
     .input(z.object({ profileId: z.number().int() }))
@@ -217,7 +218,7 @@ export const friendsRouter = router({
           },
         },
       });
-      const areFriends = data?.friends?.length ?? 0 > 0;
+      const areFriends = data?.friends.length === 1;
       return areFriends;
     }),
 
