@@ -1,18 +1,30 @@
-'use client';
-import { createPortal } from 'react-dom';
-
-type ModalProps = {
-  children: React.ReactNode;
-  mounted: boolean;
+import * as Dialog from '@radix-ui/react-dialog';
+export const Modal = ({
+  open,
+  onOpenChange,
+  children,
+}: {
+  open?: boolean;
+  onOpenChange?: () => void;
+  children?: React.ReactNode;
+}) => {
+  return (
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+      <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md" />
+      {children}
+    </Dialog.Root>
+  );
 };
 
-export const Modal = ({ children, mounted }: ModalProps) => {
-  return mounted
-    ? createPortal(
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-md">
-          {children}
-        </div>,
-        document.body
-      )
-    : null;
+const ModalContent = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Dialog.Portal>
+      <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-brandBlack-medium shadow-lg rounded-lg p-4">
+        {children}
+      </Dialog.Content>
+    </Dialog.Portal>
+  );
 };
+
+Modal.Button = Dialog.Trigger;
+Modal.Content = ModalContent;

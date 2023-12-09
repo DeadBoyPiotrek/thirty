@@ -28,10 +28,8 @@ interface PostProps {
 }
 
 export const PostButtons = ({ post }: PostProps) => {
-  const [mounted, setMounted] = useState(false);
-  const closeModal = () => {
-    setMounted(false);
-  };
+  let [open, setOpen] = useState(false);
+
   const utils = trpc.useUtils();
   const mutation = trpc.post.deletePost.useMutation({
     onSettled: () => {
@@ -48,17 +46,22 @@ export const PostButtons = ({ post }: PostProps) => {
 
   return (
     <div className="flex gap-2 h-12">
-      <Modal mounted={mounted}>
-        <PostEditForm post={post} closeModal={closeModal} />
+      <Modal open={open} onOpenChange={setOpen}>
+        <Modal.Button asChild>
+          <Button
+            className="text-lg px-4 border-brandBlack-light"
+            variant={'dark'}
+            aria-label="edit"
+          >
+            <MdModeEditOutline />
+          </Button>
+        </Modal.Button>
+        <Modal.Content>
+          Edit Post
+          <PostEditForm post={post} closeModal={() => setOpen(false)} />
+        </Modal.Content>
       </Modal>
-      <Button
-        className="text-lg px-4 border-brandBlack-light"
-        variant={'dark'}
-        aria-label="edit"
-        onClick={() => setMounted(true)}
-      >
-        <MdModeEditOutline />
-      </Button>
+
       <Button
         className="text-lg px-4 border-brandBlack-light"
         variant={'dark'}

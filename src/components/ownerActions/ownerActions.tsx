@@ -2,7 +2,7 @@
 import { signOut } from 'next-auth/react';
 import type { Session } from 'next-auth';
 import { Button } from '../ui/button';
-import { Modal } from '../ui/modal';
+import { Modal } from '../ui/modalOld';
 import { useState } from 'react';
 import { UserProfileForm } from '../userProfileForm/userProfileForm';
 type OwnerActionsProps = {

@@ -94,12 +94,14 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
         </div>
 
         <div className="flex flex-col gap-2 w-full">
-          <label htmlFor="image">Image</label>
+          <label htmlFor="image" className="text-brandWhite-pure">
+            Image
+          </label>
           <input
             id="image"
             {...register('image', { required: false })}
             type="file"
-            className="w-0 h-0 overflow-hidden absolute"
+            className="w-1 h-1 opacity-0 absolute peer"
             aria-label="image"
             onChange={e =>
               e.target.files && setImgName(e.target.files[0]?.name || null)
@@ -107,7 +109,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
           />
           <label
             htmlFor="image"
-            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 cursor-pointer overflow-hidden w-full"
+            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 cursor-pointer overflow-hidden w-44 peer-focus:outline outline-1"
           >
             {imgName ? imgName : 'Choose Image...'}
           </label>
@@ -125,7 +127,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
         </div>
       </div>
       <label>Post content</label>
-      <Textarea {...register('content', { required: true })} />
+      <Textarea variant={'dark'} {...register('content', { required: true })} />
 
       <FormError error={errors.content?.message} />
       <div className="flex justify-center ">

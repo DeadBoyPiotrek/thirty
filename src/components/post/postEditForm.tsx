@@ -6,7 +6,9 @@ import { trpc } from '@/app/_trpc/client';
 import { FormError } from '@ui/formError';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { uploadImage } from '@/lib/helpers/images/uploadImage';
-import { Button } from '../ui/button';
+import { Button } from '@ui/button';
+import { Input } from '@ui/input';
+import { Textarea } from '@ui/textarea';
 type Inputs = Zod.infer<typeof postFormSchemaImgEdit>;
 
 interface PostEditFormProps {
@@ -69,22 +71,22 @@ export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
 
   return (
     <form
-      className="text-black flex flex-col gap-2 bg-brandWhite-pure w-96 rounded-lg p-5"
+      className="flex flex-col gap-2 w-96 rounded-lg p-5"
       onSubmit={handleSubmit(onSubmit)}
     >
       <label>Post title</label>
-      <input {...register('title')} />
+      <Input {...register('title')} />
       <FormError error={errors.title?.message} />
 
       <label>Post content</label>
-      <textarea {...register('content')} />
+      <Textarea {...register('content')} />
       <FormError error={errors.content?.message} />
 
       <label>Image</label>
       <input {...register('image')} type="file" />
       <FormError error={errors.image?.message} />
 
-      <span className="flex gap-2">
+      <span className="flex gap-2 justify-center">
         <Button type="submit" variant={'brand'}>
           Save
         </Button>

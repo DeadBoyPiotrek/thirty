@@ -1,7 +1,7 @@
 'use client';
 import { MdDeleteForever, MdModeEditOutline } from 'react-icons/md';
 import { Button } from '../ui/button';
-import { Modal } from '../ui/modal';
+import { Modal } from '../ui/modalOld';
 import { QuestEditForm } from './questEditForm';
 import { useState } from 'react';
 import { trpc } from '@/app/_trpc/client';

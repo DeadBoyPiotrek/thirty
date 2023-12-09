@@ -4,11 +4,10 @@ import { VariantProps, cva } from 'class-variance-authority';
 const textareaVariants = cva('p-2 rounded-lg transition block', {
   variants: {
     variant: {
-      brand:
-        'bg-brandPurple-500 text-brandWhite-pure hover:bg-brandPurple-300 ',
+      // brand:
+      //   'bg-brandPurple-500 text-brandWhite-pure hover:bg-brandPurple-300 ',
       light: 'bg-brandWhite-pure text-brandBlack-deep hover:bg-brandWhite-100 ',
       dark: 'text-brandWhite-pure bg-brandBlack-medium border border-brandGray hover:bg-brandBlack-light',
-      ghost: 'text-brandGray hover:text-brandWhite-pure',
     },
     size: {
       sm: 'text-sm',
@@ -18,7 +17,7 @@ const textareaVariants = cva('p-2 rounded-lg transition block', {
   },
 
   defaultVariants: {
-    variant: 'dark',
+    variant: 'light',
     size: 'md',
   },
 });
