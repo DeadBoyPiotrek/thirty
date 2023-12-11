@@ -1,11 +1,12 @@
 import * as Dialog from '@radix-ui/react-dialog';
+import { Dispatch, SetStateAction } from 'react';
 export const Modal = ({
   open,
   onOpenChange,
   children,
 }: {
   open?: boolean;
-  onOpenChange?: () => void;
+  onOpenChange?: Dispatch<SetStateAction<boolean>>;
   children?: React.ReactNode;
 }) => {
   return (

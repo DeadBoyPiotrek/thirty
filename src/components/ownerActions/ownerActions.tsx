@@ -1,8 +1,8 @@
 'use client';
 import { signOut } from 'next-auth/react';
 import type { Session } from 'next-auth';
-import { Button } from '../ui/button';
-import { Modal } from '../ui/modalOld';
+import { Button } from '@ui/button';
+import { Modal } from '@ui/modal';
 import { useState } from 'react';
 import { UserProfileForm } from '../userProfileForm/userProfileForm';
 type OwnerActionsProps = {
@@ -11,19 +11,22 @@ type OwnerActionsProps = {
 };
 
 export const OwnerActions = ({ session, userData }: OwnerActionsProps) => {
-  const [mounted, setMounted] = useState(false);
+  const [open, setOpen] = useState(false);
   const closeModal = () => {
-    setMounted(false);
+    setOpen(false);
   };
   if (session) {
     return (
       <div className="flex gap-2">
-        <Modal mounted={mounted}>
-          <UserProfileForm userData={userData} closeModal={closeModal} />
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Button asChild>
+            <Button variant={'dark'}>Edit profile</Button>
+          </Modal.Button>
+          <Modal.Content>
+            <UserProfileForm userData={userData} closeModal={closeModal} />
+          </Modal.Content>
         </Modal>
-        <Button variant={'dark'} onClick={() => setMounted(true)}>
-          Edit profile
-        </Button>
+
         <Button variant={'dark'} onClick={() => signOut()}>
           Sign out
         </Button>

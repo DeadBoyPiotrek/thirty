@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
-import { FC } from 'react';
+import React from 'react';
 
 const buttonVariants = cva('p-2 rounded-lg transition ', {
   variants: {
@@ -26,16 +26,16 @@ interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {}
 
-export const Button: FC<ButtonProps> = ({
-  className,
-  size,
-  variant,
-  ...props
-}) => {
-  return (
-    <button
-      className={cn(buttonVariants({ size, variant }), className)}
-      {...props}
-    />
-  );
-};
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, size, variant, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={cn(buttonVariants({ size, variant }), className)}
+        {...props}
+      />
+    );
+  }
+);
+
+Button.displayName = 'Button';

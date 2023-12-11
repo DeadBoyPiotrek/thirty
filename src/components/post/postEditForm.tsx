@@ -9,6 +9,8 @@ import { uploadImage } from '@/lib/helpers/images/uploadImage';
 import { Button } from '@ui/button';
 import { Input } from '@ui/input';
 import { Textarea } from '@ui/textarea';
+import { ImageInput } from '../ui/imageInput';
+import { useState } from 'react';
 type Inputs = Zod.infer<typeof postFormSchemaImgEdit>;
 
 interface PostEditFormProps {
@@ -23,6 +25,12 @@ interface PostEditFormProps {
 }
 
 export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
+  const [imgName, setImgName] = useState<string | null>(null);
+  const handleImageChange2 = (file: File | null) => {
+    console.log('hello from poseEditForm');
+    setImgName(file?.name || null);
+  };
+
   const utils = trpc.useUtils();
   const mutation = trpc.post.updatePost.useMutation({
     onSettled: () => {
@@ -83,7 +91,12 @@ export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
       <FormError error={errors.content?.message} />
 
       <label>Image</label>
-      <input {...register('image')} type="file" />
+      {/* <input {...register('image')} type="file" /> */}
+      <ImageInput
+        label={imgName ? imgName : 'Choose an image'}
+        onChange={handleImageChange2}
+        register={register}
+      />
       <FormError error={errors.image?.message} />
 
       <span className="flex gap-2 justify-center">
