@@ -127,4 +127,52 @@ export const postRouter = router({
         cursor: posts[posts.length - 1]?.id ?? null,
       };
     }),
+
+  getUserPageFeedPosts: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(),
+        userId: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      const posts = await prisma.post.findMany({
+        take: input.limit ?? 5,
+        skip: input.cursor ? 1 : 0,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+        orderBy: {
+          id: 'desc',
+        },
+        where: {
+          userId: input.userId,
+        },
+
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          imageUrl: true,
+          imageName: true,
+          datePublished: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              imageUrl: true,
+            },
+          },
+          quest: {
+            select: {
+              id: true,
+              title: true,
+            },
+          },
+        },
+      });
+      return {
+        posts,
+        cursor: posts[posts.length - 1]?.id ?? null,
+      };
+    }),
 });

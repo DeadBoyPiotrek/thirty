@@ -38,7 +38,7 @@ export const Sidebar = ({
   }
 
   return (
-    <div className="w-80 flex flex-col justify-center bg-brandBlack-medium p-4 rounded-lg gap-3">
+    <div className="w-80 flex flex-col bg-brandBlack-medium p-4 rounded-lg gap-3 h-min sticky top-0 max-h-screen overflow-y-auto">
       <Image
         src={`${user.imageUrl || `/images/profile-user-default.svg`}`}
         alt="avatar"

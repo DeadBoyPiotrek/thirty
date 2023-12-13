@@ -5,10 +5,17 @@ import { authOptions } from '../api/auth/[...nextauth]/route';
 import { notFound } from 'next/navigation';
 
 import { Sidebar } from '@/components/profile/sidebar';
-import { UserFeed } from '@/components/users/userFeed';
+import { UserPageFeed } from '@/components/users/userPageFeed';
 
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const userId = parseInt(params.userId);
+
+  const { posts } = await serverClient.post.getUserPageFeedPosts({
+    limit: 5,
+    userId,
+  });
+  const cursor = posts[posts.length - 1]?.id;
+
   const user = await serverClient.user.getUserProfile({
     userId: userId,
   });
@@ -44,7 +51,7 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   // TODO: I don't like this
 
   return (
-    <div className="flex w-full  ">
+    <div className="flex w-full justify-center ">
       <Sidebar
         initUser={user}
         areFriends={areFriends}
@@ -54,7 +61,7 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
         session={session}
         loggedUserId={loggedUserId}
       />
-      <UserFeed />
+      <UserPageFeed initialPosts={{ posts, cursor }} userId={userId} />
     </div>
   );
 };

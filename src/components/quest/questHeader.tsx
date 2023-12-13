@@ -35,7 +35,7 @@ export const QuestHeader = ({
   }
   return (
     <>
-      <div className="flex gap-2 justify-between items-center">
+      <div className="flex gap-2 justify-between ">
         <h1 className="font-bold text-brandPurple-500 text-4xl max-w-3xl break-words">
           {quest.title}
         </h1>

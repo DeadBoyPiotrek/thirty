@@ -39,7 +39,7 @@ export const QuestButtons = ({ quest }: QuestProps) => {
   };
 
   return (
-    <div className="flex gap-2 h-12">
+    <div className="flex gap-2 h-12 mt-2">
       <Modal open={open} onOpenChange={setOpen}>
         <Modal.Button asChild>
           <Button

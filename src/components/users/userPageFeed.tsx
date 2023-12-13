@@ -1,24 +1,27 @@
+// TODO: can I use the same component for the user page and the feed page?
 'use client';
 import { serverClient } from '@/app/_trpc/serverClient';
+import { Post } from '@/components/post/post';
 import { trpc } from '@/app/_trpc/client';
-import { Post } from '../post/post';
-import { useEffect, useRef } from 'react';
-interface FeedProps {
-  initialPosts: Awaited<
-    ReturnType<(typeof serverClient)['post']['getFeedPosts']>
-  >;
-}
 import { useIntersection } from '@mantine/hooks';
+import { useEffect, useRef } from 'react';
+interface UserPageFeedProps {
+  initialPosts: Awaited<
+    ReturnType<(typeof serverClient)['post']['getUserPageFeedPosts']>
+  >;
+  userId: number;
+}
 
-export const Feed = ({ initialPosts }: FeedProps) => {
+export const UserPageFeed = ({ initialPosts, userId }: UserPageFeedProps) => {
   const lastPostRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
     threshold: 1,
   });
+
   const { data, fetchNextPage, hasNextPage } =
-    trpc.post.getFeedPosts.useInfiniteQuery(
-      { limit: 3 },
+    trpc.post.getUserPageFeedPosts.useInfiniteQuery(
+      { limit: 3, userId },
       {
         getNextPageParam: lastPage => lastPage.cursor,
         initialData: {
@@ -28,12 +31,12 @@ export const Feed = ({ initialPosts }: FeedProps) => {
         refetchOnMount: false,
       }
     );
-
   useEffect(() => {
     if (entry?.isIntersecting && hasNextPage) fetchNextPage();
   }, [entry]);
+
   return (
-    <div className="flex flex-col gap-10 max-w-4xl w-full">
+    <div className=" ml-5 flex flex-col gap-10 max-w-4xl w-full ">
       {data?.pages.flatMap(page =>
         page.posts.map((post, i) => {
           if (i === page.posts.length - 1) {
