@@ -1,7 +1,7 @@
 'use client';
 import { MdDeleteForever, MdModeEditOutline } from 'react-icons/md';
 import { Button } from '../ui/button';
-import { Modal } from '../ui/modalOld';
+import { Modal } from '@ui/modal';
 import { QuestEditForm } from './questEditForm';
 import { useState } from 'react';
 import { trpc } from '@/app/_trpc/client';
@@ -19,9 +19,9 @@ interface QuestProps {
 export const QuestButtons = ({ quest }: QuestProps) => {
   const router = useRouter();
   const utils = trpc.useUtils();
-  const [mounted, setMounted] = useState(false);
+  const [open, setOpen] = useState(false);
   const closeModal = () => {
-    setMounted(false);
+    setOpen(false);
   };
 
   const mutation = trpc.quest.deleteQuest.useMutation({
@@ -40,17 +40,21 @@ export const QuestButtons = ({ quest }: QuestProps) => {
 
   return (
     <div className="flex gap-2 h-12">
-      <Modal mounted={mounted}>
-        <QuestEditForm quest={quest} closeModal={closeModal} />
+      <Modal open={open} onOpenChange={setOpen}>
+        <Modal.Button asChild>
+          <Button
+            className="text-lg px-4 border-brandBlack-light"
+            variant={'dark'}
+            aria-label="edit"
+            onClick={() => setOpen(true)}
+          >
+            <MdModeEditOutline />
+          </Button>
+        </Modal.Button>
+        <Modal.Content>
+          <QuestEditForm quest={quest} closeModal={closeModal} />
+        </Modal.Content>
       </Modal>
-      <Button
-        className="text-lg px-4 border-brandBlack-light"
-        variant={'dark'}
-        aria-label="edit"
-        onClick={() => setMounted(true)}
-      >
-        <MdModeEditOutline />
-      </Button>
       <Button
         className="text-lg px-4 border-brandBlack-light"
         variant={'dark'}

@@ -26,8 +26,7 @@ interface PostEditFormProps {
 
 export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
   const [imgName, setImgName] = useState<string | null>(null);
-  const handleImageChange2 = (file: File | null) => {
-    console.log('hello from poseEditForm');
+  const handleImageChange = (file: File | null) => {
     setImgName(file?.name || null);
   };
 
@@ -90,11 +89,11 @@ export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
       <Textarea {...register('content')} />
       <FormError error={errors.content?.message} />
 
-      <label>Image</label>
-      {/* <input {...register('image')} type="file" /> */}
+      <label htmlFor="image">Image</label>
       <ImageInput
+        id="postEditImage"
         label={imgName ? imgName : 'Choose an image'}
-        onChange={handleImageChange2}
+        onChange={handleImageChange}
         register={register}
       />
       <FormError error={errors.image?.message} />

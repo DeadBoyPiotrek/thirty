@@ -9,8 +9,10 @@ import { Input } from '@ui/input';
 import { Textarea } from '@ui/textarea';
 import { useState } from 'react';
 import { uploadImage } from '@/lib/helpers/images/uploadImage';
+import { ImageInput } from '../ui/imageInput';
 export const QuestForm = () => {
-  const [imgName, setImgName] = useState<string | null>(null);
+  const [imageSelectKey, setImageSelectKey] = useState<number>(0);
+
   const utils = trpc.useUtils();
   const mutation = trpc.quest.addQuest.useMutation({
     onSettled: () => {
@@ -50,7 +52,7 @@ export const QuestForm = () => {
       });
     }
     reset();
-    setImgName(null);
+    setImageSelectKey(prevKey => prevKey + 1);
   };
 
   return (
@@ -60,28 +62,14 @@ export const QuestForm = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <label>Quest title</label>
-        <Input {...register('title')} />
+        <Input variant={'dark'} {...register('title')} />
         <FormError error={errors.title?.message} />
         <label>Quest content</label>
-        <Textarea {...register('content')} />
+        <Textarea variant={'dark'} {...register('content')} />
         <FormError error={errors.content?.message} />
         <label htmlFor="image">Image</label>
-        <input
-          id="image"
-          {...register('image', { required: false })}
-          type="file"
-          className="w-0 h-0 overflow-hidden absolute"
-          aria-label="image"
-          onChange={e =>
-            e.target.files && setImgName(e.target.files[0]?.name || null)
-          }
-        />
-        <label
-          htmlFor="image"
-          className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 cursor-pointer overflow-hidden w-full"
-        >
-          {imgName ? imgName : 'Choose Image...'}
-        </label>
+        <ImageInput key={imageSelectKey} id="questImage" register={register} />
+
         <FormError error={errors.image?.message} />
 
         <Button variant={'brand'} className="self-center px-4 font-bold">

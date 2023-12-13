@@ -25,11 +25,6 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
   const [questSelectKey, setQuestSelectKey] = useState<number>(0);
 
   const utils = trpc.useUtils();
-  const [imgName, setImgName] = useState<string | null>(null);
-  const handleImageChange = (file: File | null) => {
-    console.log('hello from poseForm');
-    setImgName(file?.name || null);
-  };
 
   const mutation = trpc.post.addPost.useMutation({
     onSettled: () => {
@@ -70,7 +65,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
       });
     }
     reset();
-    setImgName(null);
+
     setQuestSelectKey(prevKey => prevKey + 1);
   };
 
@@ -102,27 +97,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
           <label htmlFor="image" className="text-brandWhite-pure">
             Image
           </label>
-          {/* <input
-            id="image"
-            type="file"
-            className="w-1 h-1 opacity-0 absolute peer"
-            aria-label="image"
-            {...register('image', { required: false })}
-            onChange={e =>
-              e.target.files && setImgName(e.target.files[0]?.name || null)
-            }
-          />
-          <label
-            htmlFor="image"
-            className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 cursor-pointer overflow-hidden w-44 peer-focus:outline outline-1"
-          >
-            {imgName ? imgName : 'Choose Image...'}
-          </label> */}
-          <ImageInput
-            label={imgName ? imgName : 'Choose Image...'}
-            onChange={handleImageChange}
-            register={register}
-          />
+          <ImageInput key={questSelectKey} id="postImage" register={register} />
           <FormError error={errors.image?.message} />
         </div>
         <div className="flex flex-col gap-2">

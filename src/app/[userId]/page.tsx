@@ -5,6 +5,7 @@ import { authOptions } from '../api/auth/[...nextauth]/route';
 import { notFound } from 'next/navigation';
 
 import { Sidebar } from '@/components/profile/sidebar';
+import { UserFeed } from '@/components/users/userFeed';
 
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const userId = parseInt(params.userId);
@@ -53,7 +54,7 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
         session={session}
         loggedUserId={loggedUserId}
       />
-      <div className="w-full">POSTS</div>
+      <UserFeed />
     </div>
   );
 };

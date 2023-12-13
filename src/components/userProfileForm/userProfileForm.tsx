@@ -5,11 +5,12 @@ import { Switch } from '@ui/switch';
 import { userProfileSchemaImg } from '@lib/schemas/userProfileSchema';
 import { trpc } from '@/app/_trpc/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormError } from '../ui/formError';
+import { FormError } from '@ui/formError';
 
 import { uploadImage } from '@/lib/helpers/images/uploadImage';
 import { Input } from '@ui/input';
 import { Textarea } from '@ui/textarea';
+import { ImageInput } from '@ui/imageInput';
 type UserProfileFormProps = {
   userData: { name: string; bio: string | null; imageName: string | null };
   closeModal: () => void;
@@ -62,16 +63,16 @@ export const UserProfileForm = ({
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="text-black flex flex-col gap-2 bg-brandWhite-pure w-96 rounded-lg p-5"
+        className="flex flex-col gap-2 w-96 rounded-lg p-5"
       >
         <label>Image</label>
-        <Input {...register('image')} type="file" variant={'light'} />
+        <ImageInput id='userProfileImg' register={register} {...register('image')} />
         <FormError error={errors.image?.message} />
         <label>Name</label>
         <Input
           {...register('name')}
           defaultValue={userData.name}
-          variant={'light'}
+          variant={'dark'}
         />
         <FormError error={errors.name?.message} />
 
@@ -79,7 +80,7 @@ export const UserProfileForm = ({
         <Textarea
           {...register('bio')}
           defaultValue={userData.bio ?? undefined}
-          variant={'light'}
+          variant={'dark'}
         />
         <FormError error={errors.bio?.message} />
 

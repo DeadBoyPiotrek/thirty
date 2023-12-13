@@ -6,8 +6,10 @@ import { trpc } from '@/app/_trpc/client';
 import { FormError } from '@ui/formError';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { uploadImage } from '@/lib/helpers/images/uploadImage';
-import { Button } from '../ui/button';
-import { DevTool } from '@hookform/devtools';
+import { Button } from '@ui/button';
+import { ImageInput } from '@ui/imageInput';
+import { Input } from '@ui/input';
+import { Textarea } from '@ui/textarea';
 type Inputs = Zod.infer<typeof questFormSchemaImgEdit>;
 
 interface PostEditFormProps {
@@ -32,7 +34,6 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
     register,
     handleSubmit,
     formState: { errors },
-    control,
   } = useForm<Inputs>({
     resolver: zodResolver(questFormSchemaImgEdit),
     defaultValues: { title: quest.title, content: quest.content },
@@ -63,25 +64,24 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
         imageUrl,
       });
     }
-    console.log('hello ?');
     closeModal();
   };
 
   return (
     <form
-      className="text-black flex flex-col gap-2 bg-brandWhite-pure w-96 rounded-lg p-5"
+      className=" flex flex-col gap-2 w-96 rounded-lg p-5"
       onSubmit={handleSubmit(onSubmit)}
     >
       <label>Quest title</label>
-      <input {...register('title')} />
+      <Input variant={'dark'} {...register('title')} />
       <FormError error={errors.title?.message} />
 
       <label>Quest content</label>
-      <textarea {...register('content')} />
+      <Textarea variant={'dark'} {...register('content')} />
       <FormError error={errors.content?.message} />
 
       <label>Image</label>
-      <input {...register('image')} type="file" />
+      <ImageInput id="questEditImage" register={register} />
       <FormError error={errors.image?.message} />
 
       <span className="flex gap-2">
@@ -92,7 +92,6 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
           Cancel
         </Button>
       </span>
-      <DevTool control={control} />
     </form>
   );
 };
