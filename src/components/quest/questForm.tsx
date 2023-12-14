@@ -14,7 +14,7 @@ export const QuestForm = () => {
   const [imageSelectKey, setImageSelectKey] = useState<number>(0);
 
   const utils = trpc.useUtils();
-  const mutation = trpc.quest.addQuest.useMutation({
+  const { mutate: addQuest, isLoading } = trpc.quest.addQuest.useMutation({
     onSettled: () => {
       utils.quest.getQuests.invalidate();
     },
@@ -31,7 +31,7 @@ export const QuestForm = () => {
   });
   const onSubmit: SubmitHandler<Inputs> = async data => {
     if (data.image.length === 0) {
-      mutation.mutate({
+      addQuest({
         content: data.content,
         title: data.title,
       });
@@ -44,7 +44,7 @@ export const QuestForm = () => {
       if (error) {
         console.log(error);
       }
-      mutation.mutate({
+      addQuest({
         content: data.content,
         title: data.title,
         imageUrl,
@@ -72,7 +72,11 @@ export const QuestForm = () => {
 
         <FormError error={errors.image?.message} />
 
-        <Button variant={'brand'} className="self-center px-4 font-bold">
+        <Button
+          isLoading={isLoading}
+          variant={'brand'}
+          className="self-center px-4 font-bold"
+        >
           Add Quest
         </Button>
       </form>

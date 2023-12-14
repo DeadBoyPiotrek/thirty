@@ -25,11 +25,14 @@ interface PostEditFormProps {
 
 export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
   const utils = trpc.useUtils();
-  const mutation = trpc.quest.updateQuest.useMutation({
-    onSettled: () => {
-      utils.quest.getSingleQuestWithPosts.invalidate();
-    },
-  });
+  const { mutate: updateQuest, isLoading } = trpc.quest.updateQuest.useMutation(
+    {
+      onSettled: () => {
+        closeModal();
+        utils.quest.getSingleQuestWithPosts.invalidate();
+      },
+    }
+  );
   const {
     register,
     handleSubmit,
@@ -41,7 +44,7 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     if (data.image.length === 0) {
-      mutation.mutate({
+      updateQuest({
         id: quest.id,
         content: data.content,
         title: data.title,
@@ -56,7 +59,7 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
         console.log(error);
       }
 
-      mutation.mutate({
+      updateQuest({
         id: quest.id,
         content: data.content,
         title: data.title,
@@ -64,7 +67,6 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
         imageUrl,
       });
     }
-    closeModal();
   };
 
   return (
@@ -85,10 +87,10 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
       <FormError error={errors.image?.message} />
 
       <span className="flex gap-2">
-        <Button type="submit" variant={'brand'}>
+        <Button type="submit" variant={'brand'} isLoading={isLoading}>
           Save
         </Button>
-        <Button type="reset" variant={'dark'} onClick={() => closeModal()}>
+        <Button type="reset" variant={'dark'} isLoading={isLoading}>
           Cancel
         </Button>
       </span>

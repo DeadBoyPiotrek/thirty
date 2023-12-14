@@ -1,8 +1,9 @@
 import { cn } from '@/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
 import React from 'react';
+import { Spinner } from '@ui/spinner';
 
-const buttonVariants = cva('p-2 rounded-lg transition ', {
+const buttonVariants = cva('p-2 rounded-md transition relative', {
   variants: {
     variant: {
       brand:
@@ -24,16 +25,32 @@ const buttonVariants = cva('p-2 rounded-lg transition ', {
 });
 interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants> {
+  isLoading?: boolean;
+}
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, size, variant, ...props }, ref) => {
+  ({ className, size, variant, isLoading, children, ...props }, ref) => {
     return (
       <button
         ref={ref}
         className={cn(buttonVariants({ size, variant }), className)}
         {...props}
-      />
+        disabled={isLoading}
+      >
+        <div
+          className={`flex items-center justify-center w-full ${
+            isLoading ? 'blur-sm' : ''
+          }`}
+        >
+          {children}
+        </div>
+        {isLoading && (
+          <div className="absolute inset-0 flex justify-center items-center">
+            <Spinner />
+          </div>
+        )}
+      </button>
     );
   }
 );

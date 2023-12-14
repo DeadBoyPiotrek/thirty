@@ -40,12 +40,18 @@ export const FriendRequests = ({
     }
   );
 
-  const acceptFriendRequest = trpc.friends.acceptFriendRequest.useMutation({
+  const {
+    mutate: acceptFriendRequest,
+    isLoading: acceptFriendRequestIsLoading,
+  } = trpc.friends.acceptFriendRequest.useMutation({
     onSettled: () => {
       utils.friends.getReceivedFriendRequests.invalidate();
     },
   });
-  const declineFriendRequest = trpc.friends.declineFriendRequest.useMutation({
+  const {
+    mutate: declineFriendRequest,
+    isLoading: declineFriendRequestIsLoading,
+  } = trpc.friends.declineFriendRequest.useMutation({
     onSettled: () => {
       utils.friends.getSentFriendRequests.invalidate();
       utils.friends.getReceivedFriendRequests.invalidate();
@@ -80,16 +86,18 @@ export const FriendRequests = ({
               <Button
                 variant={'brand'}
                 onClick={() =>
-                  acceptFriendRequest.mutate({ profileId: request.sender.id })
+                  acceptFriendRequest({ profileId: request.sender.id })
                 }
+                isLoading={acceptFriendRequestIsLoading}
               >
                 Accept
               </Button>
               <Button
                 variant={'dark'}
                 onClick={() =>
-                  declineFriendRequest.mutate({ profileId: request.sender.id })
+                  declineFriendRequest({ profileId: request.sender.id })
                 }
+                isLoading={declineFriendRequestIsLoading}
               >
                 Decline
               </Button>
@@ -121,7 +129,7 @@ export const FriendRequests = ({
               <Button
                 variant={'dark'}
                 onClick={() =>
-                  declineFriendRequest.mutate({
+                  declineFriendRequest({
                     profileId: request.receiver.id,
                   })
                 }

@@ -17,38 +17,48 @@ export const UserActions = ({
 }: UserActionsProps) => {
   const utils = trpc.useUtils();
   // TODO: I don't like this
-  const addFriend = trpc.friends.sendFriendRequest.useMutation({
-    onSettled: () => {
-      utils.friends.isFriendRequestSent.invalidate();
-      utils.friends.isFriendRequestReceived.invalidate();
-      utils.friends.areFriends.invalidate();
-    },
-  });
-  const removeFriend = trpc.friends.removeFriend.useMutation({
-    onSettled: () => {
-      utils.friends.areFriends.invalidate();
-      utils.user.getUserProfile.refetch();
-    },
-  });
-  const acceptFriendRequest = trpc.friends.acceptFriendRequest.useMutation({
+  const { mutate: addFriend, isLoading: addFriendIsLoading } =
+    trpc.friends.sendFriendRequest.useMutation({
+      onSettled: () => {
+        utils.friends.isFriendRequestSent.invalidate();
+        utils.friends.isFriendRequestReceived.invalidate();
+        utils.friends.areFriends.invalidate();
+      },
+    });
+  const { mutate: removeFriend, isLoading: removeFriendIsLoading } =
+    trpc.friends.removeFriend.useMutation({
+      onSettled: () => {
+        utils.friends.areFriends.invalidate();
+        utils.user.getUserProfile.refetch();
+      },
+    });
+  const {
+    mutate: acceptFriendRequest,
+    isLoading: acceptFriendRequestIsLoading,
+  } = trpc.friends.acceptFriendRequest.useMutation({
     onSettled: () => {
       utils.friends.areFriends.invalidate();
       utils.user.getUserProfile.invalidate();
     },
   });
-  const declineFriendRequest = trpc.friends.declineFriendRequest.useMutation({
+  const {
+    mutate: declineFriendRequest,
+    isLoading: declineFriendRequestIsLoading,
+  } = trpc.friends.declineFriendRequest.useMutation({
     onSettled: () => {
       utils.friends.isFriendRequestSent.invalidate();
       utils.friends.isFriendRequestReceived.invalidate();
     },
   });
-  const removeSentFriendRequest =
-    trpc.friends.removeSentFriendRequest.useMutation({
-      onSettled: () => {
-        utils.friends.isFriendRequestSent.invalidate();
-        utils.friends.isFriendRequestReceived.invalidate();
-      },
-    });
+  const {
+    mutate: removeSentFriendRequest,
+    isLoading: removeSentFriendRequestIsLoading,
+  } = trpc.friends.removeSentFriendRequest.useMutation({
+    onSettled: () => {
+      utils.friends.isFriendRequestSent.invalidate();
+      utils.friends.isFriendRequestReceived.invalidate();
+    },
+  });
   const areFriends2 = trpc.friends.areFriends.useQuery(
     { profileId },
     {
@@ -76,7 +86,8 @@ export const UserActions = ({
         <Button
           className="font-medium"
           variant={'dark'}
-          onClick={() => removeFriend.mutate({ profileId })}
+          onClick={() => removeFriend({ profileId })}
+          isLoading={removeFriendIsLoading}
         >
           Remove Friend
         </Button>
@@ -84,7 +95,8 @@ export const UserActions = ({
         <Button
           className="font-medium"
           variant={'dark'}
-          onClick={() => removeSentFriendRequest.mutate({ profileId })}
+          onClick={() => removeSentFriendRequest({ profileId })}
+          isLoading={removeSentFriendRequestIsLoading}
         >
           Remove Friend Request
         </Button>
@@ -93,14 +105,16 @@ export const UserActions = ({
           <Button
             className="font-medium"
             variant={'dark'}
-            onClick={() => acceptFriendRequest.mutate({ profileId })}
+            onClick={() => acceptFriendRequest({ profileId })}
+            isLoading={acceptFriendRequestIsLoading}
           >
             Accept Friend Request
           </Button>
           <Button
             className="font-medium"
             variant={'dark'}
-            onClick={() => declineFriendRequest.mutate({ profileId })}
+            onClick={() => declineFriendRequest({ profileId })}
+            isLoading={declineFriendRequestIsLoading}
           >
             Decline Friend Request
           </Button>
@@ -108,7 +122,8 @@ export const UserActions = ({
       ) : (
         <Button
           className="border p-3"
-          onClick={() => addFriend.mutate({ profileId })}
+          onClick={() => addFriend({ profileId })}
+          isLoading={addFriendIsLoading}
         >
           Add Friend ❤️
         </Button>

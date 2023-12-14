@@ -26,11 +26,12 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
 
   const utils = trpc.useUtils();
 
-  const mutation = trpc.post.addPost.useMutation({
+  const { mutate: addPost, isLoading } = trpc.post.addPost.useMutation({
     onSettled: () => {
       utils.post.getFeedPosts.invalidate();
     },
   });
+
   const {
     register,
     handleSubmit,
@@ -41,7 +42,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     if (data.image.length === 0) {
-      mutation.mutate({
+      addPost({
         questId: data.questId,
         content: data.content,
         title: data.title,
@@ -56,7 +57,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
         console.log(error);
       }
 
-      mutation.mutate({
+      addPost({
         content: data.content,
         title: data.title,
         imageName,
@@ -116,7 +117,12 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
 
       <FormError error={errors.content?.message} />
       <div className="flex justify-center ">
-        <Button variant={'brand'} className="font-bold px-4" type="submit">
+        <Button
+          isLoading={isLoading}
+          variant={'brand'}
+          className="font-bold px-4"
+          type="submit"
+        >
           Post
         </Button>
       </div>

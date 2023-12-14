@@ -9,6 +9,7 @@ interface FeedProps {
   >;
 }
 import { useIntersection } from '@mantine/hooks';
+import { Spinner } from '@ui/spinner';
 
 export const Feed = ({ initialPosts }: FeedProps) => {
   const lastPostRef = useRef<HTMLDivElement>(null);
@@ -16,7 +17,7 @@ export const Feed = ({ initialPosts }: FeedProps) => {
     root: lastPostRef.current,
     threshold: 1,
   });
-  const { data, fetchNextPage, hasNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetching } =
     trpc.post.getFeedPosts.useInfiniteQuery(
       { limit: 3 },
       {
@@ -33,7 +34,13 @@ export const Feed = ({ initialPosts }: FeedProps) => {
     if (entry?.isIntersecting && hasNextPage) fetchNextPage();
   }, [entry]);
   return (
-    <div className="flex flex-col gap-10 max-w-4xl w-full">
+    <div className="flex flex-col gap-10 max-w-4xl w-full items-center">
+      {isFetching && (
+        <div className="flex items-center gap-4">
+          <Spinner />
+          Loading posts
+        </div>
+      )}
       {data?.pages.flatMap(page =>
         page.posts.map((post, i) => {
           if (i === page.posts.length - 1) {

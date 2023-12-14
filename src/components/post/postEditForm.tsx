@@ -10,7 +10,6 @@ import { Button } from '@ui/button';
 import { Input } from '@ui/input';
 import { Textarea } from '@ui/textarea';
 import { ImageInput } from '../ui/imageInput';
-import { useState } from 'react';
 type Inputs = Zod.infer<typeof postFormSchemaImgEdit>;
 
 interface PostEditFormProps {
@@ -25,16 +24,14 @@ interface PostEditFormProps {
 }
 
 export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
-  const [imgName, setImgName] = useState<string | null>(null);
-  const handleImageChange = (file: File | null) => {
-    setImgName(file?.name || null);
-  };
-
   const utils = trpc.useUtils();
-  const mutation = trpc.post.updatePost.useMutation({
+  const { mutate: updatePost, isLoading } = trpc.post.updatePost.useMutation({
     onSettled: () => {
+      closeModal();
+
       utils.post.getFeedPosts.invalidate();
       utils.quest.getSingleQuestWithPosts.invalidate();
+      utils.post.getUserPageFeedPosts.invalidate();
     },
   });
   const {
@@ -48,7 +45,7 @@ export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     if (data.image.length === 0) {
-      mutation.mutate({
+      updatePost({
         id: post.id,
         questId: data.questId,
         content: data.content,
@@ -64,7 +61,7 @@ export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
         console.log(error);
       }
 
-      mutation.mutate({
+      updatePost({
         id: post.id,
         content: data.content,
         title: data.title,
@@ -73,7 +70,6 @@ export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
         questId: data.questId,
       });
     }
-    closeModal();
   };
 
   return (
@@ -90,19 +86,19 @@ export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
       <FormError error={errors.content?.message} />
 
       <label htmlFor="image">Image</label>
-      <ImageInput
-        id="postEditImage"
-        label={imgName ? imgName : 'Choose an image'}
-        onChange={handleImageChange}
-        register={register}
-      />
+      <ImageInput id="postEditImage" register={register} />
       <FormError error={errors.image?.message} />
 
       <span className="flex gap-2 justify-center">
-        <Button type="submit" variant={'brand'}>
+        <Button isLoading={isLoading} type="submit" variant={'brand'}>
           Save
         </Button>
-        <Button type="reset" variant={'dark'} onClick={() => closeModal()}>
+        <Button
+          isLoading={isLoading}
+          type="reset"
+          variant={'dark'}
+          onClick={() => closeModal()}
+        >
           Cancel
         </Button>
       </span>

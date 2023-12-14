@@ -24,17 +24,18 @@ export const QuestButtons = ({ quest }: QuestProps) => {
     setOpen(false);
   };
 
-  const mutation = trpc.quest.deleteQuest.useMutation({
-    onSettled: () => {
-      utils.quest.getQuests.refetch();
-    },
-  });
+  const { mutate: deleteQuestMutation, isLoading } =
+    trpc.quest.deleteQuest.useMutation({
+      onSettled: () => {
+        utils.quest.getQuests.refetch();
+      },
+    });
 
   const deleteQuest = () => {
     if (quest.imageName) {
       deleteImage({ folderName: 'quests', imageName: quest.imageName });
     }
-    mutation.mutate({ questId: quest.id });
+    deleteQuestMutation({ questId: quest.id });
     router.push('/');
   };
 
@@ -60,6 +61,7 @@ export const QuestButtons = ({ quest }: QuestProps) => {
         variant={'dark'}
         aria-label="delete"
         onClick={deleteQuest}
+        isLoading={isLoading}
       >
         <MdDeleteForever />
       </Button>
