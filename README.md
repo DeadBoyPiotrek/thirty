@@ -22,7 +22,7 @@
   - [x] Create Post
   - [x] Delete Post
   - [x] Add Image to Post
-  - [ ] Like Post
+  - [x] Like Post
   - [ ] Comment Post
   - [x] Edit Post
   - [x] Infinite Scroll
@@ -33,7 +33,7 @@
 - [ ] Fetching
   - [x] ssr when possible
   - [x] caching
-  - [ ] optimistic updates
+  - [x] optimistic updates
 - [ ] Error Handling
 - [ ] Testing
 - [ ] CI/CD

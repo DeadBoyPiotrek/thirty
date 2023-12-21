@@ -1,14 +1,17 @@
 import { Navigation } from '@/components/nav/Navigation';
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import Provider from './_trpc/Provider';
 import { getServerSession } from 'next-auth';
 import SessionProvider from '../components/session/sessionProvider';
 import { authOptions } from './api/auth/[...nextauth]/route';
 import { cn } from '@/lib/utils';
-const inter = Inter({ subsets: ['latin'] });
 
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+});
 export const metadata: Metadata = {
   title: 'Thirty',
   description: 'Thirty is a social media platform for cool people',
@@ -22,7 +25,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className={cn(inter.className, 'flex flex-col items-center')}>
+      <body className={cn(poppins.className, 'flex flex-col items-center')}>
         <Navigation />
         <SessionProvider session={session}>
           <Provider>

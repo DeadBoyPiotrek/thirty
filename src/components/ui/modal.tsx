@@ -11,7 +11,7 @@ export const Modal = ({
 }) => {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Overlay className="z-10 fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md" />
+      <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md " />
       {children}
     </Dialog.Root>
   );
@@ -20,7 +20,7 @@ export const Modal = ({
 const ModalContent = ({ children }: { children: React.ReactNode }) => {
   return (
     <Dialog.Portal>
-      <Dialog.Content className="z-20 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-brandBlack-medium shadow-lg rounded-lg p-4">
+      <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-brandBlack-medium shadow-lg rounded-lg p-4">
         {children}
       </Dialog.Content>
     </Dialog.Portal>

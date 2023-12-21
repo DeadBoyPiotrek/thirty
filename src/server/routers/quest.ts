@@ -93,6 +93,18 @@ export const questRouter = router({
               imageName: true,
               imageUrl: true,
               datePublished: true,
+              likes: {
+                select: {
+                  id: true,
+                  user: {
+                    select: {
+                      id: true,
+                      name: true,
+                      imageUrl: true,
+                    },
+                  },
+                },
+              },
               user: {
                 select: {
                   id: true,

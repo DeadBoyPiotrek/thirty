@@ -107,6 +107,18 @@ export const postRouter = router({
           imageUrl: true,
           imageName: true,
           datePublished: true,
+          likes: {
+            select: {
+              id: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  imageUrl: true,
+                },
+              },
+            },
+          },
           user: {
             select: {
               id: true,
@@ -155,6 +167,18 @@ export const postRouter = router({
           imageUrl: true,
           imageName: true,
           datePublished: true,
+          likes: {
+            select: {
+              id: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  imageUrl: true,
+                },
+              },
+            },
+          },
           user: {
             select: {
               id: true,
@@ -174,5 +198,46 @@ export const postRouter = router({
         posts,
         cursor: posts[posts.length - 1]?.id ?? null,
       };
+    }),
+
+  likePost: protectedProcedure
+    .input(
+      z.object({
+        postId: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Check if the user has already liked the post
+      const existingLike = await prisma.like.findFirst({
+        where: {
+          userId: ctx.userId,
+          postId: input.postId,
+        },
+      });
+
+      if (existingLike) {
+        // If a like exists, remove it (unlike)
+        await prisma.like.delete({
+          where: { id: existingLike.id },
+        });
+        return { message: 'Post unliked successfully' };
+      } else {
+        // If no like exists, add a new like
+        const newLike = await prisma.like.create({
+          data: {
+            user: {
+              connect: {
+                id: ctx.userId,
+              },
+            },
+            post: {
+              connect: {
+                id: input.postId,
+              },
+            },
+          },
+        });
+        return { message: 'Post liked successfully', like: newLike };
+      }
     }),
 });

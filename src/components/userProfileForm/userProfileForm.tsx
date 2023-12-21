@@ -23,11 +23,13 @@ export const UserProfileForm = ({
   userData,
 }: UserProfileFormProps) => {
   const utils = trpc.useUtils();
-  const mutation = trpc.user.updateProfile.useMutation({
-    onSettled: () => {
-      utils.user.getUserProfile.invalidate();
-    },
-  });
+  const { mutate: updateProfile, isLoading } =
+    trpc.user.updateProfile.useMutation({
+      onSettled: () => {
+        utils.user.getUserProfile.invalidate();
+        closeModal();
+      },
+    });
 
   const {
     register,
@@ -37,21 +39,19 @@ export const UserProfileForm = ({
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     if (data.image.length === 0) {
-      mutation.mutate(data);
-      closeModal();
+      updateProfile(data);
     } else {
       const { imageName, imageUrl, error } = await uploadImage({
         folderName: 'avatars',
         image: data.image[0],
         oldImageName: userData.imageName,
       });
-      mutation.mutate({
+      updateProfile({
         bio: data.bio,
         name: data.name,
         imageUrl,
         imageName,
       });
-      closeModal();
 
       if (error) {
         console.error('uh oh something went wrong', error);
@@ -66,7 +66,11 @@ export const UserProfileForm = ({
         className="flex flex-col gap-2 w-96 rounded-lg p-5"
       >
         <label>Image</label>
-        <ImageInput id='userProfileImg' register={register} {...register('image')} />
+        <ImageInput
+          id="userProfileImg"
+          register={register}
+          {...register('image')}
+        />
         <FormError error={errors.image?.message} />
         <label>Name</label>
         <Input
@@ -86,10 +90,15 @@ export const UserProfileForm = ({
 
         <Switch />
         <span className="flex gap-2">
-          <Button type="submit" variant={'brand'}>
+          <Button type="submit" variant={'brand'} isLoading={isLoading}>
             Save
           </Button>
-          <Button type="reset" variant={'dark'} onClick={() => closeModal()}>
+          <Button
+            type="reset"
+            variant={'dark'}
+            onClick={() => closeModal()}
+            isLoading={isLoading}
+          >
             Cancel
           </Button>
         </span>
