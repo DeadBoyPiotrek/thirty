@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import { AiFillHeart } from 'react-icons/ai';
 import { FaComment } from 'react-icons/fa';
 import { format } from 'date-fns';
@@ -43,64 +43,97 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
   const { data: session } = useSession();
   const utils = trpc.useUtils();
 
+  const [likes, setLikes] = useState(post.likes);
+
   const { mutate: likeUnlikePost } = trpc.post.likePost.useMutation({
-    // TODO is there a better way to do this?
     onMutate: async () => {
-      const postId = post.id;
-
-      await utils.post.getFeedPosts.cancel();
-      const previousPosts = utils.post.getFeedPosts.getInfiniteData({
-        cursor: undefined,
-        limit: 3,
-      });
-
-      if (previousPosts) {
-        utils.post.getFeedPosts.setInfiniteData(
-          { cursor: undefined, limit: 3 },
-          {
-            pages: previousPosts.pages.map(page => {
-              return {
-                cursor: page.cursor,
-                posts: page.posts.map(post => {
-                  if (post.id === postId) {
-                    //if user already liked the post, unlike it
-                    if (
-                      post.likes.some(like => like.user.id === session?.user.id)
-                    ) {
-                      return {
-                        ...post,
-                        likes: post.likes.filter(
-                          like => like.user.id !== session?.user.id
-                        ),
-                      };
-                    }
-                    //if user didn't like the post, like it
-                    return {
-                      ...post,
-                      likes: [
-                        ...post.likes,
-                        {
-                          user: {
-                            id: session?.user.id as number,
-                            name: session?.user.name as string,
-                            imageUrl: session?.user.image as string | null,
-                          },
-                          id: Math.random(),
-                        },
-                      ],
-                    };
-                  }
-
-                  return post;
-                }),
-              };
-            }),
-            pageParams: previousPosts.pageParams,
-          }
+      // Optimistically update the likes
+      setLikes(currentLikes => {
+        const isLiked = currentLikes.some(
+          like => like.user.id === session?.user.id
         );
-      }
+        if (isLiked) {
+          // Remove like
+          return currentLikes.filter(like => like.user.id !== session?.user.id);
+        } else {
+          // Add like
+          return [
+            ...currentLikes,
+            {
+              user: {
+                id: session?.user.id as number,
+                name: session?.user.name as string,
+                imageUrl: session?.user.image as string | null,
+              },
+              id: Math.random(), // temporary ID until real ID is fetched from the server
+            },
+          ];
+        }
+      });
     },
+    // Handle actual response/error here if needed
   });
+  // const { mutate: likeUnlikePost } = trpc.post.likePost.useMutation({
+  //   // TODO is there a better way to do this?
+  //   // onMutate: async () => {
+  //   //   const postId = post.id;
+  //   //   await utils.post.getFeedPosts.cancel();
+  //   //   const previousFeedPosts = utils.post.getFeedPosts.getInfiniteData({
+  //   //     limit: 3,
+  //   //     cursor: undefined,
+  //   //   });
+  //   //   console.log('previousPosts', previousFeedPosts);
+  //   //   if (previousFeedPosts) {
+  //   //     utils.post.getFeedPosts.setInfiniteData(
+  //   //       { cursor: undefined, limit: 3 },
+  //   //       {
+  //   //         pages: previousFeedPosts.pages.map(page => {
+  //   //           return {
+  //   //             cursor: page.cursor,
+  //   //             posts: page.posts.map(post => {
+  //   //               if (post.id === postId) {
+  //   //                 //if user already liked the post, unlike it
+  //   //                 if (
+  //   //                   post.likes.some(like => like.user.id === session?.user.id)
+  //   //                 ) {
+  //   //                   return {
+  //   //                     ...post,
+  //   //                     likes: post.likes.filter(
+  //   //                       like => like.user.id !== session?.user.id
+  //   //                     ),
+  //   //                   };
+  //   //                 }
+  //   //                 //if user didn't like the post, like it
+  //   //                 return {
+  //   //                   ...post,
+  //   //                   likes: [
+  //   //                     ...post.likes,
+  //   //                     {
+  //   //                       user: {
+  //   //                         id: session?.user.id as number,
+  //   //                         name: session?.user.name as string,
+  //   //                         imageUrl: session?.user.image as string | null,
+  //   //                       },
+  //   //                       id: Math.random(),
+  //   //                     },
+  //   //                   ],
+  //   //                 };
+  //   //               }
+  //   //               return post;
+  //   //             }),
+  //   //           };
+  //   //         }),
+  //   //         pageParams: previousFeedPosts.pageParams,
+  //   //       }
+  //   //     );
+  //   //   }
+  //   // },
+
+  //   onMutate: async () => {
+
+  //   }
+
+  // });
 
   return (
     <div
@@ -159,7 +192,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
         ) : null}
       </div>
 
-      <PostLikes likes={post.likes} />
+      <PostLikes likes={likes} />
       <div className="p-2 flex justify-center gap-5 ">
         <Button
           className={`font-medium ${

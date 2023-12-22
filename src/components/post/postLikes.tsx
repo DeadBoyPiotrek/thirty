@@ -22,10 +22,9 @@ export const PostLikes = ({ likes }: PostLikesProps) => (
       <div className="text-xl text-brandPurple-500 self-start flex gap-1 font-medium items-center ">
         {likes.length > 0 ? (
           <>
-            <span className="">
-              <AiFillHeart />
-            </span>
-            <span>{likes.length}</span>
+            <AiFillHeart />
+
+            <span className="">{likes.length}</span>
           </>
         ) : null}
       </div>
