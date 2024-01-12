@@ -119,6 +119,24 @@ export const postRouter = router({
               },
             },
           },
+          comments: {
+            take: 1,
+            orderBy: {
+              datePublished: 'desc',
+            },
+            select: {
+              id: true,
+              content: true,
+              datePublished: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  imageUrl: true,
+                },
+              },
+            },
+          },
           user: {
             select: {
               id: true,
@@ -179,6 +197,25 @@ export const postRouter = router({
               },
             },
           },
+          comments: {
+            take: 1,
+            orderBy: {
+              datePublished: 'asc',
+            },
+            select: {
+              id: true,
+              content: true,
+              datePublished: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  imageUrl: true,
+                },
+              },
+            },
+          },
+
           user: {
             select: {
               id: true,
@@ -239,5 +276,112 @@ export const postRouter = router({
         });
         return { message: 'Post liked successfully', like: newLike };
       }
+    }),
+
+  addComment: protectedProcedure
+    .input(
+      z.object({
+        postId: z.number(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const comment = await prisma.comment.create({
+        data: {
+          content: input.content,
+          user: {
+            connect: {
+              id: ctx.userId,
+            },
+          },
+          post: {
+            connect: {
+              id: input.postId,
+            },
+          },
+        },
+      });
+
+      return comment;
+    }),
+  deleteComment: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const comment = await prisma.comment.delete({
+        where: {
+          id: input.id,
+          AND: {
+            userId: ctx.userId,
+          },
+        },
+      });
+
+      return comment;
+    }),
+  updateComment: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const comment = await prisma.comment.update({
+        where: {
+          id: input.id,
+          AND: {
+            userId: ctx.userId,
+          },
+        },
+        data: {
+          content: input.content,
+        },
+      });
+
+      return comment;
+    }),
+
+  loadMoreComments: protectedProcedure
+    .input(
+      z.object({
+        postId: z.number(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(),
+      })
+    )
+
+    .query(async ({ input }) => {
+      console.log(input);
+      const comments = await prisma.comment.findMany({
+        take: input.limit ?? 5,
+        skip: input.cursor ? 1 : 0,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+        orderBy: {
+          id: 'desc',
+        },
+        where: {
+          postId: input.postId,
+        },
+        select: {
+          id: true,
+          content: true,
+          datePublished: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              imageUrl: true,
+            },
+          },
+        },
+      });
+      return {
+        comments,
+        cursor: comments[comments.length - 1]?.id ?? null,
+      };
     }),
 });

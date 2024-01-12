@@ -105,6 +105,24 @@ export const questRouter = router({
                   },
                 },
               },
+              comments: {
+                take: 1,
+                orderBy: {
+                  datePublished: 'asc',
+                },
+                select: {
+                  id: true,
+                  content: true,
+                  datePublished: true,
+                  user: {
+                    select: {
+                      id: true,
+                      name: true,
+                      imageUrl: true,
+                    },
+                  },
+                },
+              },
               user: {
                 select: {
                   id: true,

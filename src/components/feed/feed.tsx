@@ -9,7 +9,6 @@ interface FeedProps {
   >;
 }
 import { useIntersection } from '@mantine/hooks';
-// import { Spinner } from '@ui/spinner';
 
 export const Feed = ({ initialPosts }: FeedProps) => {
   const lastPostRef = useRef<HTMLDivElement>(null);
@@ -35,13 +34,6 @@ export const Feed = ({ initialPosts }: FeedProps) => {
   }, [entry]);
   return (
     <div className="flex flex-col gap-10 max-w-4xl w-full items-center">
-      {/* TODO replace with toast */}
-      {/* {isFetching && (
-        <div className="flex items-center gap-4">
-          <Spinner />
-          Loading posts
-        </div>
-      )} */}
       {data?.pages.flatMap(page =>
         page.posts.map((post, i) => {
           if (i === page.posts.length - 1) {

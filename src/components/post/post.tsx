@@ -10,6 +10,7 @@ import { PostButtons } from './postButtons';
 import { trpc } from '@/app/_trpc/client';
 import { useSession } from 'next-auth/react';
 import { PostLikes } from './postLikes';
+import { Comments } from '../comment/comments';
 interface PostProps {
   post: {
     id: number;
@@ -19,6 +20,7 @@ interface PostProps {
     imageUrl: string | null;
     datePublished: Date;
     likes: Like[];
+    comments: Comment[];
     user: {
       id: number;
       name: string;
@@ -39,10 +41,21 @@ interface Like {
   };
 }
 
+interface Comment {
+  id: number;
+  content: string;
+  datePublished: Date;
+  user: {
+    id: number;
+    name: string;
+    imageUrl: string | null;
+  };
+}
+
 export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
   const { data: session } = useSession();
-  const utils = trpc.useUtils();
 
+  // TODO is this the best way to handle likes?
   const [likes, setLikes] = useState(post.likes);
 
   const { mutate: likeUnlikePost } = trpc.post.likePost.useMutation({
@@ -73,67 +86,6 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
     },
     // Handle actual response/error here if needed
   });
-  // const { mutate: likeUnlikePost } = trpc.post.likePost.useMutation({
-  //   // TODO is there a better way to do this?
-  //   // onMutate: async () => {
-  //   //   const postId = post.id;
-  //   //   await utils.post.getFeedPosts.cancel();
-  //   //   const previousFeedPosts = utils.post.getFeedPosts.getInfiniteData({
-  //   //     limit: 3,
-  //   //     cursor: undefined,
-  //   //   });
-  //   //   console.log('previousPosts', previousFeedPosts);
-  //   //   if (previousFeedPosts) {
-  //   //     utils.post.getFeedPosts.setInfiniteData(
-  //   //       { cursor: undefined, limit: 3 },
-  //   //       {
-  //   //         pages: previousFeedPosts.pages.map(page => {
-  //   //           return {
-  //   //             cursor: page.cursor,
-  //   //             posts: page.posts.map(post => {
-  //   //               if (post.id === postId) {
-  //   //                 //if user already liked the post, unlike it
-  //   //                 if (
-  //   //                   post.likes.some(like => like.user.id === session?.user.id)
-  //   //                 ) {
-  //   //                   return {
-  //   //                     ...post,
-  //   //                     likes: post.likes.filter(
-  //   //                       like => like.user.id !== session?.user.id
-  //   //                     ),
-  //   //                   };
-  //   //                 }
-  //   //                 //if user didn't like the post, like it
-  //   //                 return {
-  //   //                   ...post,
-  //   //                   likes: [
-  //   //                     ...post.likes,
-  //   //                     {
-  //   //                       user: {
-  //   //                         id: session?.user.id as number,
-  //   //                         name: session?.user.name as string,
-  //   //                         imageUrl: session?.user.image as string | null,
-  //   //                       },
-  //   //                       id: Math.random(),
-  //   //                     },
-  //   //                   ],
-  //   //                 };
-  //   //               }
-  //   //               return post;
-  //   //             }),
-  //   //           };
-  //   //         }),
-  //   //         pageParams: previousFeedPosts.pageParams,
-  //   //       }
-  //   //     );
-  //   //   }
-  //   // },
-
-  //   onMutate: async () => {
-
-  //   }
-
-  // });
 
   return (
     <div
@@ -179,7 +131,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
       <h2 className="text-lg text-brandPurple-300  break-words">
         {post.title}
       </h2>
-      <p className=" break-words">{post.content}</p>
+      <p className="break-words whitespace-pre-wrap">{post.content}</p>
       <div className="flex justify-center">
         {post.imageUrl ? (
           <Image
@@ -196,7 +148,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
       <div className="p-2 flex justify-center gap-5 ">
         <Button
           className={`font-medium ${
-            post.likes.some(like => like.user.id === session?.user.id)
+            likes.some(like => like.user.id === session?.user.id)
               ? 'text-brandPurple-500'
               : ''
           }`}
@@ -216,6 +168,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
           </span>
         </Button>
       </div>
+      <Comments postId={post.id} comments={post.comments} />
     </div>
   );
 });
