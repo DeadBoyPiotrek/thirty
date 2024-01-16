@@ -71,7 +71,7 @@ export const postRouter = router({
   getFeedPosts: protectedProcedure
     .input(
       z.object({
-        limit: z.number().min(1).max(100).nullish(),
+        limit: z.number().min(1).max(10).nullish(),
         cursor: z.number().nullish(),
       })
     )
@@ -152,8 +152,26 @@ export const postRouter = router({
           },
         },
       });
+
+      // TODO: seems expensive
+      const commentsAmount = await Promise.all(
+        posts.map(async post => {
+          return await prisma.comment.count({
+            where: {
+              postId: post.id,
+            },
+          });
+        })
+      );
+      const postsWithCommentsAmount = posts.map((post, index) => {
+        return {
+          ...post,
+          commentsAmount: commentsAmount[index],
+        };
+      });
+
       return {
-        posts,
+        posts: postsWithCommentsAmount,
         cursor: posts[posts.length - 1]?.id ?? null,
       };
     }),
@@ -161,7 +179,7 @@ export const postRouter = router({
   getUserPageFeedPosts: protectedProcedure
     .input(
       z.object({
-        limit: z.number().min(1).max(100).nullish(),
+        limit: z.number().min(1).max(10).nullish(),
         cursor: z.number().nullish(),
         userId: z.number(),
       })
@@ -355,13 +373,12 @@ export const postRouter = router({
     )
 
     .query(async ({ input }) => {
-      console.log(input);
       const comments = await prisma.comment.findMany({
         take: input.limit ?? 5,
         skip: input.cursor ? 1 : 0,
         cursor: input.cursor ? { id: input.cursor } : undefined,
         orderBy: {
-          id: 'desc',
+          datePublished: 'desc',
         },
         where: {
           postId: input.postId,
@@ -379,6 +396,13 @@ export const postRouter = router({
           },
         },
       });
+
+      // const commentsAmount = await prisma.comment.count({
+      //   where: {
+      //     postId: input.postId,
+      //   },
+      // });
+
       return {
         comments,
         cursor: comments[comments.length - 1]?.id ?? null,

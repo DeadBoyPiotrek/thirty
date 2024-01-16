@@ -30,6 +30,7 @@ interface PostProps {
       id: number;
       title: string;
     };
+    commentsAmount: number;
   };
 }
 interface Like {
@@ -168,7 +169,11 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
           </span>
         </Button>
       </div>
-      <Comments postId={post.id} comments={post.comments} />
+      <Comments
+        postId={post.id}
+        comments={post.comments}
+        amount={post.commentsAmount}
+      />
     </div>
   );
 });

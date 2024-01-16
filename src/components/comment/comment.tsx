@@ -22,7 +22,7 @@ interface CommentProps {
 export const Comment = ({ comment }: CommentProps) => {
   const { data: session } = useSession();
   return (
-    <div className="px-2 py-1 rounded-md bg-brandBlack-light flex flex-col w-full ">
+    <div className="px-2 py-1 rounded-md bg-brandBlack-light flex flex-col w-full">
       <div className="flex items-center gap-2 w-full justify-between">
         <span className="flex items-center gap-2">
           <Link

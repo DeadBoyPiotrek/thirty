@@ -10,6 +10,7 @@ import { Comment } from './comment';
 interface CommentsProps {
   comments: Comment[];
   postId: number;
+  amount: number;
 }
 interface Comment {
   id: number;
@@ -22,7 +23,7 @@ interface Comment {
   };
 }
 
-export const Comments = ({ postId, comments }: CommentsProps) => {
+export const Comments = ({ postId, comments, amount }: CommentsProps) => {
   type Inputs = Zod.infer<typeof commentSchema>;
 
   const {
@@ -45,41 +46,51 @@ export const Comments = ({ postId, comments }: CommentsProps) => {
     onSettled: () => {},
   });
 
-  const { data, fetchNextPage, hasNextPage, isFetching } =
+  const { data, isFetching, fetchNextPage } =
     trpc.post.loadMoreComments.useInfiniteQuery(
-      { postId, limit: 1 },
+      { postId, limit: 10 },
       {
         getNextPageParam: lastPage => lastPage.cursor,
         initialData: {
           pageParams: [undefined],
-
           pages: [{ comments, cursor: comments[comments.length - 1]?.id }],
         },
         refetchOnMount: false,
       }
     );
-  console.log(`initialcursor:`, comments[comments.length - 1]?.id);
-  console.log(`🚀 ~ Comments ~ hasNextPage:`, hasNextPage);
+
+  const commentsFetched = data?.pages.flatMap(page => page.comments).length;
+
   return (
     <div className="flex flex-col gap-2">
-      {hasNextPage ? (
-        <Button
-          variant="ghost"
-          onClick={() => {
-            fetchNextPage();
-          }}
-          isLoading={isFetching}
-        >
-          View more comments
-        </Button>
+      {amount > 2 && amount !== commentsFetched ? (
+        <span className="flex items-center justify-between">
+          <Button
+            variant="ghost"
+            onClick={() => {
+              fetchNextPage();
+            }}
+            isLoading={isFetching}
+          >
+            View more comments
+          </Button>
+          <p className="text-brandGray">
+            {commentsFetched} of {amount}{' '}
+          </p>
+        </span>
+      ) : null}
+      {amount >= 1 && amount == commentsFetched ? (
+        <p className="text-brandGray self-end">
+          {commentsFetched} of {amount}{' '}
+        </p>
       ) : null}
 
-      <div className="pr-1 flex flex-col gap-2  max-h-96 overflow-y-scroll">
-        {data?.pages.flatMap(page =>
-          page.comments.map(comment => (
+      <div className="pr-1 flex flex-col gap-2  max-h-96 overflow-y-scroll overscroll-none">
+        {data?.pages
+          .flatMap(page => page.comments)
+          .map(comment => (
             <Comment key={comment.id} comment={comment} />
-          ))
-        )}
+          ))}
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex">
