@@ -8,9 +8,10 @@ import { trpc } from '@/app/_trpc/client';
 import { Comment } from './comment';
 
 interface CommentsProps {
-  comments: Comment[];
+  initialComments: Comment[];
   postId: number;
-  amount: number;
+  initialAmount: number;
+  formOpen?: boolean;
 }
 interface Comment {
   id: number;
@@ -23,9 +24,14 @@ interface Comment {
   };
 }
 
-export const Comments = ({ postId, comments, amount }: CommentsProps) => {
+export const Comments = ({
+  postId,
+  initialComments,
+  initialAmount,
+  formOpen,
+}: CommentsProps) => {
   type Inputs = Zod.infer<typeof commentSchema>;
-
+  const utils = trpc.useUtils();
   const {
     register,
     handleSubmit,
@@ -33,37 +39,56 @@ export const Comments = ({ postId, comments, amount }: CommentsProps) => {
     reset,
   } = useForm<Inputs>({ resolver: zodResolver(commentSchema) });
 
-  const onSubmit: SubmitHandler<Inputs> = async data => {
-    addComment({
-      content: data.content,
-      postId,
-    });
-    console.log(data);
-    reset();
-  };
-
-  const { mutate: addComment } = trpc.post.addComment.useMutation({
-    onSettled: () => {},
+  const { mutate: addComment, isLoading } = trpc.post.addComment.useMutation({
+    onSettled: () => {
+      utils.post.getFeedPosts.invalidate();
+    },
   });
 
-  const { data, isFetching, fetchNextPage } =
+  const { data, isFetching, fetchNextPage, hasNextPage, refetch } =
     trpc.post.loadMoreComments.useInfiniteQuery(
       { postId, limit: 10 },
       {
-        getNextPageParam: lastPage => lastPage.cursor,
+        getNextPageParam: lastPage => lastPage.cursor ?? undefined,
+
         initialData: {
           pageParams: [undefined],
-          pages: [{ comments, cursor: comments[comments.length - 1]?.id }],
+          pages: [
+            {
+              comments: initialComments,
+              commentsAmount: initialAmount,
+              cursor: initialComments[initialComments.length - 1]?.id,
+            },
+          ],
         },
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
       }
     );
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    addComment(
+      {
+        content: data.content,
+        postId,
+      },
+      {
+        onSuccess: () => {
+          refetch();
+        },
+      }
+    );
+    reset();
+  };
 
-  const commentsFetched = data?.pages.flatMap(page => page.comments).length;
-
+  const commentsFetchedAmount = data?.pages.flatMap(
+    page => page.comments
+  ).length;
+  const allCommentsAmount =
+    data?.pages.flatMap(page => page.commentsAmount)[0] || initialAmount;
   return (
     <div className="flex flex-col gap-2">
-      {amount > 2 && amount !== commentsFetched ? (
+      {(allCommentsAmount > 2 && allCommentsAmount !== commentsFetchedAmount) ||
+      !hasNextPage ? (
         <span className="flex items-center justify-between">
           <Button
             variant="ghost"
@@ -75,13 +100,13 @@ export const Comments = ({ postId, comments, amount }: CommentsProps) => {
             View more comments
           </Button>
           <p className="text-brandGray">
-            {commentsFetched} of {amount}{' '}
+            {commentsFetchedAmount} of {allCommentsAmount}{' '}
           </p>
         </span>
       ) : null}
-      {amount >= 1 && amount == commentsFetched ? (
+      {allCommentsAmount >= 1 && allCommentsAmount == commentsFetchedAmount ? (
         <p className="text-brandGray self-end">
-          {commentsFetched} of {amount}{' '}
+          {commentsFetchedAmount} of {allCommentsAmount}
         </p>
       ) : null}
 
@@ -92,19 +117,23 @@ export const Comments = ({ postId, comments, amount }: CommentsProps) => {
             <Comment key={comment.id} comment={comment} />
           ))}
       </div>
+      {formOpen ? (
+        <form onSubmit={handleSubmit(onSubmit)} className="flex">
+          <Textarea
+            variant={'dark'}
+            {...register('content')}
+            placeholder="Add a comment..."
+            className="w-full "
+          />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex">
-        <Textarea
-          variant={'dark'}
-          {...register('content')}
-          placeholder="Add a comment..."
-          className="w-full "
-        />
-
-        <Button variant={'dark'} disabled={Object.keys(errors).length > 0}>
-          Comment
-        </Button>
-      </form>
+          <Button
+            variant={'dark'}
+            disabled={isLoading || Object.keys(errors).length > 0}
+          >
+            Comment
+          </Button>
+        </form>
+      ) : null}
     </div>
   );
 };

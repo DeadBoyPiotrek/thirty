@@ -58,7 +58,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
 
   // TODO is this the best way to handle likes?
   const [likes, setLikes] = useState(post.likes);
-
+  const [isCommentFormOpen, setCommentFormOpen] = useState(false);
   const { mutate: likeUnlikePost } = trpc.post.likePost.useMutation({
     onMutate: async () => {
       // Optimistically update the likes
@@ -146,7 +146,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
       </div>
 
       <PostLikes likes={likes} />
-      <div className="p-2 flex justify-center gap-5 ">
+      <div className=" flex justify-center gap-5 items-center">
         <Button
           className={`font-medium ${
             likes.some(like => like.user.id === session?.user.id)
@@ -162,7 +162,12 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
             Like
           </span>
         </Button>
-        <Button className="font-medium" aria-label="comment" variant={'ghost'}>
+        <Button
+          className="font-medium"
+          aria-label="comment"
+          variant={'ghost'}
+          onClick={() => setCommentFormOpen(!isCommentFormOpen)}
+        >
           <span className="flex items-center gap-2">
             <FaComment />
             Comment
@@ -171,8 +176,9 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
       </div>
       <Comments
         postId={post.id}
-        comments={post.comments}
-        amount={post.commentsAmount}
+        initialComments={post.comments}
+        initialAmount={post.commentsAmount}
+        formOpen={isCommentFormOpen}
       />
     </div>
   );

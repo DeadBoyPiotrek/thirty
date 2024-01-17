@@ -397,14 +397,15 @@ export const postRouter = router({
         },
       });
 
-      // const commentsAmount = await prisma.comment.count({
-      //   where: {
-      //     postId: input.postId,
-      //   },
-      // });
+      const commentsAmount = await prisma.comment.count({
+        where: {
+          postId: input.postId,
+        },
+      });
 
       return {
         comments,
+        commentsAmount,
         cursor: comments[comments.length - 1]?.id ?? null,
       };
     }),
