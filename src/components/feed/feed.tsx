@@ -18,7 +18,7 @@ export const Feed = ({ initialPosts }: FeedProps) => {
   });
   const { data, fetchNextPage, hasNextPage } =
     trpc.post.getFeedPosts.useInfiniteQuery(
-      { limit: 1 },
+      { limit: 3 },
       {
         getNextPageParam: lastPage => lastPage.cursor,
         initialData: {

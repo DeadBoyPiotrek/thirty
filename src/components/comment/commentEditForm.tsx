@@ -18,9 +18,11 @@ export const CommentEditForm = ({
   content,
   id,
 }: CommentEditFormProps) => {
+  const utils = trpc.useUtils();
   const { mutate: updateComment, isLoading } =
     trpc.post.updateComment.useMutation({
       onSettled: () => {
+        utils.post.loadMoreComments.invalidate();
         closeModal();
       },
     });

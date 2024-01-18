@@ -108,7 +108,7 @@ export const questRouter = router({
               comments: {
                 take: 1,
                 orderBy: {
-                  datePublished: 'asc',
+                  datePublished: 'desc',
                 },
                 select: {
                   id: true,
@@ -135,7 +135,30 @@ export const questRouter = router({
         },
       });
 
-      return quest;
+      if (!quest) {
+        return null;
+      }
+
+      const commentsAmount = await Promise.all(
+        quest.posts.map(async post => {
+          const amount = await prisma.comment.count({
+            where: {
+              postId: post.id,
+            },
+          });
+          return amount;
+        })
+      );
+
+      const questWithCommentsAmount = {
+        ...quest,
+        posts: quest.posts.map((post, i) => ({
+          ...post,
+          commentsAmount: commentsAmount[i],
+        })),
+      };
+
+      return questWithCommentsAmount;
     }),
 
   deleteQuest: protectedProcedure

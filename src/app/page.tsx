@@ -8,7 +8,7 @@ import { serverClient } from './_trpc/serverClient';
 export default async function Home() {
   const session = await getServerSession(authOptions);
   if (session) {
-    const { posts } = await serverClient.post.getFeedPosts({ limit: 1 });
+    const { posts } = await serverClient.post.getFeedPosts({ limit: 5 });
     const cursor = posts[posts.length - 1]?.id;
     const userQuests = await serverClient.quest.getQuestsForPostForm();
     return (

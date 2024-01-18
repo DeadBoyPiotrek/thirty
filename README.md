@@ -23,7 +23,7 @@
   - [x] Delete Post
   - [x] Add Image to Post
   - [x] Like Post
-  - [ ] Comment Post
+  - [x] Comment Post
   - [x] Edit Post
   - [x] Infinite Scroll
 - [ ] Looks

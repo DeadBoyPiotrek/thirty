@@ -111,7 +111,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
             <div className="flex">
               <p>{post.user.name}</p> &nbsp;in&nbsp;
               <Link
-                className="overflow-hidden max-w-md max-h-6"
+                className="truncate max-w-md max-h-6"
                 href={`/${post.user.id}/quests/${post.quest.id}`}
               >
                 {post.quest.title}

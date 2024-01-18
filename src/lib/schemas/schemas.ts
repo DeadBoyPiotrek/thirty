@@ -36,5 +36,5 @@ export const image = z
 export const imageName = z.string().nonempty().max(500).optional();
 export const imageUrl = z.string().nonempty().max(500).url().optional();
 export const commentSchema = z.object({
-  content: z.string().min(1, 'Required').max(500, 'Must be less than 500'),
+  content: z.string().min(1, 'Required').max(1000, 'Must be less than 1000'),
 });

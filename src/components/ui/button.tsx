@@ -10,6 +10,7 @@ const buttonVariants = cva('p-2 rounded-md transition', {
       light: 'bg-brandWhite-pure text-brandBlack-deep hover:bg-brandWhite-100',
       dark: 'text-brandWhite-pure bg-brandBlack-medium border border-brandGray hover:bg-brandBlack-light',
       ghost: 'text-brandGray hover:text-brandWhite-pure',
+      disabled: 'text-brandGray hover:text-brandGray cursor-auto',
     },
     size: {
       sm: 'text-sm',

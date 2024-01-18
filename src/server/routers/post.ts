@@ -218,7 +218,7 @@ export const postRouter = router({
           comments: {
             take: 1,
             orderBy: {
-              datePublished: 'asc',
+              datePublished: 'desc',
             },
             select: {
               id: true,
@@ -249,8 +249,26 @@ export const postRouter = router({
           },
         },
       });
+
+      const commentsAmount = await Promise.all(
+        posts.map(async post => {
+          return await prisma.comment.count({
+            where: {
+              postId: post.id,
+            },
+          });
+        })
+      );
+
+      const postsWithCommentsAmount = posts.map((post, index) => {
+        return {
+          ...post,
+          commentsAmount: commentsAmount[index],
+        };
+      });
+
       return {
-        posts,
+        posts: postsWithCommentsAmount,
         cursor: posts[posts.length - 1]?.id ?? null,
       };
     }),
@@ -373,6 +391,7 @@ export const postRouter = router({
     )
 
     .query(async ({ input }) => {
+      console.log(input);
       const comments = await prisma.comment.findMany({
         take: input.limit ?? 5,
         skip: input.cursor ? 1 : 0,

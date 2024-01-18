@@ -39,7 +39,7 @@ export const QuestList = ({
           key={quest.id}
           href={`/${quest.userId}/quests/${quest.id}`}
           className={cn(
-            'w-96 max-h-96 rounded-lg bg-brandBlack-medium flex flex-col pb-2',
+            'w-96 max-h-96  rounded-lg bg-brandBlack-medium flex flex-col pb-2 ',
             !quest.imageUrl && 'p-4'
           )}
         >
@@ -49,7 +49,7 @@ export const QuestList = ({
               alt={`imageUrl for ${quest.title}`}
               width={400}
               height={300}
-              className="h-52 object-cover rounded-t-lg  "
+              className="h-52 object-cover rounded-t-lg"
             />
           ) : null}
           <time
@@ -59,13 +59,11 @@ export const QuestList = ({
             {format(quest.datePublished, 'MMM dd, yyyy')}
           </time>
 
-          <p className="text-2xl text-brandPurple-500 break-words pt-2 pl-2 overflow-hidden ">
+          <p className="text-2xl text-brandPurple-500 break-words pt-2 pl-2 line-clamp-2">
             {quest.title}
           </p>
 
-          <p className="pt-2 pl-2 break-words overflow-hidden">
-            {quest.content}
-          </p>
+          <p className="pt-2 pl-2 break-words line-clamp-2">{quest.content}</p>
         </Link>
       ))}
     </div>

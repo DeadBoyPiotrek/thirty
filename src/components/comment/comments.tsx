@@ -6,6 +6,7 @@ import { Textarea } from '@ui/textarea';
 import { Button } from '../ui/button';
 import { trpc } from '@/app/_trpc/client';
 import { Comment } from './comment';
+import { IoSend } from 'react-icons/io5';
 
 interface CommentsProps {
   initialComments: Comment[];
@@ -35,7 +36,7 @@ export const Comments = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     reset,
   } = useForm<Inputs>({ resolver: zodResolver(commentSchema) });
 
@@ -45,7 +46,7 @@ export const Comments = ({
     },
   });
 
-  const { data, isFetching, fetchNextPage, hasNextPage, refetch } =
+  const { data, isFetching, fetchNextPage, refetch } =
     trpc.post.loadMoreComments.useInfiniteQuery(
       { postId, limit: 10 },
       {
@@ -87,8 +88,7 @@ export const Comments = ({
     data?.pages.flatMap(page => page.commentsAmount)[0] || initialAmount;
   return (
     <div className="flex flex-col gap-2">
-      {(allCommentsAmount > 2 && allCommentsAmount !== commentsFetchedAmount) ||
-      !hasNextPage ? (
+      {allCommentsAmount > 2 && allCommentsAmount !== commentsFetchedAmount ? (
         <span className="flex items-center justify-between">
           <Button
             variant="ghost"
@@ -118,7 +118,10 @@ export const Comments = ({
           ))}
       </div>
       {formOpen ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex items-center gap-2 p-2"
+        >
           <Textarea
             variant={'dark'}
             {...register('content')}
@@ -127,10 +130,13 @@ export const Comments = ({
           />
 
           <Button
-            variant={'dark'}
-            disabled={isLoading || Object.keys(errors).length > 0}
+            variant={isValid ? 'brand' : 'disabled'}
+            disabled={Object.keys(errors).length > 0}
+            isLoading={isLoading}
+            className="text-xl"
+            aria-label="Send comment"
           >
-            Comment
+            <IoSend />
           </Button>
         </form>
       ) : null}

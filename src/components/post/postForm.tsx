@@ -120,7 +120,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
         <Button
           isLoading={isLoading}
           variant={'brand'}
-          className="font-bold px-4"
+          className="font-semibold px-4"
           type="submit"
         >
           Post

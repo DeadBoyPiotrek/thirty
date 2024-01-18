@@ -18,8 +18,7 @@ export const CommentButtons = ({ content, id }: CommentProps) => {
   const { mutate: deletePostMutation, isLoading } =
     trpc.post.deleteComment.useMutation({
       onSettled: () => {
-        utils.post.getFeedPosts.invalidate();
-        utils.quest.getSingleQuestWithPosts.invalidate();
+        utils.post.loadMoreComments.invalidate();
       },
     });
 
