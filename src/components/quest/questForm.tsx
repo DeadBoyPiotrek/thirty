@@ -61,10 +61,10 @@ export const QuestForm = () => {
         className="flex flex-col p-5 m-5 bg-brandBlack-medium rounded-lg gap-2 w-full"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <label>Quest title</label>
+        <label>Goal title</label>
         <Input variant={'dark'} {...register('title')} />
         <FormError error={errors.title?.message} />
-        <label>Quest content</label>
+        <label>Goal content</label>
         <Textarea variant={'dark'} {...register('content')} />
         <FormError error={errors.content?.message} />
         <label htmlFor="image">Image</label>
@@ -77,7 +77,7 @@ export const QuestForm = () => {
           variant={'brand'}
           className="self-center px-4 font-bold"
         >
-          Add Quest
+          Add Goal
         </Button>
       </form>
     </>

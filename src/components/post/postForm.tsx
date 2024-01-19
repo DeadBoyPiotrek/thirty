@@ -77,7 +77,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
     >
       <div className="flex gap-4 ">
         <div className="flex flex-col gap-2 ">
-          <label>Quest</label>
+          <label>Goal</label>
           <Controller
             name="questId"
             control={control}

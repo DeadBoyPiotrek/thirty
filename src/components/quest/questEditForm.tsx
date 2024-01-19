@@ -74,11 +74,11 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
       className=" flex flex-col gap-2 w-96 rounded-lg p-5"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <label>Quest title</label>
+      <label>Goal title</label>
       <Input variant={'dark'} {...register('title')} />
       <FormError error={errors.title?.message} />
 
-      <label>Quest content</label>
+      <label>Goal content</label>
       <Textarea variant={'dark'} {...register('content')} />
       <FormError error={errors.content?.message} />
 

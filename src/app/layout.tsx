@@ -13,8 +13,8 @@ const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 export const metadata: Metadata = {
-  title: 'Thirty',
-  description: 'Thirty is a social media platform for cool people',
+  title: 'Target Tracker',
+  description: 'Target Tracker is a social media platform for cool people',
 };
 
 export default async function RootLayout({

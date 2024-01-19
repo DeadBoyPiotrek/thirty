@@ -26,10 +26,10 @@ export const QuestSelect = ({ field, quests }: QuestSelectProps) => (
   <Select.Root onValueChange={value => field.onChange(parseInt(value))}>
     <Select.Trigger
       className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 overflow-hidden w-96 break-words flex items-center justify-between"
-      aria-label="quests"
+      aria-label="goal"
       key={field.value}
     >
-      <Select.Value className="bg-green-300" placeholder="Select quest..." />
+      <Select.Value className="bg-green-300" placeholder="Select goal..." />
       <Select.Icon className="text-2xl">
         <MdKeyboardArrowDown />
       </Select.Icon>

@@ -53,7 +53,7 @@ export const Sidebar = ({
         className="text-xl font-medium  text-brandPurple-500"
         href={`/${userId}/quests`}
       >
-        Quests
+        Goals
       </Link>
       {loggedUserId === userId ? (
         <OwnerActions

@@ -8,6 +8,10 @@ import { Sidebar } from '@/components/profile/sidebar';
 import { UserPageFeed } from '@/components/users/userPageFeed';
 
 const ProfilePage = async ({ params }: { params: { userId: string } }) => {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return redirect('/');
+  }
   const userId = parseInt(params.userId);
 
   const { posts } = await serverClient.post.getUserPageFeedPosts({
@@ -19,13 +23,8 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const user = await serverClient.user.getUserProfile({
     userId: userId,
   });
-
   if (!user) {
     return notFound();
-  }
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return redirect('/');
   }
 
   const loggedUserId = session.user?.id;
