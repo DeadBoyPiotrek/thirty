@@ -92,7 +92,11 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
     <div
       ref={ref}
       key={post.id}
-      className="bg-brandBlack-medium rounded-lg w-full p-5 flex flex-col gap-2"
+      className={`bg-brandBlack-medium rounded-lg w-full p-5 flex flex-col gap-2 ${
+        ref ? 'bg-green-50' : ''
+      }
+          
+        }`}
     >
       <div className="flex justify-between">
         <div className="flex gap-2 items-center ">
@@ -129,18 +133,18 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
         {session?.user.id === post.user.id ? <PostButtons post={post} /> : null}
       </div>
 
-      <h2 className="text-lg text-brandPurple-300  break-words">
+      <h2 className="text-lg text-brandPurple-300  break-words ">
         {post.title}
       </h2>
       <p className="break-words whitespace-pre-wrap">{post.content}</p>
-      <div className="flex justify-center">
+      <div className="flex justify-center ">
         {post.imageUrl ? (
           <Image
             src={post.imageUrl}
             alt={post.title}
             width={500}
             height={500}
-            className="w-auto h-auto"
+            className="w-auto h-auto max-h-fit"
           />
         ) : null}
       </div>

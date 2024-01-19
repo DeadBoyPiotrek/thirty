@@ -14,7 +14,7 @@ export const Feed = ({ initialPosts }: FeedProps) => {
   const lastPostRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
-    threshold: 1,
+    threshold: 0.5,
   });
   const { data, fetchNextPage, hasNextPage } =
     trpc.post.getFeedPosts.useInfiniteQuery(
@@ -33,10 +33,14 @@ export const Feed = ({ initialPosts }: FeedProps) => {
     if (entry?.isIntersecting && hasNextPage) fetchNextPage();
   }, [entry]);
   return (
-    <div className="flex flex-col gap-10 max-w-4xl w-full items-center">
+    <div
+      className={`flex flex-col gap-10 max-w-4xl w-full items-center pb-1${
+        entry?.isIntersecting ? 'bg-red-50' : ''
+      }`}
+    >
       {data?.pages.flatMap(page =>
         page.posts.map((post, i) => {
-          if (i === page.posts.length - 1) {
+          if (i === page.posts.length - 2) {
             return <Post key={post.id} post={post} ref={ref} />;
           } else {
             return <Post key={post.id} post={post} />;

@@ -110,7 +110,7 @@ export const Comments = ({
         </p>
       ) : null}
 
-      <div className="pr-1 flex flex-col gap-2  max-h-96 overflow-y-scroll overscroll-none">
+      <div className="pr-1 flex flex-col gap-2  max-h-96 overflow-y-scroll lg:overscroll-none ">
         {data?.pages
           .flatMap(page => page.comments)
           .map(comment => (

@@ -72,10 +72,11 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
 
   return (
     <form
-      className="flex flex-col p-5 m-5 bg-brandBlack-medium rounded-lg gap-2 w-full"
+      className="text-sm lg:text-base flex flex-col p-3 mb-5 lg:p-5 mx-14 bg-brandBlack-medium w-full rounded-lg gap-2  max-w-xs
+       md:max-w-2xl lg:max-w-4xl "
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex gap-4 ">
+      <div className="flex flex-col lg:flex-row  gap-4 ">
         <div className="flex flex-col gap-2 ">
           <label>Goal</label>
           <Controller
@@ -94,14 +95,14 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
           <FormError error={errors.questId?.message} />
         </div>
 
-        <div className="flex flex-col gap-2 w-full">
-          <label htmlFor="image" className="text-brandWhite-pure">
+        <div className="flex flex-col gap-2 w-full ">
+          <label htmlFor="image" className="text-brandWhite-pure ">
             Image
           </label>
           <ImageInput key={questSelectKey} id="postImage" register={register} />
           <FormError error={errors.image?.message} />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 ">
           <label>Post title</label>
           <Input
             variant={'dark'}
@@ -114,18 +115,15 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
       </div>
       <label>Post content</label>
       <Textarea variant={'dark'} {...register('content', { required: true })} />
-
       <FormError error={errors.content?.message} />
-      <div className="flex justify-center ">
-        <Button
-          isLoading={isLoading}
-          variant={'brand'}
-          className="font-semibold px-4"
-          type="submit"
-        >
-          Post
-        </Button>
-      </div>
+      <Button
+        isLoading={isLoading}
+        variant={'brand'}
+        className="font-semibold mt-2 px-4 "
+        type="submit"
+      >
+        Post
+      </Button>
     </form>
   );
 };
