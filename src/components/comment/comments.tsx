@@ -88,7 +88,7 @@ export const Comments = ({
     data?.pages.flatMap(page => page.commentsAmount)[0] || initialAmount;
   return (
     <div className="flex flex-col gap-2">
-      {allCommentsAmount > 2 && allCommentsAmount !== commentsFetchedAmount ? (
+      {allCommentsAmount > 1 && allCommentsAmount !== commentsFetchedAmount ? (
         <span className="flex items-center justify-between">
           <Button
             variant="ghost"

@@ -16,7 +16,7 @@ const QuestPage = async ({
 
   return (
     <div className="max-w-4xl flex flex-col justify-center w-full gap-3">
-      <QuestHeader initialQuest={quest} userId={userId} questId={questId} />
+      {/* <QuestHeader initialQuest={quest} userId={userId} questId={questId} /> */}
       <PostsList initialQuest={quest} userId={userId} questId={questId} />
     </div>
   );

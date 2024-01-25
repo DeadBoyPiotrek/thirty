@@ -71,7 +71,7 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
 
   return (
     <form
-      className=" flex flex-col gap-2 w-96 rounded-lg p-5"
+      className=" flex flex-col gap-2 w-full rounded-lg p-5 "
       onSubmit={handleSubmit(onSubmit)}
     >
       <label>Goal title</label>
@@ -86,11 +86,16 @@ export const QuestEditForm = ({ quest, closeModal }: PostEditFormProps) => {
       <ImageInput id="questEditImage" register={register} />
       <FormError error={errors.image?.message} />
 
-      <span className="flex gap-2">
+      <span className="flex gap-2 justify-center">
         <Button type="submit" variant={'brand'} isLoading={isLoading}>
           Save
         </Button>
-        <Button type="reset" variant={'dark'} isLoading={isLoading}>
+        <Button
+          type="reset"
+          variant={'dark'}
+          isLoading={isLoading}
+          onClick={() => closeModal()}
+        >
           Cancel
         </Button>
       </span>

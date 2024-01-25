@@ -5,15 +5,16 @@ import { Modal } from '../ui/modal';
 import { CommentEditForm } from './commentEditForm';
 import { useState } from 'react';
 import { trpc } from '@/app/_trpc/client';
-
+import * as Popover from '@radix-ui/react-popover';
+import { SlOptionsVertical } from 'react-icons/sl';
 interface CommentProps {
   id: number;
   content: string;
 }
 
 export const CommentButtons = ({ content, id }: CommentProps) => {
-  let [open, setOpen] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false);
   const utils = trpc.useUtils();
   const { mutate: deletePostMutation, isLoading } =
     trpc.post.deleteComment.useMutation({
@@ -23,17 +24,42 @@ export const CommentButtons = ({ content, id }: CommentProps) => {
     });
 
   return (
-    <div className="flex gap-2 self-end ">
-      <Modal open={open} onOpenChange={setOpen}>
-        <Modal.Button asChild>
-          <Button
-            className="text-lg  border-brandBlack-light"
-            variant={'ghost'}
-            aria-label="edit"
+    <>
+      <Popover.Root open={openDropdown} onOpenChange={setOpenDropdown}>
+        <Popover.Trigger asChild>
+          <button aria-label="comment options">
+            <SlOptionsVertical />
+          </button>
+        </Popover.Trigger>
+
+        <Popover.Portal>
+          <Popover.Content
+            className="flex gap-2 h-14 bg-brandBlack-light rounded-md p-1"
+            side="bottom"
           >
-            <MdModeEditOutline />
-          </Button>
-        </Modal.Button>
+            <Button
+              className="text-lg px-4 border-brandBlack-light"
+              variant="dark"
+              aria-label="edit"
+              onClick={() => setOpen(true)}
+            >
+              <MdModeEditOutline />
+            </Button>
+            <Button
+              className="text-lg px-4 border-brandBlack-light"
+              variant="dark"
+              aria-label="delete"
+              onClick={() => deletePostMutation({ id })}
+              isLoading={isLoading}
+            >
+              <MdDeleteForever />
+            </Button>
+            <Popover.Arrow className="fill-brandBlack-light" />
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
+      <Modal open={open} onOpenChange={setOpen}>
+        <Modal.Button asChild></Modal.Button>
         <Modal.Content>
           Edit Comment
           <CommentEditForm
@@ -43,16 +69,6 @@ export const CommentButtons = ({ content, id }: CommentProps) => {
           />
         </Modal.Content>
       </Modal>
-
-      <Button
-        className="text-lg  border-brandBlack-light"
-        variant={'ghost'}
-        aria-label="delete"
-        onClick={() => deletePostMutation({ id })}
-        isLoading={isLoading}
-      >
-        <MdDeleteForever />
-      </Button>
-    </div>
+    </>
   );
 };

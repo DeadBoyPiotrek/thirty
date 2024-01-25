@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { trpc } from '@/app/_trpc/client';
 import { deleteImage } from '@/lib/helpers/images/deleteImage';
 import { useRouter } from 'next/navigation';
+import * as Popover from '@radix-ui/react-popover';
+import { SlOptionsVertical } from 'react-icons/sl';
 interface QuestProps {
   quest: {
     id: number;
@@ -20,9 +22,7 @@ export const QuestButtons = ({ quest }: QuestProps) => {
   const router = useRouter();
   const utils = trpc.useUtils();
   const [open, setOpen] = useState(false);
-  const closeModal = () => {
-    setOpen(false);
-  };
+  const [openDropdown, setOpenDropdown] = useState(false);
 
   const { mutate: deleteQuestMutation, isLoading } =
     trpc.quest.deleteQuest.useMutation({
@@ -41,30 +41,44 @@ export const QuestButtons = ({ quest }: QuestProps) => {
 
   return (
     <div className="flex gap-2 h-12 mt-2">
-      <Modal open={open} onOpenChange={setOpen}>
-        <Modal.Button asChild>
-          <Button
-            className="text-lg px-4 border-brandBlack-light"
-            variant={'dark'}
-            aria-label="edit"
-            onClick={() => setOpen(true)}
+      <Popover.Root open={openDropdown} onOpenChange={setOpenDropdown}>
+        <Popover.Trigger asChild>
+          <button aria-label="post options">
+            <SlOptionsVertical />
+          </button>
+        </Popover.Trigger>
+
+        <Popover.Portal>
+          <Popover.Content
+            className="flex gap-2 h-14 bg-brandBlack-light rounded-md p-1"
+            side="bottom"
           >
-            <MdModeEditOutline />
-          </Button>
-        </Modal.Button>
+            <Button
+              className="text-lg px-4 border-brandBlack-light"
+              variant={'dark'}
+              aria-label="edit"
+              onClick={() => setOpen(true)}
+            >
+              <MdModeEditOutline />
+            </Button>
+            <Button
+              className="text-lg px-4 border-brandBlack-light"
+              variant={'dark'}
+              aria-label="delete"
+              onClick={deleteQuest}
+              isLoading={isLoading}
+            >
+              <MdDeleteForever />
+            </Button>{' '}
+            <Popover.Arrow className="fill-brandBlack-light" />
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
+      <Modal open={open} onOpenChange={setOpen}>
         <Modal.Content>
-          <QuestEditForm quest={quest} closeModal={closeModal} />
+          <QuestEditForm quest={quest} closeModal={() => setOpen(false)} />
         </Modal.Content>
       </Modal>
-      <Button
-        className="text-lg px-4 border-brandBlack-light"
-        variant={'dark'}
-        aria-label="delete"
-        onClick={deleteQuest}
-        isLoading={isLoading}
-      >
-        <MdDeleteForever />
-      </Button>
     </div>
   );
 };

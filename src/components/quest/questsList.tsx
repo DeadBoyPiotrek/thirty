@@ -31,7 +31,7 @@ export const QuestList = ({
   return (
     <div
       className="flex flex-wrap justify-center gap-3 xl:w-[1180px] 
-    lg:w-[785px]  md:w-[384px] md:justify-start 
+    lg:w-[785px] md:w-[384px] md:justify-start w-full
     "
     >
       {data.map(quest => (
@@ -39,7 +39,7 @@ export const QuestList = ({
           key={quest.id}
           href={`/${quest.userId}/quests/${quest.id}`}
           className={cn(
-            'w-96 max-h-96  rounded-lg bg-brandBlack-medium flex flex-col pb-2 ',
+            'max-w-sm w-full max-h-96 rounded-lg bg-brandBlack-medium flex flex-col pb-2 ',
             !quest.imageUrl && 'p-4'
           )}
         >

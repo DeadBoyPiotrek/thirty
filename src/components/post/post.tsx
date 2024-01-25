@@ -92,34 +92,34 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
     <div
       ref={ref}
       key={post.id}
-      className={`bg-brandBlack-medium rounded-lg w-full p-5 flex flex-col gap-2 ${
-        ref ? 'bg-green-50' : ''
-      }
-          
-        }`}
+      className="bg-brandBlack-medium rounded-lg w-full p-2 sm:p-5 flex flex-col gap-2 "
     >
-      <div className="flex justify-between">
-        <div className="flex gap-2 items-center ">
+      <div className="flex justify-between ">
+        <div className="flex gap-2 items-center">
           <Link href={`/${post.user.id}`}>
             <Image
               src={`${
                 post.user.imageUrl || `/images/profile-user-default.svg`
               }`}
               alt="avatar"
-              className=" w-10 h-10 rounded-full overflow-hidden object-cover "
+              className=" w-10 h-10 rounded-full object-cover"
               width={40}
               height={40}
             />
           </Link>
           <div>
-            <div className="flex">
-              <p>{post.user.name}</p> &nbsp;in&nbsp;
-              <Link
-                className="truncate max-w-md max-h-6"
-                href={`/${post.user.id}/quests/${post.quest.id}`}
-              >
-                {post.quest.title}
-              </Link>
+            <div className="sm:flex gap-1 w-full border">
+              <p>{post.user.name}</p>
+
+              <span className="flex gap-1">
+                in
+                <Link
+                  className="text-brandPurple-100 border break-words  "
+                  href={`/${post.user.id}/quests/${post.quest.id}`}
+                >
+                  {post.quest.title}
+                </Link>
+              </span>
             </div>
             <time
               className="text-sm"
@@ -137,15 +137,17 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(({ post }, ref) => {
         {post.title}
       </h2>
       <p className="break-words whitespace-pre-wrap">{post.content}</p>
-      <div className="flex justify-center ">
+      <div className="flex justify-center  ">
         {post.imageUrl ? (
-          <Image
-            src={post.imageUrl}
-            alt={post.title}
-            width={500}
-            height={500}
-            className="w-auto h-auto max-h-fit"
-          />
+          <div className="max-h-screen overflow-hidden">
+            <Image
+              src={post.imageUrl}
+              alt={post.title}
+              width={500}
+              height={500}
+              className="w-auto h-auto "
+            />
+          </div>
         ) : null}
       </div>
 

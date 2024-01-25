@@ -6,7 +6,8 @@ import { PostEditForm } from './postEditForm';
 import { useState } from 'react';
 import { trpc } from '@/app/_trpc/client';
 import { deleteImage } from '@/lib/helpers/images/deleteImage';
-
+import * as Popover from '@radix-ui/react-popover';
+import { SlOptionsVertical } from 'react-icons/sl';
 interface PostProps {
   post: {
     id: number;
@@ -28,8 +29,8 @@ interface PostProps {
 }
 
 export const PostButtons = ({ post }: PostProps) => {
-  let [open, setOpen] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false);
   const utils = trpc.useUtils();
   const { mutate: deletePostMutation, isLoading } =
     trpc.post.deletePost.useMutation({
@@ -46,32 +47,48 @@ export const PostButtons = ({ post }: PostProps) => {
   };
 
   return (
-    <div className="flex gap-2 h-12">
-      <Modal open={open} onOpenChange={setOpen}>
-        <Modal.Button asChild>
-          <Button
-            className="text-lg px-4 border-brandBlack-light"
-            variant={'dark'}
-            aria-label="edit"
+    <>
+      <Popover.Root open={openDropdown} onOpenChange={setOpenDropdown}>
+        <Popover.Trigger asChild>
+          <button aria-label="post options">
+            <SlOptionsVertical />
+          </button>
+        </Popover.Trigger>
+
+        <Popover.Portal>
+          <Popover.Content
+            className="flex gap-2 h-14 bg-brandBlack-light rounded-md p-1"
+            side="bottom"
           >
-            <MdModeEditOutline />
-          </Button>
-        </Modal.Button>
+            <Button
+              className="text-lg px-4 border-brandBlack-light"
+              variant={'dark'}
+              aria-label="edit"
+              onClick={() => setOpen(true)}
+            >
+              <MdModeEditOutline />
+            </Button>
+            <Button
+              className="text-lg px-4 border-brandBlack-light"
+              variant={'dark'}
+              aria-label="delete"
+              onClick={deletePost}
+              isLoading={isLoading}
+            >
+              <MdDeleteForever />
+            </Button>
+
+            <Popover.Arrow className="fill-brandBlack-light" />
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
+      <Modal open={open} onOpenChange={setOpen}>
+        <Modal.Button asChild></Modal.Button>
         <Modal.Content>
           Edit Post
           <PostEditForm post={post} closeModal={() => setOpen(false)} />
         </Modal.Content>
       </Modal>
-
-      <Button
-        className="text-lg px-4 border-brandBlack-light"
-        variant={'dark'}
-        aria-label="delete"
-        onClick={deletePost}
-        isLoading={isLoading}
-      >
-        <MdDeleteForever />
-      </Button>
-    </div>
+    </>
   );
 };

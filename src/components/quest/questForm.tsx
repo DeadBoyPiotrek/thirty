@@ -58,7 +58,7 @@ export const QuestForm = () => {
   return (
     <>
       <form
-        className="flex flex-col p-5 m-5 bg-brandBlack-medium rounded-lg gap-2 w-full"
+        className="flex flex-col p-3 sm:p-5 bg-brandBlack-medium rounded-lg gap-2 w-full max-w-xl"
         onSubmit={handleSubmit(onSubmit)}
       >
         <label>Goal title</label>

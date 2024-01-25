@@ -44,10 +44,14 @@ export const CommentEditForm = ({
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="
-    flex flex-col gap-2 p-5 w-96
+    flex flex-col gap-2 p-5 w-full
     "
     >
-      <Textarea {...register('content')} />
+      <Textarea
+        variant="dark"
+        className="overflow-y-scroll overflow-x-hidden "
+        {...register('content')}
+      />
       {errors.content && <span>{errors.content.message}</span>}
       <span className="flex gap-2 justify-center">
         <Button isLoading={isLoading} type="submit" variant={'brand'}>

@@ -54,7 +54,7 @@ export const Comment = ({ comment }: CommentProps) => {
           <CommentButtons id={comment.id} content={comment.content} />
         ) : null}
       </div>
-      <p className="px-2 ml-10 break-words whitespace-pre-wrap ">
+      <p className="px-2 sm:ml-10 break-words whitespace-pre-wrap ">
         {comment.content}
       </p>
     </div>

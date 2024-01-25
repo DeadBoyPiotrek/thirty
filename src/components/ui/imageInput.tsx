@@ -27,7 +27,7 @@ export const ImageInput: FC<ImageInputProps> = ({ register, id }) => {
       />
       <label
         htmlFor={id}
-        className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 cursor-pointer overflow-hidden lg:w-44 peer-focus:outline outline-1"
+        className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 cursor-pointer overflow-hidden  peer-focus:outline outline-1"
       >
         {imgName}
       </label>

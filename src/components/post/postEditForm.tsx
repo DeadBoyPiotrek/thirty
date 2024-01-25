@@ -74,15 +74,15 @@ export const PostEditForm = ({ post, closeModal }: PostEditFormProps) => {
 
   return (
     <form
-      className="flex flex-col gap-2 w-96 rounded-lg p-5"
+      className="flex flex-col gap-2 rounded-lg p-1 w-full"
       onSubmit={handleSubmit(onSubmit)}
     >
       <label>Post title</label>
-      <Input {...register('title')} />
+      <Input variant="dark" {...register('title')} />
       <FormError error={errors.title?.message} />
 
       <label>Post content</label>
-      <Textarea {...register('content')} />
+      <Textarea variant="dark" {...register('content')} />
       <FormError error={errors.content?.message} />
 
       <label htmlFor="image">Image</label>

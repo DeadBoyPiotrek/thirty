@@ -61,7 +61,7 @@ export const FriendRequests = ({
   return (
     <div className="flex flex-col">
       <p className="text-3xl ">Friend Requests</p>
-      <div className="flex gap-3 flex-wrap mt-2">
+      <div className="flex gap-3 flex-wrap mt-2 justify-center ">
         {receivedFriendRequests.data.map(request => (
           <div
             className="flex flex-col items-center gap-2 rounded-md border border-brandBlack-light p-4 hover:bg-brandBlack-light"
