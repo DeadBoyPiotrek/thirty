@@ -63,7 +63,7 @@ export const UserProfileForm = ({
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 w-96 rounded-lg p-5"
+        className="flex flex-col gap-2  rounded-lg p-5"
       >
         <label>Image</label>
         <ImageInput

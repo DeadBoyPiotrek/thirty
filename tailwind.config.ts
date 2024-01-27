@@ -31,6 +31,11 @@ const config: Config = {
       scale: {
         115: '1.15',
       },
+      screens: {
+        '1100': '1100px',
+        '900': '900px',
+        '450': '450px',
+      },
     },
   },
   plugins: [],

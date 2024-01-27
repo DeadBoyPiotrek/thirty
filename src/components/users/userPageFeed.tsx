@@ -5,7 +5,6 @@ import { Post } from '@/components/post/post';
 import { trpc } from '@/app/_trpc/client';
 import { useIntersection } from '@mantine/hooks';
 import { useEffect, useRef } from 'react';
-import { Spinner } from '@ui/spinner';
 interface UserPageFeedProps {
   initialPosts: Awaited<
     ReturnType<(typeof serverClient)['post']['getUserPageFeedPosts']>
@@ -17,10 +16,10 @@ export const UserPageFeed = ({ initialPosts, userId }: UserPageFeedProps) => {
   const lastPostRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
-    threshold: 1,
+    threshold: 0.5,
   });
 
-  const { data, fetchNextPage, hasNextPage, isFetching } =
+  const { data, fetchNextPage, hasNextPage } =
     trpc.post.getUserPageFeedPosts.useInfiniteQuery(
       { limit: 3, userId },
       {
@@ -37,19 +36,13 @@ export const UserPageFeed = ({ initialPosts, userId }: UserPageFeedProps) => {
   }, [entry]);
 
   return (
-    <div className=" ml-5 flex flex-col gap-10 max-w-4xl w-full ">
-      {isFetching && (
-        <div className="flex items-center gap-4">
-          <Spinner />
-          Loading posts
-        </div>
-      )}
+    <div className="flex flex-col gap-5 max-w-4xl ">
       {data?.pages.flatMap(page =>
         page.posts.map((post, i) => {
           if (i === page.posts.length - 1) {
-            return <Post key={post.id} post={post} ref={ref} />;
+            return <Post key={post.id} post={post} userPageFeed ref={ref} />;
           } else {
-            return <Post key={post.id} post={post} />;
+            return <Post key={post.id} userPageFeed post={post} />;
           }
         })
       )}

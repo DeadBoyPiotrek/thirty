@@ -33,7 +33,7 @@ export const Feed = ({ initialPosts }: FeedProps) => {
     if (entry?.isIntersecting && hasNextPage) fetchNextPage();
   }, [entry]);
   return (
-    <div className="flex flex-col gap-10 max-w-4xl w-full items-center pb-1 ">
+    <div className="flex flex-col gap-5 max-w-4xl w-full items-center pb-1 ">
       {data?.pages.flatMap(page =>
         page.posts.map((post, i) => {
           if (i === page.posts.length - 2) {

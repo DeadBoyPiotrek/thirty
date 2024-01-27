@@ -50,7 +50,7 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   // TODO: I don't like this
 
   return (
-    <div className="flex w-full justify-center ">
+    <div className="flex flex-col md:flex-row w-full justify-center gap-3">
       <Sidebar
         initUser={user}
         areFriends={areFriends}
