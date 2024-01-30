@@ -78,7 +78,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
     >
       <div className="flex flex-col lg:flex-row  gap-4 ">
         <div className="flex flex-col gap-2 ">
-          <label>Goal</label>
+          <label htmlFor="questId">Goal</label>
           <Controller
             name="questId"
             control={control}
@@ -103,18 +103,23 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
           <FormError error={errors.image?.message} />
         </div>
         <div className="flex flex-col gap-2 ">
-          <label>Post title</label>
+          <label htmlFor="title">Title</label>
           <Input
             variant={'dark'}
-            textSize={'lg'}
             className="h-11 "
+            id="title"
             {...register('title', { required: true })}
           />
+
           <FormError error={errors.title?.message} />
         </div>
       </div>
-      <label>Post content</label>
-      <Textarea variant={'dark'} {...register('content', { required: true })} />
+      <label htmlFor="content">Content</label>
+      <Textarea
+        id="content"
+        variant={'dark'}
+        {...register('content', { required: true })}
+      />
       <FormError error={errors.content?.message} />
       <Button
         isLoading={isLoading}

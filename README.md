@@ -28,9 +28,9 @@
   - [x] Infinite Scroll
 - [ ] Looks
   - [x] Reusable Components
-  - [ ] Responsive
+  - [x] Responsive
   - [ ] Animations
-- [ ] Fetching
+- [x] Fetching
   - [x] ssr when possible
   - [x] caching
   - [x] optimistic updates

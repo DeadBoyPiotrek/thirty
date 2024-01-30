@@ -14,11 +14,10 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   }
   const userId = parseInt(params.userId);
 
-  const { posts } = await serverClient.post.getUserPageFeedPosts({
+  const { posts, cursor } = await serverClient.post.getUserPageFeedPosts({
     limit: 5,
     userId,
   });
-  const cursor = posts[posts.length - 1]?.id;
 
   const user = await serverClient.user.getUserProfile({
     userId: userId,
@@ -30,6 +29,7 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
   const loggedUserId = session.user?.id;
 
   let areFriends, isFriendRequestSent, isFriendRequestReceived;
+
   // TODO: I don't like this
   if (loggedUserId !== userId) {
     areFriends = await serverClient.friends.areFriends({
@@ -60,6 +60,7 @@ const ProfilePage = async ({ params }: { params: { userId: string } }) => {
         session={session}
         loggedUserId={loggedUserId}
       />
+
       <UserPageFeed initialPosts={{ posts, cursor }} userId={userId} />
     </div>
   );

@@ -28,6 +28,7 @@ export const authOptions: NextAuthOptions = {
       };
     },
   },
+  theme: { colorScheme: 'dark', brandColor: '#6772db' },
 };
 
 const handler = NextAuth(authOptions);

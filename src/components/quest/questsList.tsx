@@ -59,11 +59,23 @@ export const QuestList = ({
             {format(quest.datePublished, 'MMM dd, yyyy')}
           </time>
 
-          <p className="text-2xl text-brandPurple-500 break-words pt-2 pl-2 line-clamp-2">
+          <p
+            className={cn(
+              'text-2xl text-brandPurple-500 break-words pt-2 pl-2 line-clamp-2',
+              !quest.imageUrl && 'line-clamp-4'
+            )}
+          >
             {quest.title}
           </p>
 
-          <p className="pt-2 pl-2 break-words line-clamp-2">{quest.content}</p>
+          <p
+            className={cn(
+              'pt-2 pl-2 break-words line-clamp-2',
+              !quest.imageUrl && 'line-clamp-4'
+            )}
+          >
+            {quest.content}
+          </p>
         </Link>
       ))}
     </div>

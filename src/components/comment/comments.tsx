@@ -7,6 +7,7 @@ import { Button } from '../ui/button';
 import { trpc } from '@/app/_trpc/client';
 import { Comment } from './comment';
 import { IoSend } from 'react-icons/io5';
+import { useEffect, useRef } from 'react';
 
 interface CommentsProps {
   initialComments: Comment[];
@@ -31,6 +32,13 @@ export const Comments = ({
   initialAmount,
   formOpen,
 }: CommentsProps) => {
+  const commentInputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    if (formOpen && commentInputRef.current) {
+      commentInputRef.current.focus();
+    }
+  }, [formOpen]);
   type Inputs = Zod.infer<typeof commentSchema>;
   const utils = trpc.useUtils();
   const {
@@ -124,6 +132,7 @@ export const Comments = ({
         >
           <Textarea
             variant={'dark'}
+            ref={commentInputRef}
             {...register('content')}
             placeholder="Add a comment..."
             className="w-full "

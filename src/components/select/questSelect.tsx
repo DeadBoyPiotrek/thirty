@@ -25,7 +25,7 @@ interface QuestSelectProps {
 export const QuestSelect = ({ field, quests }: QuestSelectProps) => (
   <Select.Root onValueChange={value => field.onChange(parseInt(value))}>
     <Select.Trigger
-      className="text-brandWhite-pure bg-brandBlack-medium border border-brandGray p-2 rounded-lg h-11 overflow-hidden lg:w-96 break-words flex items-center justify-between"
+      className="p-2 rounded-lg h-11 overflow-hidden lg:w-96 break-words flex items-center justify-between focus:outline-none text-brandWhite-pure bg-brandBlack-light focus:ring-1 focus:ring-brandPurple-500 hover:ring-1 ring-brandPurple-500"
       aria-label="goal"
       key={field.value}
     >

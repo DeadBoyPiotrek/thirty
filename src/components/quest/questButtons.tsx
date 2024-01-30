@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import * as Popover from '@radix-ui/react-popover';
 import { SlOptionsVertical } from 'react-icons/sl';
 interface QuestProps {
+  photosNames: (string | null)[];
   quest: {
     id: number;
     title: string;
@@ -18,7 +19,7 @@ interface QuestProps {
     imageUrl: string | null;
   };
 }
-export const QuestButtons = ({ quest }: QuestProps) => {
+export const QuestButtons = ({ quest, photosNames }: QuestProps) => {
   const router = useRouter();
   const utils = trpc.useUtils();
   const [open, setOpen] = useState(false);
@@ -35,6 +36,13 @@ export const QuestButtons = ({ quest }: QuestProps) => {
     if (quest.imageName) {
       deleteImage({ folderName: 'quests', imageName: quest.imageName });
     }
+
+    photosNames.forEach(photoLink => {
+      if (photoLink) {
+        deleteImage({ folderName: 'posts', imageName: photoLink });
+      }
+    });
+
     deleteQuestMutation({ questId: quest.id });
     router.push('/');
   };

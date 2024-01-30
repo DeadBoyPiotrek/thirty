@@ -61,11 +61,11 @@ export const QuestForm = () => {
         className="flex flex-col p-3 sm:p-5 bg-brandBlack-medium rounded-lg gap-2 w-full max-w-xl"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <label>Goal title</label>
-        <Input variant={'dark'} {...register('title')} />
+        <label htmlFor="title">Title</label>
+        <Input variant={'dark'} id="title" {...register('title')} />
         <FormError error={errors.title?.message} />
-        <label>Goal content</label>
-        <Textarea variant={'dark'} {...register('content')} />
+        <label htmlFor="content">Content</label>
+        <Textarea id="content" variant={'dark'} {...register('content')} />
         <FormError error={errors.content?.message} />
         <label htmlFor="image">Image</label>
         <ImageInput key={imageSelectKey} id="questImage" register={register} />

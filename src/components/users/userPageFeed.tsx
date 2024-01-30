@@ -1,4 +1,3 @@
-// TODO: can I use the same component for the user page and the feed page?
 'use client';
 import { serverClient } from '@/app/_trpc/serverClient';
 import { Post } from '@/components/post/post';
@@ -26,7 +25,12 @@ export const UserPageFeed = ({ initialPosts, userId }: UserPageFeedProps) => {
         getNextPageParam: lastPage => lastPage.cursor,
         initialData: {
           pageParams: [undefined],
-          pages: [{ posts: initialPosts.posts, cursor: initialPosts.cursor }],
+          pages: [
+            {
+              posts: initialPosts.posts,
+              cursor: initialPosts.cursor,
+            },
+          ],
         },
         refetchOnMount: false,
       }
@@ -36,7 +40,7 @@ export const UserPageFeed = ({ initialPosts, userId }: UserPageFeedProps) => {
   }, [entry]);
 
   return (
-    <div className="flex flex-col gap-5 max-w-4xl ">
+    <div className="flex flex-col gap-5 max-w-4xl w-full ">
       {data?.pages.flatMap(page =>
         page.posts.map((post, i) => {
           if (i === page.posts.length - 1) {

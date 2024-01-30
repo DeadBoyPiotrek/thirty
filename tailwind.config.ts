@@ -25,7 +25,11 @@ const config: Config = {
           medium: '#141418',
           light: '#222229',
         },
-        brandRed: '#C84F59',
+        brandRed: {
+          300: '#FCA5A5',
+          500: '#C84F59',
+          700: '#EF4444',
+        },
         brandGray: '#8D8D90',
       },
       scale: {

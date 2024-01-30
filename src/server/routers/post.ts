@@ -391,7 +391,6 @@ export const postRouter = router({
     )
 
     .query(async ({ input }) => {
-      console.log(input);
       const comments = await prisma.comment.findMany({
         take: input.limit ?? 5,
         skip: input.cursor ? 1 : 0,

@@ -1,7 +1,6 @@
 'use client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from '@ui/button';
-import { Switch } from '@ui/switch';
 import { userProfileSchemaImg } from '@lib/schemas/userProfileSchema';
 import { trpc } from '@/app/_trpc/client';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -59,11 +58,13 @@ export const UserProfileForm = ({
     }
   };
 
+  const { mutate: deleteProfile } = trpc.user.deleteProfile.useMutation();
+
   return (
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-2  rounded-lg p-5"
+        className="flex flex-col gap-2  rounded-lg"
       >
         <label>Image</label>
         <ImageInput
@@ -88,8 +89,7 @@ export const UserProfileForm = ({
         />
         <FormError error={errors.bio?.message} />
 
-        <Switch />
-        <span className="flex gap-2">
+        <span className="flex gap-2 justify-center">
           <Button type="submit" variant={'brand'} isLoading={isLoading}>
             Save
           </Button>
@@ -103,6 +103,12 @@ export const UserProfileForm = ({
           </Button>
         </span>
       </form>
+      <Button
+        onClick={() => deleteProfile({ userImageName: userData.imageName })}
+        variant={'danger'}
+      >
+        Delete account
+      </Button>
     </>
   );
 };

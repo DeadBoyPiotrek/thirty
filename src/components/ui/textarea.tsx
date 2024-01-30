@@ -7,7 +7,7 @@ const textareaVariants = cva('p-2 rounded-lg transition block', {
       // brand:
       //   'bg-brandPurple-500 text-brandWhite-pure hover:bg-brandPurple-300 ',
       light: 'bg-brandWhite-pure text-brandBlack-deep hover:bg-brandWhite-100 ',
-      dark: 'text-brandWhite-pure bg-brandBlack-medium border border-brandGray hover:bg-brandBlack-light',
+      dark: 'focus:outline-none text-brandWhite-pure bg-brandBlack-light focus:ring-1 focus:ring-brandPurple-500 hover:ring-1 ring-brandPurple-500',
     },
     size: {
       sm: 'text-sm',

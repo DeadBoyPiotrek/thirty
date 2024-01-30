@@ -89,7 +89,6 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(
           }
         });
       },
-      // Handle actual response/error here if needed
     });
 
     return (
@@ -125,7 +124,7 @@ export const Post = forwardRef<HTMLDivElement, PostProps>(
                   <Link
                     className={`break-words truncate hover:text-brandPurple-100 ${
                       userPageFeed
-                        ? 'max-w-[200px] 450:max-w-xs md:max-w-[100px] 900:max-w-[240px] xl:max-w-xl 1100:max-w-md'
+                        ? 'max-w-[200px] 450:max-w-xs md:max-w-[100px] 900:max-w-[240px] 1100:max-w-md'
                         : 'max-w-[200px] 450:max-w-xs md:max-w-md 900:max-w-xl'
                     }
 

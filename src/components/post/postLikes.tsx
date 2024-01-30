@@ -20,15 +20,20 @@ export const PostLikes = ({ likes }: PostLikesProps) => {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
-        <div className="text-xl text-brandPurple-500 self-start flex gap-1 font-medium items-center cursor-pointer">
+        <button
+          aria-label={`${
+            likes.length > 0 ? `${likes.length} likes` : `0 likes`
+          }`}
+          className="text-xl text-brandPurple-500 self-start flex gap-1 font-medium items-center"
+        >
           {likes.length > 0 ? (
             <>
               <AiFillHeart />
 
-              <span className="">{likes.length}</span>
+              <span>{likes.length}</span>
             </>
           ) : null}
-        </div>
+        </button>
       </Popover.Trigger>
 
       <Popover.Portal>

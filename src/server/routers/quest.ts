@@ -190,6 +190,7 @@ export const questRouter = router({
           title: input.title,
           content: input.content,
           imageUrl: input.imageUrl,
+          imageName: input.imageName,
         },
       });
 

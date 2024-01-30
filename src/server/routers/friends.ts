@@ -205,20 +205,18 @@ export const friendsRouter = router({
   areFriends: protectedProcedure
     .input(z.object({ profileId: z.number().int() }))
     .query(async ({ input, ctx }) => {
-      const { userId } = ctx;
-      const data = await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-        select: {
-          friends: {
-            where: {
-              id: input.profileId,
+      const areFriends = !!(
+        (await prisma.user.findFirst({
+          where: {
+            id: ctx.userId,
+            friends: {
+              some: {
+                id: input.profileId,
+              },
             },
           },
-        },
-      });
-      const areFriends = data?.friends.length === 1;
+        })) || ctx.userId === input.profileId
+      );
       return areFriends;
     }),
 

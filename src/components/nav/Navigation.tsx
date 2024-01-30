@@ -28,24 +28,30 @@ export const Navigation = async () => {
         </Link>
 
         <span className="flex text-3xl gap-x-4 md:text-4xl md:gap-x-16">
-          <Link href="/">
-            <HiHome
-              aria-hidden="true"
-              className="transition hover:scale-125 ease-in-out duration-300"
-            />
+          <Link
+            href="/"
+            aria-label="
+          Home
+          "
+          >
+            <HiHome className="transition hover:scale-125 ease-in-out duration-300" />
           </Link>
 
-          <Link href="/friends">
-            <FaUserFriends
-              aria-hidden="true"
-              className="transition hover:scale-125 ease-in-out duration-300 "
-            />
+          <Link
+            href="/friends"
+            aria-label="
+          Friends
+          "
+          >
+            <FaUserFriends className="transition hover:scale-125 ease-in-out duration-300 " />
           </Link>
-          <Link href={`/${user.id}/quests`}>
-            <FaStar
-              aria-hidden="true"
-              className="transition hover:scale-125 ease-in-out duration-300"
-            />
+          <Link
+            href={`/${user.id}/quests`}
+            aria-label="
+          Goals
+          "
+          >
+            <FaStar className="transition hover:scale-125 ease-in-out duration-300" />
           </Link>
         </span>
 

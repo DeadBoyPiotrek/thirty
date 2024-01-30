@@ -20,9 +20,9 @@ export const Modal = ({
 const ModalContent = ({ children }: { children: React.ReactNode }) => {
   return (
     <Dialog.Portal>
-      <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg   max-w-xl p-4 w-full">
+      <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-xl p-4 w-full">
         <div>
-          <div className="bg-brandBlack-medium rounded-lg w-full p-4">
+          <div className="bg-brandBlack-medium rounded-lg w-full p-4 shadow-lg ">
             {children}
           </div>
         </div>

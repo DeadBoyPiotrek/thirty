@@ -33,13 +33,27 @@ export const QuestHeader = ({
   if (!quest) {
     return <h1>Quest not found 💔</h1>;
   }
+  const questProps = {
+    id: quest.id,
+    title: quest.title,
+    content: quest.content,
+    imageName: quest.imageName,
+    imageUrl: quest.imageUrl,
+  };
+
+  const questPostsPhotosNames = quest.posts.map(post => post.imageName);
   return (
     <>
       <div className="flex gap-2 justify-between">
         <h1 className="font-bold text-brandPurple-500 text-4xl break-words">
           {quest.title}
         </h1>
-        {loggedUserId === userId ? <QuestButtons quest={quest} /> : null}
+        {loggedUserId === userId ? (
+          <QuestButtons
+            photosNames={questPostsPhotosNames}
+            quest={questProps}
+          />
+        ) : null}
       </div>
       <p className="max-w-4xl break-words py-2">{quest.content}</p>
       {quest.imageUrl ? (

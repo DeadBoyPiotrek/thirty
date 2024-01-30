@@ -2,6 +2,7 @@ import { userProfileSchemaImgUrl } from '@/lib/schemas/userProfileSchema';
 import { prisma } from '../prisma';
 import { router, publicProcedure, protectedProcedure } from '../trpc';
 import { z } from 'zod';
+import { deleteImage } from '@/lib/helpers/images/deleteImage';
 
 export const userRouter = router({
   getAllUsers: publicProcedure.query(async () => {
@@ -90,5 +91,65 @@ export const userRouter = router({
       });
 
       return user;
+    }),
+
+  deleteProfile: protectedProcedure
+    .input(z.object({ userImageName: z.string().nullish() }))
+    .mutation(async ({ ctx, input }) => {
+      const postsImagesNames = await prisma.post.findMany({
+        where: {
+          userId: ctx.userId,
+        },
+        select: {
+          imageName: true,
+        },
+      });
+
+      const questsImagesNames = await prisma.quest.findMany({
+        where: {
+          userId: ctx.userId,
+        },
+        select: {
+          imageName: true,
+        },
+      });
+
+      const filteredPostsImagesNames = postsImagesNames
+        .filter(image => image.imageName !== null)
+        .map(image => ({
+          imageName: image.imageName as string,
+          folder: 'posts' as 'posts',
+        }));
+      const filteredQuestsImagesNames = questsImagesNames
+        .filter(image => image.imageName !== null)
+        .map(image => ({
+          imageName: image.imageName as string,
+          folder: 'quests' as 'quests',
+        }));
+
+      for (const image of filteredPostsImagesNames) {
+        await deleteImage({
+          folderName: image.folder,
+          imageName: image.imageName,
+        });
+      }
+
+      for (const image of filteredQuestsImagesNames) {
+        await deleteImage({
+          folderName: image.folder,
+          imageName: image.imageName,
+        });
+      }
+
+      await deleteImage({
+        folderName: 'avatars',
+        imageName: input.userImageName as string,
+      });
+
+      await prisma.user.delete({
+        where: {
+          id: ctx.userId,
+        },
+      });
     }),
 });
