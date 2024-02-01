@@ -38,11 +38,11 @@ export const Sidebar = ({
   }
 
   return (
-    <div className="md:w-80 flex flex-none flex-col bg-brandBlack-medium p-4 rounded-lg gap-3 h-min md:sticky md:top-0 max-h-screen overflow-y-auto lg:overscroll-none">
+    <div className="md:w-80 flex flex-none flex-col bg-brandBlack-medium p-4 rounded-lg gap-3 h-min md:sticky md:top-3 overflow-auto overflow-y-auto md:max-h-screen lg:overscroll-none items-center md:items-start">
       <Image
         src={`${user.imageUrl || `/images/profile-user-default.svg`}`}
         alt="avatar"
-        className="w-72 h-72 rounded-full object-cover "
+        className="w-72 h-72 rounded-full object-cover"
         width={288}
         height={288}
       />

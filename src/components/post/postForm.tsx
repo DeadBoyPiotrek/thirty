@@ -96,7 +96,7 @@ export const PostForm = ({ userQuests }: PostFormProps) => {
         </div>
 
         <div className="flex flex-col gap-2 w-full ">
-          <label htmlFor="image" className="text-brandWhite-pure ">
+          <label htmlFor="postImage" className="text-brandWhite-pure ">
             Image
           </label>
           <ImageInput key={questSelectKey} id="postImage" register={register} />

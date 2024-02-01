@@ -3,7 +3,7 @@ import { QuestForm } from '@/components/quest/questForm';
 import { QuestList } from '@/components/quest/questsList';
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 
 const QuestsPage = async ({ params }: { params: { userId: string } }) => {
   const session = await getServerSession(authOptions);

@@ -5,7 +5,7 @@ import { Poppins } from 'next/font/google';
 import Provider from './_trpc/Provider';
 import { getServerSession } from 'next-auth';
 import SessionProvider from '../components/session/sessionProvider';
-import { authOptions } from './api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { cn } from '@/lib/utils';
 
 const poppins = Poppins({

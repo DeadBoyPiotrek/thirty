@@ -85,7 +85,7 @@ export const UserActions = ({
       {areFriends2.data ? (
         <Button
           className="font-medium"
-          variant={'dark'}
+          variant="dark"
           onClick={() => removeFriend({ profileId })}
           isLoading={removeFriendIsLoading}
         >

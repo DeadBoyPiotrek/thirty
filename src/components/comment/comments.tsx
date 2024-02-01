@@ -88,7 +88,7 @@ export const Comments = ({
     );
     reset();
   };
-
+  const { ref, ...rest } = register('content');
   const commentsFetchedAmount = data?.pages.flatMap(
     page => page.comments
   ).length;
@@ -132,8 +132,12 @@ export const Comments = ({
         >
           <Textarea
             variant={'dark'}
-            ref={commentInputRef}
+            {...rest}
             {...register('content')}
+            ref={e => {
+              ref(e);
+              commentInputRef.current = e;
+            }}
             placeholder="Add a comment..."
             className="w-full "
           />

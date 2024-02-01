@@ -20,14 +20,14 @@ export const OwnerActions = ({ session, userData }: OwnerActionsProps) => {
       <div className="flex gap-2">
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Button asChild>
-            <Button variant={'dark'}>Edit profile</Button>
+            <Button variant="light">Edit profile</Button>
           </Modal.Button>
           <Modal.Content>
             <UserProfileForm userData={userData} closeModal={closeModal} />
           </Modal.Content>
         </Modal>
 
-        <Button variant={'dark'} onClick={() => signOut()}>
+        <Button variant="light" onClick={() => signOut()}>
           Sign out
         </Button>
       </div>

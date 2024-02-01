@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { HiHome } from 'react-icons/hi';
 import { FaUserFriends, FaStar } from 'react-icons/fa';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import Image from 'next/image';
 
 export const Navigation = async () => {
