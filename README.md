@@ -45,7 +45,7 @@ https://github.com/DeadBoyPiotrek/thirty/assets/87661735/fc5252bc-8610-4110-900a
   - [x] ssr when possible
   - [x] caching
   - [x] optimistic updates
-- [ ] Error Handling
+- [ ] Better Error Handling
 - [ ] Testing
 - [ ] CI/CD
 - [ ] Deployment
