@@ -1,3 +1,14 @@
+# Target Tracker
+
+**Social Goal-Tracking App**
+
+Track goals, connect with friends, and celebrate achievements with Target Tracker! Add friends, post updates with images, write comments, and like posts for a collaborative and motivating journey.
+
+
+https://github.com/DeadBoyPiotrek/thirty/assets/87661735/fc5252bc-8610-4110-900a-461dac026f4b
+
+
+
 # Tech Stack
 
 <b>
@@ -40,4 +51,4 @@
 - [ ] Deployment
 - [ ] Toaster
 - [ ] Dropzone for images
-- [ ] Safe Post/Quest draft
+- [ ] Safe Post draft
